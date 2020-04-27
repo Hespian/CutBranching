@@ -1,0 +1,54 @@
+/******************************************************************************
+ * algorithms.h
+ *
+ * Source of VieCut.
+ *
+ ******************************************************************************
+ * Copyright (C) 2018 Alexander Noe <alexander.noe@univie.ac.at>
+ *
+ * Published under the MIT license in the LICENSE file.
+ *****************************************************************************/
+
+#pragma once
+
+#include <string>
+
+#ifdef PARALLEL
+#include "parallel/algorithm/exact_parallel_minimum_cut.h"
+#include "parallel/algorithm/parallel_cactus.h"
+#endif
+#include "algorithms/global_mincut/cactus/cactus_mincut.h"
+#include "algorithms/global_mincut/ks_minimum_cut.h"
+#include "algorithms/global_mincut/matula_approx.h"
+#include "algorithms/global_mincut/minimum_cut.h"
+#include "algorithms/global_mincut/noi_minimum_cut.h"
+#include "algorithms/global_mincut/padberg_rinaldi.h"
+#include "algorithms/global_mincut/stoer_wagner_minimum_cut.h"
+#include "algorithms/global_mincut/viecut.h"
+
+[[maybe_unused]] static minimum_cut * selectMincutAlgorithm(
+    const std::string& argv_str) {
+#ifndef PARALLEL
+    if (argv_str == "ks")
+        return new ks_minimum_cut();
+    if (argv_str == "noi")
+        return new noi_minimum_cut();
+    if (argv_str == "matula")
+        return new matula_approx();
+    if (argv_str == "vc")
+        return new viecut();
+    if (argv_str == "pr")
+        return new padberg_rinaldi();
+    if (argv_str == "cactus")
+        return new cactus_mincut();
+#endif
+#ifdef PARALLEL
+    if (argv_str == "inexact")
+        return new viecut();
+    if (argv_str == "exact")
+        return new exact_parallel_minimum_cut();
+    if (argv_str == "cactus")
+        return new parallel_cactus();
+#endif
+    return new minimum_cut();
+}

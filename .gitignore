@@ -1,0 +1,6 @@
+build
+.vscode*
+
+
+pg.cpp
+run.sh
