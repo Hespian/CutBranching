@@ -9,6 +9,8 @@
 #include "VieCut/lib/data_structure/graph_access.h"
 //#include "Metis/include/metis.h"
 
+#include "validate_sol.h"
+
 using namespace std;
 
 std::vector<std::vector<int>> readPaceGraphFromFile(std::string fileName);
@@ -49,6 +51,14 @@ int main(int argc,  char** argv)
             res.nBranchings = -1;
             res.time = -1;
         }
+
+        std::vector<bool> solution(algo.adj.size(), false);
+        algo.get_solved_is(solution);
+        if (!validate_solution(solution, algo.adj))
+        {
+            res.instance += "--failed";
+        }
+
         writeResultToFile(res, of);
 
         cout << "nbranch: " << algo.nBranchings << endl;
