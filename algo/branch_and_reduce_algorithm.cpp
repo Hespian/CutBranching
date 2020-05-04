@@ -45,6 +45,8 @@ long branch_and_reduce_algorithm::nBranchings = 0;
 int branch_and_reduce_algorithm::debug = 0;
 
 int branch_and_reduce_algorithm::EXTRA_DECOMP = 0;
+long branch_and_reduce_algorithm::defaultBranchings = 0;
+bool branch_and_reduce_algorithm::defaultBranch = false;
 
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
     : adj(), n(_adj.size()), used(n * 2)
@@ -1297,10 +1299,12 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         int cv = get_articulation_point();
 
         if (cv == -1)
+        {
             v = get_max_deg_vtx();
+            defaultBranch = true;
+        }
         else
         {
-            //cout << "cv found" << endl;
             v = cv;
         }
 
@@ -1331,6 +1335,8 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
             {
                 cut.push_back(get_max_deg_vtx());
                 branch_t--;
+
+                defaultBranch = true;
             }
         }
 
@@ -1420,6 +1426,12 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         return;
     }
     nBranchings++;
+    if (defaultBranch)
+    {
+        defaultBranchings++;
+        defaultBranch = false;
+    }
+
     if (mirrorN == 0)
     {
         used.clear();
@@ -2453,7 +2465,7 @@ void branch_and_reduce_algorithm::convert_adj_lists(graph_access &G, std::vector
 #endif // DEBUG
 }
 
-void branch_and_reduce_algorithm::convert_to_metis(int *nNodes, std::vector<int> &xadj, std::vector<int> &adjncy, std::vector<NodeID> &reverse_mapping)
+void branch_and_reduce_algorithm::convert_to_metis(int32_t *nNodes, std::vector<int32_t> &xadj, std::vector<int32_t> &adjncy, std::vector<NodeID> &reverse_mapping)
 {
     unsigned int const node_count = number_of_nodes_remaining();
     // Number of edges
@@ -2461,6 +2473,7 @@ void branch_and_reduce_algorithm::convert_to_metis(int *nNodes, std::vector<int>
 
     // Nodes -> Range
     std::vector<NodeID> mapping(adj.size(), 10000000);
+    reverse_mapping.resize(node_count, -1);
     // Get number of edges and reorder nodes
     unsigned int node_counter = 0;
     for (NodeID node = 0; node < adj.size(); ++node)
@@ -2473,7 +2486,7 @@ void branch_and_reduce_algorithm::convert_to_metis(int *nNodes, std::vector<int>
             reverse_mapping[node_counter] = node;
             node_counter++;
         }
-
+    
     // Create the adjacency array
     xadj.resize(node_count + 1);
     adjncy.resize(m);
@@ -2907,6 +2920,7 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
         // to big, use max. deg. vertex instead
         cut.clear();
         cut.emplace_back(get_max_deg_vtx());
+        defaultBranch = true;
     }
 }
 

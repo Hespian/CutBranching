@@ -54,6 +54,9 @@ public:
 	// 1 for extra decompose step
 	static int EXTRA_DECOMP;
 
+	static long defaultBranchings;
+	static bool defaultBranch;
+
 	std::vector<std::vector<int>> adj;
 	static long nBranchings;
 	static int debug;
@@ -191,7 +194,7 @@ public:
 	void convert_adj_lists(graph_access &G, std::vector<NodeID> &reverse_mapping) const;
 
 	void convert_to_ga(std::shared_ptr<graph_access> G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping);
-	void convert_to_metis(int* nNodes, std::vector<int> &xadj, std::vector<int> &adjncy, std::vector<NodeID> &reverse_mapping);
+	void convert_to_metis(int32_t* nNodes, std::vector<int32_t> &xadj, std::vector<int32_t> &adjncy, std::vector<NodeID> &reverse_mapping);
 
 	void addStartingSolution(std::vector<int> solution, int solutionSize);
 

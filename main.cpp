@@ -43,7 +43,7 @@ int main(int argc,  char** argv)
         int sol = algo.solve(t, 900);
         double secs = t.elapsed();
 
-        Result res(i, algo.nBranchings, secs);
+        Result res(to_string(i), algo.nBranchings, secs, sol, algo.defaultBranchings);
         if (sol == -1) 
         {
             res.nBranchings = -1;
