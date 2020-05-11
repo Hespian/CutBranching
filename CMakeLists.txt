@@ -5,7 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(
     #VieCut/lib
+    Metis/build/Linux-x86_64/libmetis
     ${GUROBI_INCLUDE_DIR}
 )
 
 add_executable(MIS main.cpp algo/branch_and_reduce_algorithm.cpp algo/modified.cpp)
+target_link_libraries(MIS ${CMAKE_SOURCE_DIR}/Metis/build/Linux-x86_64/libmetis/libmetis.a)
+

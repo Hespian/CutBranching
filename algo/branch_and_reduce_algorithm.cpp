@@ -33,6 +33,9 @@
 #include <deque>
 #include <chrono>
 
+#include <cstring>
+#include "../Metis/include/metis.h"
+
 typedef unsigned int NodeID;
 
 using namespace std;
@@ -47,6 +50,7 @@ int branch_and_reduce_algorithm::debug = 0;
 int branch_and_reduce_algorithm::EXTRA_DECOMP = 0;
 long branch_and_reduce_algorithm::defaultBranchings = 0;
 bool branch_and_reduce_algorithm::defaultBranch = false;
+int branch_and_reduce_algorithm::ND_LEVEL = 64;
 
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
     : adj(), n(_adj.size()), used(n * 2)
@@ -1331,7 +1335,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
                 get_stcut_vertices();
                 branch_t = 10;
             }
-            else 
+            else
             {
                 cut.push_back(get_max_deg_vtx());
                 branch_t--;
@@ -1342,6 +1346,27 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
 
         v = cut.back();
         cut.pop_back();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 6) // nested dissection
+    {
+        if (nd_computed == false)
+        {
+            compute_nd_order();
+            nd_computed = true;
+        }
+
+        while (!nd_order.empty() && x[nd_order.back()] != -1)
+            nd_order.pop_back();
+
+        if (nd_order.empty())
+        {
+            //cout << "nd is empty!" << endl;
+            nd_order.push_back(get_max_deg_vtx());
+        }
+
+        v = nd_order.back();
+        nd_order.pop_back();
         dv = deg(v);
     }
 
@@ -1695,6 +1720,20 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
             }
 
             vcs[i] = new branch_and_reduce_algorithm(adj2, size[i]);
+
+            // inherit nd branching order ypp
+            std::vector<NodeID> sub_nd_order(0);
+            for (int i = 0; i < this->nd_order.size(); i++)
+            {
+                if (std::find(vs.begin(), vs.end(), this->nd_order[i]) != vs.end())
+                {
+                    sub_nd_order.push_back(pos2[this->nd_order[i]]);
+                }
+            }
+
+            vcs[i]->nd_computed = this->nd_computed;
+            vcs[i]->nd_order.swap(sub_nd_order);
+
             for (unsigned int j = 0; j < vs.size(); j++)
             {
                 if (in[vs[j]] >= 0 && pos1[in[vs[j]]] == i && pos2[in[vs[j]]] < static_cast<int>(vs.size()))
@@ -2486,7 +2525,7 @@ void branch_and_reduce_algorithm::convert_to_metis(int32_t *nNodes, std::vector<
             reverse_mapping[node_counter] = node;
             node_counter++;
         }
-    
+
     // Create the adjacency array
     xadj.resize(node_count + 1);
     adjncy.resize(m);
@@ -2543,17 +2582,6 @@ void branch_and_reduce_algorithm::convert_to_ga(std::shared_ptr<graph_access> G,
     // Build the graph
     G->build_from_adj(adja);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // NEW BRANCHING RULES
 
@@ -2692,7 +2720,8 @@ void branch_and_reduce_algorithm::find_st_vtcs(std::shared_ptr<graph_access> gra
         }
         s = v;
     }
-    else s = ss;
+    else
+        s = ss;
     if (tt == -1)
     {
         visited.resize(0);
@@ -2716,7 +2745,8 @@ void branch_and_reduce_algorithm::find_st_vtcs(std::shared_ptr<graph_access> gra
         }
         t = v;
     }
-    else t = tt;
+    else
+        t = tt;
 }
 
 void hc_karp_DFS(std::shared_ptr<graph_access> &graph, std::vector<int> &dist, std::vector<int> &matched, std::stack<NodeID> stack, NodeID u, std::vector<NodeID> &vis)
@@ -2761,7 +2791,7 @@ void hc_karp(std::shared_ptr<graph_access> graph, std::vector<NodeID> U, std::ve
     bool aug = true;
     std::vector<int> dist(n, -1);
 
-    // Repeat until no more augmenting paths 
+    // Repeat until no more augmenting paths
     while (aug)
     {
         aug = false;
@@ -2780,7 +2810,7 @@ void hc_karp(std::shared_ptr<graph_access> graph, std::vector<NodeID> U, std::ve
             }
         }
 
-        // BFS until augmenting path found 
+        // BFS until augmenting path found
         while (!q.empty())
         {
             NodeID v = q.front();
@@ -2846,7 +2876,6 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     s = mapping[v1];
     t = mapping[v2];
     // find_st_vtcs(graph, ss, tt);
-
 
     std::shared_ptr<mutable_graph> m_graph = mutable_graph::from_graph_access(graph);
     auto res = flow.solve_max_flow_min_cut(m_graph, {s, t}, 0, true);
@@ -3007,3 +3036,151 @@ bool inline branch_and_reduce_algorithm::is_neighbour_of(std::shared_ptr<graph_a
 
 //     flow->finish_construction();
 // }
+
+std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int32_t *perm, int32_t *part_sizes, int32_t *sep_sizes, int n, int p, int32_t *weights)
+{
+    int level = log2(p);
+
+    std::vector<std::vector<int>> seps(0);
+    std::vector<int> t_sep(0);
+
+    // extract top level separator
+    int tsep_size = *(sep_sizes + p - 2);
+    if (weights == NULL)
+    {
+        for (int i = n - tsep_size; i < n; i++)
+        {
+            t_sep.push_back(perm[i]);
+        }
+    }
+    else 
+    {
+        int pnt = n-1;
+        while (tsep_size > 0)
+        {
+            t_sep.push_back(perm[pnt]);
+            tsep_size -= weights[perm[pnt]];
+            pnt--;
+        }
+    }
+
+    seps.push_back(t_sep);
+
+    if (level == 1)
+        return seps;
+
+    // recursively extract separators of lower levels
+    int lsize = 0;
+    int rsize = 0;
+    int32_t *lsize_arr = (int32_t *)malloc(sizeof(int32_t) * p / 2);
+    int32_t *rsize_arr = (int32_t *)malloc(sizeof(int32_t) * p / 2);
+
+    int32_t *l_ptr = lsize_arr;
+    int32_t *r_ptr = rsize_arr;
+
+    for (int i = level - 2; i >= 0; i--)
+    {
+        for (int j = 0; j < pow(2, i); j++)
+        {
+            lsize += *sep_sizes;
+            *l_ptr = *sep_sizes;
+            l_ptr++;
+            sep_sizes++;
+        }
+
+        for (int j = 0; j < pow(2, i); j++)
+        {
+            rsize += *sep_sizes;
+            *r_ptr = *sep_sizes;
+            r_ptr++;
+            sep_sizes++;
+        }
+    }
+
+    for (int i = 0; i < p / 2; i++)
+    {
+        lsize += part_sizes[i];
+        rsize += part_sizes[i + p / 2];
+    }
+
+    std::vector<std::vector<int>> seps_l = get_nd_separators(perm, part_sizes, lsize_arr, lsize, p / 2, weights);
+    std::vector<std::vector<int>> seps_r = get_nd_separators(perm + lsize, part_sizes + p / 2, rsize_arr, rsize, p / 2, weights);
+
+    for (int i = 0; i < seps_l.size(); i++)
+    {
+        seps.push_back(seps_l[i]);
+        seps.push_back(seps_r[i]);
+    }
+
+    free(lsize_arr);
+    free(rsize_arr);
+
+    return seps;
+}
+
+void branch_and_reduce_algorithm::compute_nd_order()
+{
+    int32_t n;
+    std::vector<int32_t> xadj_v;
+    std::vector<int32_t> adjncy_v;
+    std::vector<NodeID> rm;
+    convert_to_metis(&n, xadj_v, adjncy_v, rm);
+    int p = pow(2, ceil(log2(n))) / ND_LEVEL;
+
+    if (p < 8)
+        p = 8;
+
+
+
+    cout << "p: " << p << endl; 
+
+    int32_t *xadj = (int32_t *)malloc(sizeof(int32_t) * xadj_v.size());
+    int32_t *adjncy = (int32_t *)malloc(sizeof(int32_t) * adjncy_v.size());
+    int32_t *perm = (int32_t *)malloc(sizeof(int32_t) * n);
+    int32_t *iperm = (int32_t *)malloc(sizeof(int32_t) * n);
+    int32_t *sizes = (int32_t *)malloc(sizeof(int32_t) * p * 2);
+
+    //int32_t *degs = (int32_t *)malloc(sizeof(int32_t) * n);
+
+    for (int i = 0; i < xadj_v.size(); i++)
+        xadj[i] = xadj_v[i];
+
+    for (int i = 0; i < adjncy_v.size(); i++)
+        adjncy[i] = adjncy_v[i];
+
+    int maxdeg = 0;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     if (deg(rm[i]) > maxdeg)
+    //         maxdeg = deg(rm[i]);
+    //     degs[i] = deg(rm[i]);
+    // }
+
+    // for (int i = 0; i < n; i++)
+    // {
+    //     degs[i] = maxdeg + 1 - degs[i];
+    // }
+
+    int r = METIS_NodeNDP(n, xadj, adjncy, NULL, p, NULL, perm, iperm, sizes);
+    //int r = METIS_NodeNDP(n, xadj, adjncy, degs, p, NULL, perm, iperm, sizes);
+    std::vector<std::vector<int>> seps = get_nd_separators(perm, sizes, sizes + p, n, p, NULL);
+
+    for (int i = seps.size() - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < seps[i].size(); j++)
+        {
+            nd_order.push_back(rm[seps[i][j]]);
+        }
+    }
+
+    cout << *(sizes + 2 * p - 2) << endl;
+    cout << nd_order.size() << endl;
+
+    free(xadj);
+    free(adjncy);
+    free(perm);
+    free(iperm);
+    free(sizes);
+
+    //free(degs);
+}

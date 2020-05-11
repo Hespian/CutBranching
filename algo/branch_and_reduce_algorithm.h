@@ -53,6 +53,7 @@ public:
 
 	// 1 for extra decompose step
 	static int EXTRA_DECOMP;
+	static int ND_LEVEL;
 
 	static long defaultBranchings;
 	static bool defaultBranch;
@@ -235,6 +236,15 @@ public:
 	inline int get_max_deg_vtx();
 	inline int get_min_deg_vtx(std::shared_ptr<graph_access> g);
 	inline bool is_neighbour_of(std::shared_ptr<graph_access> graph, NodeID v, NodeID u);
+
+
+	// Nested Dissection
+	bool nd_computed = false;
+	std::vector<NodeID> nd_order;
+
+	void compute_nd_order();
+	std::vector<std::vector<int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
+
 
 
 
