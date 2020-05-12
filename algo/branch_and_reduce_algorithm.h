@@ -55,8 +55,23 @@ public:
 	static int EXTRA_DECOMP;
 	static int ND_LEVEL;
 
+	// statistics
 	static long defaultBranchings;
 	static bool defaultBranch;
+	static long defaultPicks;
+	static long stratPicks;
+	static long nDecomps;
+
+	static void resetStatistics()
+	{
+		nBranchings = 0;
+		defaultBranch = false;
+		defaultBranchings = 0;
+		defaultPicks = 0;
+		stratPicks = 0;
+		nDecomps = 0;
+	}
+
 
 	std::vector<std::vector<int>> adj;
 	static long nBranchings;

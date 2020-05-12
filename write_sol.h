@@ -13,6 +13,9 @@ public:
 
     long mis_size;
     long nDefaultBranchings;
+    long nDefaultPicks = -2;
+    long nStratPicks = -2;
+    long nDecomps = -2;
 
     Result(std::string i, long nBrnch, double t, long mis, long nDB) : instance {i}, nBranchings {nBrnch}, time {t}, mis_size {mis}, nDefaultBranchings {nDB}
     {
@@ -27,7 +30,10 @@ void writeResult(Result& sol, std::ostream &f) {
       << " nBranch: " << sol.nBranchings 
       << " time: " << sol.time 
       << " MIS size: " << sol.mis_size
-      << " nDefaultBranchings: " << sol.nDefaultBranchings
+      << " nDefBranch: " << sol.nDefaultBranchings
+      << " nDefPicks: " << sol.nDefaultPicks
+      << " nStratPicks: " << sol.nStratPicks
+      << " nDecomp: " << sol.nDecomps
       << std::endl;
 }
 

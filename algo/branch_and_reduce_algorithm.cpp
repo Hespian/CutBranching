@@ -48,9 +48,13 @@ long branch_and_reduce_algorithm::nBranchings = 0;
 int branch_and_reduce_algorithm::debug = 0;
 
 int branch_and_reduce_algorithm::EXTRA_DECOMP = 0;
+int branch_and_reduce_algorithm::ND_LEVEL = 64;
+
 long branch_and_reduce_algorithm::defaultBranchings = 0;
 bool branch_and_reduce_algorithm::defaultBranch = false;
-int branch_and_reduce_algorithm::ND_LEVEL = 64;
+long branch_and_reduce_algorithm::defaultPicks = 0;
+long branch_and_reduce_algorithm::stratPicks = 0;
+long branch_and_reduce_algorithm::nDecomps = 0;
 
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
     : adj(), n(_adj.size()), used(n * 2)
@@ -1305,10 +1309,12 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         if (cv == -1)
         {
             v = get_max_deg_vtx();
+            defaultPicks++;
             defaultBranch = true;
         }
         else
         {
+            stratPicks++;
             v = cv;
         }
 
@@ -1340,6 +1346,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
                 cut.push_back(get_max_deg_vtx());
                 branch_t--;
 
+                defaultPicks++;
                 defaultBranch = true;
             }
         }
@@ -1363,7 +1370,10 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         {
             //cout << "nd is empty!" << endl;
             nd_order.push_back(get_max_deg_vtx());
+            defaultPicks++;
+            defaultBranch = true;
         }
+        else stratPicks++;
 
         v = nd_order.back();
         nd_order.pop_back();
@@ -1550,6 +1560,10 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
         }
         if (nC <= 1 && (n <= 100 || n * SHRINK < rn))
             return false;
+
+        // count decomps
+        nDecomps++;
+
         std::vector<long long> cs(nC, 0);
         {
             int p = 0;
@@ -2950,7 +2964,9 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
         cut.clear();
         cut.emplace_back(get_max_deg_vtx());
         defaultBranch = true;
+        defaultPicks++;
     }
+    else stratPicks += cut.size();
 }
 
 int inline branch_and_reduce_algorithm::get_max_deg_vtx()
