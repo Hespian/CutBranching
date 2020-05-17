@@ -1373,12 +1373,18 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
             defaultPicks++;
             defaultBranch = true;
         }
-        else stratPicks++;
+        else
+            stratPicks++;
 
         v = nd_order.back();
         nd_order.pop_back();
         dv = deg(v);
     }
+
+    // opt branch order
+    optBranchOrder.push_back(v);
+    std::vector<int> crntBranchOrder(optBranchOrder);
+    int crntBest = opt;
 
     std::vector<int> &ps = iter;
     for (int i = 0; i < n; i++)
@@ -1452,6 +1458,10 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
     lb = oldLB;
     depth--;
     restore(pn);
+
+    // optimal branch order
+    crntBest = opt;
+
     if (lb >= opt)
     {
         if (startingSolutionIsBest)
@@ -1466,6 +1476,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         defaultBranchings++;
         defaultBranch = false;
     }
+    optBranchOrder.swap(crntBranchOrder);
 
     if (mirrorN == 0)
     {
@@ -1526,6 +1537,12 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
     lb = oldLB;
     depth--;
     restore(pn);
+
+    if (opt == crntBest)
+    {
+        // v in vc is better => restore branching order
+        optBranchOrder.swap(crntBranchOrder);
+    }
 }
 
 bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
@@ -1951,6 +1968,19 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
             for (unsigned int j = 0; j < vss[i].size(); j++)
                 y[vss[i][j]] = vcs[i]->y[j];
         }
+
+        // get branching nodes
+        for (int i = 0; i < vcs.size(); i++)
+        {
+            branch_and_reduce_algorithm *pAlg = vcs[i];
+            std::vector<int> &vs = vss[i];
+            for (int j = 0; j < pAlg->optBranchOrder.size(); j++)
+            {
+                this->optBranchOrder.push_back(vs[pAlg->optBranchOrder[j]]);
+            }
+        }
+
+
         reverse();
     }
 
@@ -2597,6 +2627,38 @@ void branch_and_reduce_algorithm::convert_to_ga(std::shared_ptr<graph_access> G,
     G->build_from_adj(adja);
 }
 
+void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>>& G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping)
+{
+    unsigned int const node_count = number_of_nodes_remaining();
+
+    mapping.resize(adj.size(), -1);
+    reverse_mapping.resize(node_count, -1);
+
+    unsigned int node_counter = 0;
+    for (NodeID node = 0; node < adj.size(); ++node)
+    {
+        if (x[node] < 0)
+        {
+            mapping[node] = node_counter;
+            reverse_mapping[node_counter] = node;
+            node_counter++;
+        }
+    }
+    G.resize(node_count);
+
+    for (NodeID node = 0; node < adj.size(); ++node)
+    {
+        if (x[node] < 0)
+        {
+            for (NodeID neigh : adj[node])
+            {
+                if (x[neigh] < 0)
+                    G[mapping[node]].push_back(mapping[neigh]);
+            }
+        }
+    }
+}
+
 // NEW BRANCHING RULES
 
 int branch_and_reduce_algorithm::get_articulation_point()
@@ -2966,7 +3028,8 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
         defaultBranch = true;
         defaultPicks++;
     }
-    else stratPicks += cut.size();
+    else
+        stratPicks += cut.size();
 }
 
 int inline branch_and_reduce_algorithm::get_max_deg_vtx()
@@ -3069,9 +3132,9 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
             t_sep.push_back(perm[i]);
         }
     }
-    else 
+    else
     {
-        int pnt = n-1;
+        int pnt = n - 1;
         while (tsep_size > 0)
         {
             t_sep.push_back(perm[pnt]);
@@ -3146,9 +3209,7 @@ void branch_and_reduce_algorithm::compute_nd_order()
     if (p < 8)
         p = 8;
 
-
-
-    cout << "p: " << p << endl; 
+    //cout << "p: " << p << endl;
 
     int32_t *xadj = (int32_t *)malloc(sizeof(int32_t) * xadj_v.size());
     int32_t *adjncy = (int32_t *)malloc(sizeof(int32_t) * adjncy_v.size());
@@ -3189,8 +3250,8 @@ void branch_and_reduce_algorithm::compute_nd_order()
         }
     }
 
-    cout << *(sizes + 2 * p - 2) << endl;
-    cout << nd_order.size() << endl;
+    //cout << *(sizes + 2 * p - 2) << endl;
+    //cout << nd_order.size() << endl;
 
     free(xadj);
     free(adjncy);

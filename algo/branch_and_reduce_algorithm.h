@@ -72,6 +72,7 @@ public:
 		nDecomps = 0;
 	}
 
+	std::vector<int> optBranchOrder;
 
 	std::vector<std::vector<int>> adj;
 	static long nBranchings;
@@ -211,6 +212,7 @@ public:
 
 	void convert_to_ga(std::shared_ptr<graph_access> G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping);
 	void convert_to_metis(int32_t* nNodes, std::vector<int32_t> &xadj, std::vector<int32_t> &adjncy, std::vector<NodeID> &reverse_mapping);
+	void convert_to_adj(std::vector<std::vector<int>>& G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping);
 
 	void addStartingSolution(std::vector<int> solution, int solutionSize);
 
