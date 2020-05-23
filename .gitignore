@@ -1,5 +1,9 @@
 build
 Metis
+NestedDissection
+VieCut
+reduced_instances
+branch_orders
 .vscode*
 
 
