@@ -5,8 +5,8 @@
 #include "read_pace.h"
 #include "write_sol.h"
 #include "algo/branch_and_reduce_algorithm.h"
-#include "VieCut/lib/tools/timer.h"
-#include "VieCut/lib/data_structure/graph_access.h"
+#include "timer.h"
+#include "data_structure/graph_access.h"
 //#include "Metis/include/metis.h"
 
 #include "validate_sol.h"
@@ -23,6 +23,8 @@ int main(int argc,  char** argv)
     branch_and_reduce_algorithm::EXTRA_DECOMP = atoi(argv[2]);
     int start = atoi(argv[3]);
     int end = atoi(argv[4]) + 1;
+
+    branch_and_reduce_algorithm::ND_LEVEL = 64;
 
     std::string of = "../Benchmarks/" + to_string(branch_and_reduce_algorithm::BRANCHING) + "_" + to_string(branch_and_reduce_algorithm::EXTRA_DECOMP)
                     + "_" + to_string(start) + "_" + to_string(end) + ".txt";

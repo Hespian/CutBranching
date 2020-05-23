@@ -26,18 +26,32 @@
 #include "modified.h"
 
 //#include "definitions.h"
-#include "../VieCut/lib/data_structure/graph_access.h"
-#include "../VieCut/lib/algorithms/global_mincut/viecut.h"
-#include "../VieCut/lib/algorithms/flow/push_relabel.h"
-#include "../VieCut/lib/algorithms/flow/preflow_push.h"
+#include "data_structure/graph_access.h"
+#include "algorithms/push_relabel.h"
 
-#include "../VieCut/lib/tools/timer.h"
+
+#include "definitions.h"
+#include "timer.h"
 
 
 // system includes
 #include <vector>
 #include <string>
 #include <memory>
+#include <cstring>
+
+#include "../NestedDissection/extern/argtable3-3.0.3/argtable3.h"
+#include <iostream>
+#include <fstream>
+#include <regex.h>
+#include <memory>
+#include "metis.h"
+
+#include "data_structure/graph_access.h"
+#include "dissection/reductions.h"
+#include "io/graph_io.h"
+//#include "../RND/app/parse_parameters.h"
+#include "partition/partition_config.h"
 
 class branch_and_reduce_algorithm
 {
@@ -61,6 +75,8 @@ public:
 	static long defaultPicks;
 	static long stratPicks;
 	static long nDecomps;
+
+	static long prunes;
 
 	static void resetStatistics()
 	{
@@ -233,7 +249,7 @@ public:
 	// ----------
 
 	// global mincuts
-	viecut cut_algo;
+	//viecut cut_algo;
 	int get_mincut_vertex();
 	// ----------
 
@@ -241,12 +257,12 @@ public:
 	// st cuts
 	NodeID s, t;
 	int branch_t = 10;
-	push_relabel flow;
+	push_relabel flow_algo;
 	std::vector<NodeID> cut;
 
 	void get_stcut_vertices();
 	void find_st_vtcs(std::shared_ptr<graph_access> graph, NodeID ss = -1, NodeID tt = -1);
-	//void generate_flow_graph(std::shared_ptr<graph_access> graph, std::shared_ptr<flow_graph> flow);
+	void generate_flow_graph(std::shared_ptr<graph_access> graph, std::shared_ptr<flow_graph> flow);
 	// ------------
 
 	// utility
@@ -262,7 +278,8 @@ public:
 	void compute_nd_order();
 	std::vector<std::vector<int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
 
-
+	// Improved Nested Dissection
+	void compute_improved_nd_order();
 
 
 #if 0

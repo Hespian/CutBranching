@@ -20,6 +20,7 @@
 #include "fast_set.h"
 #include "modified.h"
 
+#include <stack>
 #include <vector>
 #include <set>
 #include <iostream>
@@ -55,6 +56,7 @@ bool branch_and_reduce_algorithm::defaultBranch = false;
 long branch_and_reduce_algorithm::defaultPicks = 0;
 long branch_and_reduce_algorithm::stratPicks = 0;
 long branch_and_reduce_algorithm::nDecomps = 0;
+long branch_and_reduce_algorithm::prunes = 0;
 
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
     : adj(), n(_adj.size()), used(n * 2)
@@ -1380,6 +1382,31 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         nd_order.pop_back();
         dv = deg(v);
     }
+    else if (BRANCHING == 7) // improved nested dissection
+    {
+        if (nd_computed == false)
+        {
+            compute_improved_nd_order();
+            nd_computed = true;
+        }
+
+        while (!nd_order.empty() && x[nd_order.back()] != -1)
+            nd_order.pop_back();
+
+        if (nd_order.empty())
+        {
+            //cout << "nd is empty!" << endl;
+            nd_order.push_back(get_max_deg_vtx());
+            defaultPicks++;
+            defaultBranch = true;
+        }
+        else
+            stratPicks++;
+
+        v = nd_order.back();
+        nd_order.pop_back();
+        dv = deg(v);
+    }
 
     // opt branch order
     optBranchOrder.push_back(v);
@@ -1980,7 +2007,6 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
             }
         }
 
-
         reverse();
     }
 
@@ -2047,6 +2073,7 @@ void branch_and_reduce_algorithm::rec(timer &t, double time_limit)
         return;
     if (lowerBound() >= opt) // pruned by LowerBound
     {
+        prunes++;
         if (startingSolutionIsBest && rn != 0)
         {
             ++numBranchesPrunedByStartingSolution;
@@ -2627,7 +2654,7 @@ void branch_and_reduce_algorithm::convert_to_ga(std::shared_ptr<graph_access> G,
     G->build_from_adj(adja);
 }
 
-void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>>& G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping)
+void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>> &G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping)
 {
     unsigned int const node_count = number_of_nodes_remaining();
 
@@ -2739,34 +2766,34 @@ void branch_and_reduce_algorithm::dfs(int v, int in)
 
 int branch_and_reduce_algorithm::get_mincut_vertex()
 {
+    // std::shared_ptr<graph_access> graph(new graph_access());
+    // std::vector<NodeID> reverseMapping(number_of_nodes_remaining());
+    // std::vector<NodeID> mapping(number_of_nodes_remaining());
+    // convert_to_ga(graph, reverseMapping, mapping);
 
-    std::shared_ptr<graph_access> graph(new graph_access());
-    std::vector<NodeID> reverseMapping(number_of_nodes_remaining());
-    std::vector<NodeID> mapping(number_of_nodes_remaining());
-    convert_to_ga(graph, reverseMapping, mapping);
+    // cut_algo.perform_minimum_cut(graph);
 
-    cut_algo.perform_minimum_cut(graph);
+    // NodeID branchNode = -1;
+    // int coutSize = 0;
 
-    NodeID branchNode = -1;
-    int coutSize = 0;
+    // for (int i = 0; i < graph->number_of_nodes(); i++)
+    // {
+    //     if (graph->getNodeInCut(i))
+    //     {
+    //         coutSize++;
+    //         for (auto neig : graph->edges_of(i))
+    //         {
+    //             NodeID id = graph->getEdgeTarget(neig);
+    //             if (!graph->getNodeInCut(id))
+    //             {
+    //                 branchNode = reverseMapping[id];
+    //             }
+    //         }
+    //     }
+    // }
 
-    for (int i = 0; i < graph->number_of_nodes(); i++)
-    {
-        if (graph->getNodeInCut(i))
-        {
-            coutSize++;
-            for (auto neig : graph->edges_of(i))
-            {
-                NodeID id = graph->getEdgeTarget(neig);
-                if (!graph->getNodeInCut(id))
-                {
-                    branchNode = reverseMapping[id];
-                }
-            }
-        }
-    }
-
-    return branchNode;
+    // return branchNode;
+    return get_max_deg_vtx();
 }
 
 void branch_and_reduce_algorithm::find_st_vtcs(std::shared_ptr<graph_access> graph, NodeID ss, NodeID tt)
@@ -2953,29 +2980,30 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     t = mapping[v2];
     // find_st_vtcs(graph, ss, tt);
 
-    std::shared_ptr<mutable_graph> m_graph = mutable_graph::from_graph_access(graph);
-    auto res = flow.solve_max_flow_min_cut(m_graph, {s, t}, 0, true);
+    std::shared_ptr<flow_graph> m_graph(new flow_graph());
+    generate_flow_graph(graph, m_graph);
+    std::vector<NodeID> res(0);
+    flow_algo.solve_max_flow_min_cut(*m_graph, s, t, true, res);
 
     std::vector<NodeID> cut1, cut2;
     std::vector<NodeID> edgesInCut;
-
     // find edges in cut and vtcs. adjacent to them
-    for (int i = 0; i < res.second.size(); i++)
+    for (int i = 0; i < res.size(); i++)
     {
-        for (auto neig : m_graph->edges_of(res.second[i]))
+        for (auto neig : graph->edges_of(res[i]))
         {
-            NodeID id = m_graph->getEdgeTarget(res.second[i], neig);
-            if (std::find(res.second.begin(), res.second.end(), id) == res.second.end())
+            NodeID id = graph->getEdgeTarget(neig);
+            if (std::find(res.begin(), res.end(), id) == res.end())
             {
                 // not in cut
-                edgesInCut.push_back(res.second[i]);
+                edgesInCut.push_back(res[i]);
                 edgesInCut.push_back(id);
 
                 if (std::find(cut2.begin(), cut2.end(), id) == cut2.end())
                     cut2.emplace_back(id);
 
                 if (std::find(cut1.begin(), cut1.end(), id) == cut1.end())
-                    cut1.emplace_back(res.second[i]);
+                    cut1.emplace_back(res[i]);
             }
         }
     }
@@ -3019,7 +3047,7 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
 
     cut.swap(vc);
 
-    double perc = (double)res.second.size() / (double)number_of_nodes_remaining();
+    double perc = (double)res.size() / (double)number_of_nodes_remaining();
     if (cut.size() > 7 || perc < 0.1 || perc > 0.9)
     {
         // to big, use max. deg. vertex instead
@@ -3072,7 +3100,7 @@ int inline branch_and_reduce_algorithm::get_min_deg_vtx(std::shared_ptr<graph_ac
 
     for (int i = 0; i < g->number_of_nodes(); i++)
     {
-        int ddv = g->getUnweightedNodeDegree(i);
+        int ddv = g->getNodeDegree(i);
         if (ddv < dv)
         {
             v = i;
@@ -3092,29 +3120,19 @@ bool inline branch_and_reduce_algorithm::is_neighbour_of(std::shared_ptr<graph_a
     return false;
 }
 
-// void branch_and_reduce_algorithm::generate_flow_graph(std::shared_ptr<graph_access> graph, std::shared_ptr<flow_graph> flow)
-// {
-//     flow->start_construction(graph->number_of_nodes() * 2);
+void branch_and_reduce_algorithm::generate_flow_graph(std::shared_ptr<graph_access> graph, std::shared_ptr<flow_graph> flow)
+{
+    flow->start_construction(graph->number_of_nodes());
 
-//     for (int i = 0; i < graph->number_of_nodes(); i++)
-//     {
-//         flow->new_edge(i * 2, i * 2 + 1, 1);
-//     }
+    for (EdgeID e : graph->edges())
+    {
+        NodeID s1 = graph->getEdgeSource(e);
+        NodeID t1 = graph->getEdgeTarget(e);
+        flow->new_edge(s1, t1, 1);
+    }
 
-//     for (EdgeID e : graph->edges())
-//     {
-//         NodeID s1 = graph->getEdgeSource(e) * 2 + 1;
-//         NodeID t1 = graph->getEdgeTarget(e) * 2;
-
-//         NodeID s2 = t1 + 1;
-//         NodeID t2 = s1 - 1;
-
-//         flow->new_edge(s1, t1, 1);
-//         flow->new_edge(s2, t2, 1);
-//     }
-
-//     flow->finish_construction();
-// }
+    flow->finish_construction();
+}
 
 std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int32_t *perm, int32_t *part_sizes, int32_t *sep_sizes, int n, int p, int32_t *weights)
 {
@@ -3260,4 +3278,105 @@ void branch_and_reduce_algorithm::compute_nd_order()
     free(sizes);
 
     //free(degs);
+}
+
+void branch_and_reduce_algorithm::compute_improved_nd_order()
+{
+    PartitionConfig partition_config;
+    std::vector<nested_dissection_reduction_type> rorder(4);
+    rorder[0] = (nested_dissection_reduction_type)0;
+    rorder[1] = (nested_dissection_reduction_type)1;
+    rorder[2] = (nested_dissection_reduction_type)4;
+    rorder[3] = (nested_dissection_reduction_type)5;
+    partition_config.reduction_order = rorder;
+    partition_config.max_simplicial_degree = 12;
+
+    bool suppress_output = true;
+
+    std::streambuf *backup = std::cout.rdbuf();
+    if (suppress_output)
+        std::cout.rdbuf(nullptr);
+
+    std::shared_ptr<graph_access> input_graph(new graph_access());
+    std::vector<NodeID> m(0);
+    std::vector<NodeID> rm(number_of_nodes_remaining());
+    convert_to_ga(input_graph, rm, m);
+
+    graph_access *active_graph;
+    std::vector<std::unique_ptr<Reduction>> reduction_stack;
+    bool used_reductions = apply_reductions(partition_config, *input_graph, reduction_stack);
+    if (used_reductions)
+    {
+        active_graph = &reduction_stack.back()->get_reduced_graph();
+    }
+    else
+    {
+        active_graph = &(*input_graph);
+    }
+
+    idx_t num_nodes = active_graph->number_of_nodes(); // graph data structure
+    idx_t *xadj = active_graph->UNSAFE_metis_style_xadj_array();
+    idx_t *adjncy = active_graph->UNSAFE_metis_style_adjncy_array();
+    idx_t *perm = new idx_t[active_graph->number_of_nodes()];
+    idx_t *iperm = new idx_t[active_graph->number_of_nodes()]; // inverse ordering. This is the one we are interested in.
+    idx_t *metis_options = new idx_t[METIS_NOPTIONS];
+
+    int p = pow(2, ceil(log2(num_nodes))) / ND_LEVEL;
+
+    if (p < 8)
+        p = 8;
+
+    idx_t *sizes = new idx_t[p * 2];
+
+    // Perform nested dissection with Metis
+    if (num_nodes > 0)
+    {
+        METIS_SetDefaultOptions(metis_options);
+        //METIS_NodeND(&num_nodes, xadj, adjncy, nullptr, metis_options, perm, iperm);
+        METIS_NodeNDP(num_nodes, xadj, adjncy, nullptr, p, metis_options, perm, iperm, sizes);
+    }
+    // Place labels of reduced graph in a vector for uncontracting
+    std::vector<NodeID> reduced_labels(active_graph->number_of_nodes(), 0);
+    for (size_t i = 0; i < active_graph->number_of_nodes(); ++i)
+    {
+        reduced_labels[i] = iperm[i];
+    }
+
+    std::vector<std::vector<int>> seps = get_nd_separators(perm, sizes, sizes + p, num_nodes, p, NULL);
+    std::vector<NodeID> seps_flat;
+    for (int i = seps.size() - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < seps[i].size(); j++)
+            seps_flat.push_back(seps[i][j]);
+    }
+
+    // Map ordering of reduced graph to input graph
+    std::vector<NodeID> final_labels;
+    std::vector<NodeID> final_seps;
+
+    if (used_reductions)
+    {
+        map_ordering(reduction_stack, reduced_labels, final_labels);
+        map_separators(reduction_stack, seps_flat, final_seps);
+    }
+    else
+    {
+        final_labels = reduced_labels;
+        final_seps = seps_flat;
+    }
+
+    for (int i = final_seps.size() - 1; i >= 0; i--)
+    {
+        nd_order.push_back(rm[final_seps[i]]);
+    }
+
+    // Restore cout output stream
+    std::cout.rdbuf(backup);
+
+    delete[] xadj;
+    delete[] adjncy;
+    delete[] perm;
+    delete[] iperm;
+    delete[] metis_options;
+    delete[] sizes;
 }
