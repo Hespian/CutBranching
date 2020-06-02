@@ -256,7 +256,7 @@ public:
 
 	// st cuts
 	NodeID s, t;
-	int branch_t = 10;
+	int branch_t = 0;
 	push_relabel flow_algo;
 	std::vector<NodeID> cut;
 
@@ -273,6 +273,7 @@ public:
 
 	// Nested Dissection
 	bool nd_computed = false;
+	int nd_threshold = 30;
 	std::vector<NodeID> nd_order;
 
 	void compute_nd_order();

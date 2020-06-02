@@ -1359,14 +1359,17 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
     }
     else if (BRANCHING == 6) // nested dissection
     {
-        if (nd_computed == false)
+        if (nd_computed == false && branch_t == 0)
         {
-            compute_nd_order();
             nd_computed = true;
+            compute_nd_order();
+            branch_t = 20;
         }
 
         while (!nd_order.empty() && x[nd_order.back()] != -1)
             nd_order.pop_back();
+
+        branch_t--;
 
         if (nd_order.empty())
         {
@@ -3217,6 +3220,8 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
 
 void branch_and_reduce_algorithm::compute_nd_order()
 {
+    nd_threshold = std::max(30, (int)(0.1 * number_of_nodes_remaining()));
+
     int32_t n;
     std::vector<int32_t> xadj_v;
     std::vector<int32_t> adjncy_v;
@@ -3258,6 +3263,21 @@ void branch_and_reduce_algorithm::compute_nd_order()
 
     int r = METIS_NodeNDP(n, xadj, adjncy, NULL, p, NULL, perm, iperm, sizes);
     //int r = METIS_NodeNDP(n, xadj, adjncy, degs, p, NULL, perm, iperm, sizes);
+
+    for (int i = p; i < 2 * p; i++)
+    {
+        if (sizes[i] > nd_threshold)
+        {
+            nd_computed = false;
+            free(xadj);
+            free(adjncy);
+            free(perm);
+            free(iperm);
+            free(sizes);
+            return;
+        }
+    }
+
     std::vector<std::vector<int>> seps = get_nd_separators(perm, sizes, sizes + p, n, p, NULL);
 
     for (int i = seps.size() - 1; i >= 0; i--)
@@ -3365,10 +3385,12 @@ void branch_and_reduce_algorithm::compute_improved_nd_order()
         final_seps = seps_flat;
     }
 
-    for (int i = final_seps.size() - 1; i >= 0; i--)
-    {
-        nd_order.push_back(rm[final_seps[i]]);
-    }
+    // for (int i = final_seps.size() - 1; i >= 0; i--)
+    // {
+    //     nd_order.push_back(rm[final_seps[i]]);
+    // }
+
+    nd_order.swap(final_labels);
 
     // Restore cout output stream
     std::cout.rdbuf(backup);
