@@ -77,6 +77,7 @@ public:
 	static long nDecomps;
 
 	static long prunes;
+	static long ro;
 
 	static void resetStatistics()
 	{
@@ -89,6 +90,7 @@ public:
 	}
 
 	std::vector<int> optBranchOrder;
+	std::vector<std::vector<int>>  branchTree;
 
 	std::vector<std::vector<int>> adj;
 	static long nBranchings;

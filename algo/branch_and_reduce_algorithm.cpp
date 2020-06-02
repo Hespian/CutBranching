@@ -58,6 +58,8 @@ long branch_and_reduce_algorithm::stratPicks = 0;
 long branch_and_reduce_algorithm::nDecomps = 0;
 long branch_and_reduce_algorithm::prunes = 0;
 
+long branch_and_reduce_algorithm::ro = 1;
+
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
     : adj(), n(_adj.size()), used(n * 2)
 {
@@ -193,6 +195,17 @@ void branch_and_reduce_algorithm::compute_fold(std::vector<int> const &S, std::v
             newAdj[i + 1].swap(copyOfTmp);
         }
     }
+
+    // test
+    if (ro == 1)
+    {
+        for (int i = 0; i < nd_order.size(); i++)
+        {
+            if (std::find(removed.begin(), removed.end(), nd_order[i]) != removed.end())
+                nd_order[i] = s;
+        }
+    }
+
     modifieds[modifiedN++] = make_shared<fold>(fold(S.size(), removed, vs, newAdj, this));
 }
 
@@ -1411,6 +1424,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         dv = deg(v);
     }
 
+    branchTree.push_back({depth, v});
     // opt branch order
     optBranchOrder.push_back(v);
     std::vector<int> crntBranchOrder(optBranchOrder);
@@ -1985,6 +1999,18 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
             assert(vc->y[j] == 0 || vc->y[j] == 1);
         }
     }
+
+    for (int i = 0; i < vcs.size(); i++)
+    {
+        branch_and_reduce_algorithm *pAlg = vcs[i];
+        std::vector<int> &vs = vss[i];
+        for (int j = 0; j < pAlg->branchTree.size(); j++)
+        {
+            std::vector<int> &bn = pAlg->branchTree[j];
+            this->branchTree.push_back({bn[0], vs[bn[1]]});
+        }
+    }
+
     if (opt > sum) // new best solution found -> set solution
     {
         if (debug >= 2 && rootDepth <= maxDepth)
