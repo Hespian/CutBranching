@@ -121,6 +121,26 @@ void branch_and_reduce_algorithm::set(int v, int a)
     crt += a;
     x[v] = a;
     vRestore[--rn] = v;
+
+    // disable v in bc_index
+    if (bc_index_built)
+    {
+        int cnt = 0;
+        for (int u : adj[v])
+        {
+            if (x[u] < 0)
+            {
+                bc_index->DeleteEdge(u, v);
+                bc_index->DeleteEdge(v, u);
+                removedEdges.emplace_back(u, v);
+                removedEdges.emplace_back(v, u);
+                cnt += 2;
+            }
+        }
+        removedEdgesCnt.push_back(cnt);
+        nDisabled++;
+    }
+
     if (a == 0)
     {
         for (int u : adj[v])
@@ -129,6 +149,25 @@ void branch_and_reduce_algorithm::set(int v, int a)
                 x[u] = 1;
                 crt++;
                 vRestore[--rn] = u;
+
+                if (bc_index_built)
+                {
+                    // disable u in bc_index
+                    int cnt = 0;
+                    for (int w : adj[u])
+                    {
+                        if (x[w] < 0)
+                        {
+                            bc_index->DeleteEdge(w, u);
+                            bc_index->DeleteEdge(u, w);
+                            removedEdges.emplace_back(w, u);
+                            removedEdges.emplace_back(u, w);
+                            cnt += 2;
+                        }
+                    }
+                    removedEdgesCnt.push_back(cnt);
+                    nDisabled++;
+                }
             }
     }
 }
@@ -138,11 +177,15 @@ void branch_and_reduce_algorithm::set(int v, int a)
 void branch_and_reduce_algorithm::compute_fold(std::vector<int> const &S, std::vector<int> const &NS)
 {
     assert(NS.size() == S.size() + 1);
+
+    // remove all vertices but the 1. neighbour
     std::vector<int> removed(S.size() * 2);
     for (unsigned int i = 0; i < S.size(); i++)
         removed[i] = S[i];
     for (unsigned int i = 0; i < S.size(); i++)
         removed[S.size() + i] = NS[1 + i];
+
+    // s = first neighbour
     int s = NS[0];
     used.clear();
     for (int v : S)
@@ -158,6 +201,9 @@ void branch_and_reduce_algorithm::compute_fold(std::vector<int> const &S, std::v
                 tmp[p++] = u;
             }
     }
+    // tmp contains N(N(S))\S
+
+    // set edges of s
     std::vector<std::vector<int>> newAdj(p + 1);
     {
         std::vector<int> copyOfTmp(tmp.begin(), tmp.begin() + p);
@@ -171,6 +217,8 @@ void branch_and_reduce_algorithm::compute_fold(std::vector<int> const &S, std::v
         used.add(v);
     for (int v : NS)
         used.add(v);
+
+    // set edges of vertices in tmp
     for (unsigned int i = 0; i < newAdj[0].size(); i++)
     {
         int v = newAdj[0][i];
@@ -288,6 +336,7 @@ void branch_and_reduce_algorithm::compute_alternative(std::vector<int> const &A,
             newAdj[i].swap(copyOfTmp);
         }
     }
+
     modifieds[modifiedN++] = make_shared<alternative>(alternative(removed.size() / 2, removed, vs, newAdj, this, A2.size()));
 }
 
@@ -301,6 +350,19 @@ void branch_and_reduce_algorithm::restore(int n)
             crt -= x[v];
             x[v] = -1;
             rn++;
+
+            if (nDisabled >= 0)
+            {
+                int nEdges = removedEdgesCnt.back();
+                removedEdgesCnt.pop_back();
+                nDisabled--;
+                for (int i = 0; i < nEdges; i++)
+                {
+                    std::pair<int, int> edge = removedEdges.back();
+                    removedEdges.pop_back();
+                    bc_index->InsertEdge(edge.first, edge.second);
+                }
+            }
         }
         else
         {
@@ -768,7 +830,7 @@ bool branch_and_reduce_algorithm::fold2Reduction()
             if (p < 2)
                 continue;
             for (int u : adj[tmp[0]])
-                if (u == tmp[1])
+                if (u == tmp[1]) // triangle
                 {
                     set(v, 0);
                     goto loop;
@@ -1404,6 +1466,101 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         {
             compute_improved_nd_order();
             nd_computed = true;
+        }
+
+        while (!nd_order.empty() && x[nd_order.back()] != -1)
+            nd_order.pop_back();
+
+        if (nd_order.empty())
+        {
+            //cout << "nd is empty!" << endl;
+            nd_order.push_back(get_max_deg_vtx());
+            defaultPicks++;
+            defaultBranch = true;
+        }
+        else
+            stratPicks++;
+
+        v = nd_order.back();
+        nd_order.pop_back();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 8) // betweenness centrality
+    {
+        if (!bc_index_built)
+        {
+            bc_index_built = true;
+
+            bc_index = new DynamicCentralityHAY();
+            std::vector<std::pair<int, int>> es;
+            for (int v = 0; v < adj.size(); v++)
+            {
+                if (x[v] < 0)
+                {
+                    for (int u : adj[v])
+                    {
+                        if (x[u] < 0)
+                            es.emplace_back(u, v);
+                    }
+                }
+            }
+            nVert = rn;
+
+            bc_index->PreCompute(es, 5000);
+            cout << "ok" << endl;
+        }
+
+        double topCentr = 0;
+        v = -1;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (x[i] < 0)
+            {
+                double centr = bc_index->QueryCentrality(i);
+                if (centr > topCentr)
+                {
+                    v = i;
+                    topCentr = centr;
+                }
+            }
+        }
+        //if (v == -1) v = get_max_deg_vtx();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 9)
+    {
+        if (nd_computed == false)
+        {
+            nd_computed = true;
+            bc_index_built = true;
+
+            bc_index = new DynamicCentralityHAY();
+            std::vector<std::pair<int, int>> es;
+            for (int v = 0; v < adj.size(); v++)
+            {
+                if (x[v] < 0)
+                {
+                    for (int u : adj[v])
+                    {
+                        if (x[u] < 0)
+                            es.emplace_back(u, v);
+                    }
+                }
+            }
+            nVert = rn;
+            bc_index->PreCompute(es, 500000);
+            std::vector<std::pair<double, int>> ranking;
+            cout << "rn: " << rn << endl;
+            for (int i = 0; i < adj.size(); i++)
+            {
+                if (x[i] < 0)
+                    ranking.emplace_back(bc_index->QueryCentrality(i), i);
+            }
+            std::sort(ranking.begin(), ranking.end());
+            for (int i = 0; i < ranking.size(); i++)
+                nd_order.push_back(ranking[i].second);
+            cout << "ok" << endl;
         }
 
         while (!nd_order.empty() && x[nd_order.back()] != -1)

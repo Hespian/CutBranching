@@ -53,6 +53,10 @@
 //#include "../RND/app/parse_parameters.h"
 #include "partition/partition_config.h"
 
+#include "algorithm/dynamic_centrality_hay.hpp"
+
+using namespace betweenness_centrality;
+
 class branch_and_reduce_algorithm
 {
 	friend class modified;
@@ -283,6 +287,19 @@ public:
 
 	// Improved Nested Dissection
 	void compute_improved_nd_order();
+
+
+
+	// Betweenness Centrality
+	DynamicCentralityBase *bc_index;
+	bool bc_index_built = false;
+	bool done = false;
+	int nVert = -1;
+
+	int nDisabled = -1;
+	std::vector<std::pair<int, int>> removedEdges;
+	std::vector<int> removedEdgesCnt;
+	
 
 
 #if 0
