@@ -300,6 +300,8 @@ public:
 	std::vector<std::pair<int, int>> removedEdges;
 	std::vector<int> removedEdgesCnt;
 	
+	std::vector<int> nodeMapping;
+
 
 
 #if 0

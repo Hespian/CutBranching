@@ -39,6 +39,7 @@ modified::modified(int const _add, std::vector<int> &_removed, std::vector<int> 
 
     if (pAlg->bc_index_built)
     {
+        std::vector<int>& mapping = pAlg->nodeMapping;
 
         // disable removed vertices in bc_index
         for (int v : removed)
@@ -47,8 +48,11 @@ modified::modified(int const _add, std::vector<int> &_removed, std::vector<int> 
             {
                 if (pAlg->x[u] < 0)
                 {
-                    pAlg->bc_index->DeleteEdge(v, u);
-                    pAlg->bc_index->DeleteEdge(u, v);
+                    pAlg->bc_index->DeleteEdge(mapping[v], mapping[u]);
+                    pAlg->bc_index->DeleteEdge(mapping[u], mapping[v]);
+
+                    modStack.emplace_back(std::make_pair(mapping[v], mapping[u]), 1);
+                    modStack.emplace_back(std::make_pair(mapping[u], mapping[v]), 1);
                 }
             }
         }
@@ -60,8 +64,11 @@ modified::modified(int const _add, std::vector<int> &_removed, std::vector<int> 
             {
                 if (pAlg->x[u] < 0)
                 {
-                    pAlg->bc_index->DeleteEdge(v, u);
-                    pAlg->bc_index->DeleteEdge(u, v);
+                    pAlg->bc_index->DeleteEdge(mapping[v], mapping[u]);
+                    pAlg->bc_index->DeleteEdge(mapping[u], mapping[v]);
+
+                    modStack.emplace_back(std::make_pair(mapping[v], mapping[u]), 1);
+                    modStack.emplace_back(std::make_pair(mapping[u], mapping[v]), 1);
                 }
             }
         }
@@ -71,8 +78,11 @@ modified::modified(int const _add, std::vector<int> &_removed, std::vector<int> 
         {
             for (int u : newAdj[i])
             {
-                pAlg->bc_index->InsertEdge(vs[i], u);
-                pAlg->bc_index->InsertEdge(u, vs[i]);
+                pAlg->bc_index->InsertEdge(mapping[vs[i]], mapping[u]);
+                pAlg->bc_index->InsertEdge(mapping[u], mapping[vs[i]]);
+
+                modStack.emplace_back(std::make_pair(mapping[vs[i]], mapping[u]), 2);
+                modStack.emplace_back(std::make_pair(mapping[u], mapping[vs[i]]), 2);
             }
         }
     }
@@ -100,41 +110,17 @@ void modified::restore()
 
     if (pAlg->bc_index_built)
     {
-
-        // remove added edges
-        for (int i = 0; i < static_cast<int>(vs.size()); i++)
+        for (int i = 0; i < modStack.size(); i++)
         {
-            for (int u : pAlg->adj[vs[i]])
-            {
-                pAlg->bc_index->DeleteEdge(vs[i], u);
-                pAlg->bc_index->DeleteEdge(u, vs[i]);
-            }
-        }
-
-        // add removed edges
-        for (int i = 0; i < static_cast<int>(vs.size()); i++)
-        {
-            for (int u : oldAdj[i])
-            {
-                if (pAlg->x[u] < 0)
-                {
-                    pAlg->bc_index->InsertEdge(vs[i], u);
-                    pAlg->bc_index->InsertEdge(u, vs[i]);
-                }
-            }
-        }
-
-        // enable removed verties
-        for (int v : removed)
-        {
-            for (int u : pAlg->adj[v])
-            {
-                if (pAlg->x[u] < 0)
-                {
-                    pAlg->bc_index->InsertEdge(v, u);
-                    pAlg->bc_index->InsertEdge(u, v);
-                }
-            }
+            std::pair<int, int> edge = modStack.back().first;
+            int mode = modStack.back().second;
+            modStack.pop_back();
+             
+            
+            if (mode == 1)
+                pAlg->bc_index->InsertEdge(edge.first, edge.second);
+            else if (mode == 2)
+                pAlg->bc_index->DeleteEdge(edge.first, edge.second);
         }
     }
 

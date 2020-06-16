@@ -130,17 +130,16 @@ void branch_and_reduce_algorithm::set(int v, int a)
         {
             if (x[u] < 0)
             {
-                bc_index->DeleteEdge(u, v);
-                bc_index->DeleteEdge(v, u);
-                removedEdges.emplace_back(u, v);
-                removedEdges.emplace_back(v, u);
+                bc_index->DeleteEdge(nodeMapping[u], nodeMapping[v]);
+                bc_index->DeleteEdge(nodeMapping[v], nodeMapping[u]);
+                removedEdges.emplace_back(nodeMapping[u], nodeMapping[v]);
+                removedEdges.emplace_back(nodeMapping[v], nodeMapping[u]);
                 cnt += 2;
             }
         }
         removedEdgesCnt.push_back(cnt);
         nDisabled++;
     }
-
     if (a == 0)
     {
         for (int u : adj[v])
@@ -158,10 +157,10 @@ void branch_and_reduce_algorithm::set(int v, int a)
                     {
                         if (x[w] < 0)
                         {
-                            bc_index->DeleteEdge(w, u);
-                            bc_index->DeleteEdge(u, w);
-                            removedEdges.emplace_back(w, u);
-                            removedEdges.emplace_back(u, w);
+                            bc_index->DeleteEdge(nodeMapping[u], nodeMapping[w]);
+                            bc_index->DeleteEdge(nodeMapping[w], nodeMapping[u]);
+                            removedEdges.emplace_back(nodeMapping[u], nodeMapping[w]);
+                            removedEdges.emplace_back(nodeMapping[w], nodeMapping[u]);
                             cnt += 2;
                         }
                     }
@@ -1485,7 +1484,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         nd_order.pop_back();
         dv = deg(v);
     }
-    else if (BRANCHING == 8) // betweenness centrality
+    else if (BRANCHING == 8) // dynamic betweenness centrality
     {
         if (!bc_index_built)
         {
@@ -1505,8 +1504,15 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
                 }
             }
             nVert = rn;
-
             bc_index->PreCompute(es, 5000);
+
+            // top level -> mapping = id
+            nodeMapping.resize(adj.size());
+            for (int i = 0; i < nodeMapping.size(); i++)
+            {
+                nodeMapping[i] = i;
+            }
+
             cout << "ok" << endl;
         }
 
@@ -1517,7 +1523,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         {
             if (x[i] < 0)
             {
-                double centr = bc_index->QueryCentrality(i);
+                double centr = bc_index->QueryCentrality(nodeMapping[i]);
                 if (centr > topCentr)
                 {
                     v = i;
@@ -1528,12 +1534,12 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         //if (v == -1) v = get_max_deg_vtx();
         dv = deg(v);
     }
-    else if (BRANCHING == 9)
+    else if (BRANCHING == 9) // static betweenness centrality
     {
         if (nd_computed == false)
         {
             nd_computed = true;
-            bc_index_built = true;
+            bc_index_built = false;
 
             bc_index = new DynamicCentralityHAY();
             std::vector<std::pair<int, int>> es;
@@ -1549,7 +1555,8 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
                 }
             }
             nVert = rn;
-            bc_index->PreCompute(es, 500000);
+            bc_index->PreCompute(es, 1000);
+
             std::vector<std::pair<double, int>> ranking;
             cout << "rn: " << rn << endl;
             for (int i = 0; i < adj.size(); i++)
@@ -1965,6 +1972,18 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
 
             vcs[i]->nd_computed = this->nd_computed;
             vcs[i]->nd_order.swap(sub_nd_order);
+
+            // mapping for bc index
+            if (BRANCHING == 8)
+            {
+                std::vector<int> sub_nodeMapping(nodeMapping.size());
+                for (int i = 0; i < vs.size(); i++)
+                    sub_nodeMapping[i] = nodeMapping[vs[i]];
+
+                vcs[i]->bc_index_built = this->bc_index_built;
+                vcs[i]->bc_index = this->bc_index;
+                vcs[i]->nodeMapping.swap(sub_nodeMapping);
+            }
 
             for (unsigned int j = 0; j < vs.size(); j++)
             {

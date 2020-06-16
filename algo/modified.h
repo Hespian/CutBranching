@@ -37,6 +37,8 @@ public:
     std::vector<std::vector<int>> oldAdj;
     branch_and_reduce_algorithm *pAlg;
 
+    std::vector<std::pair<std::pair<int,int>, int>> modStack;
+
 public:
     modified(int const add, std::vector<int> &removed, std::vector<int> &vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg);
 
