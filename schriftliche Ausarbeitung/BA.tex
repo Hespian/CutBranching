@@ -24,23 +24,23 @@
 
 \section{Introduction} \label{sec1}
 \subsection{Motivation}
-The problem \textit{maximum independent set} is a classic NP-complete graph problem \cite{GareyJohnson} and therefore has been well studied over the last decades. Given an undirected graph, the problem is to find a set of pairwise non-adjacent vertices of largest cardinality.\\\\
-Applications of \textit{maximum independent set} and its complementary problems \textit{minimum vertex cover} and \textit{maximum clique} cover a variety of fields including computer graphics \cite{CG}, network analysis \cite{NW}, rout planning \cite{RP} and computational biology \cite{BIO1, BIO2}, among others. Unfortunately, due to the complexity of those problems, finding exact solutions to most real-world instances is computationally infeasible. However, a lot of work is invested into finding new techniques to handle the complexity. \\\\
-One of the best known techniques for finding exact solutions to those problems, both  in theory and practice, are branch and bound algorithms. Such algorithms are generally based on kernelization. This means applying a set of reduction rules to decrease the complexity measure (in most cases the size) of an instance while still preserving the solvabilty. A solution to the original instance can then be constructed from a solution of the reduced instance in subexponential time. If an instance can not be reduced further, the algorithm branches into at least two subproblems of lower complexity which are then solved recursively. Branch and bound algorithms also use problem specific upper and lower bounds to a solution and prune the search space by eliminating solutions which do not satisfy those bounds. \\\\
-So far most studies on branch and bound algorithms for the \textit{maximum independent set} problem solely focused on finding new and improved reduction rules and lower or upper bounds, respectively. There are very few publications regarding different branching strategies. However, a comparison of three simple branching strategies by Akiba and Iwata \cite{AkibaIwata} shows that the branching strategy can have a huge impact on the running time of an algorithm.
+The \emph{maximum independent set} problem is a classic NP-complete graph problem \cite{GareyJohnson} and therefore has been well studied over the last decades. Given an undirected graph, the problem is to find a set of pairwise non-adjacent vertices of largest cardinality.\paragraph{}
+Applications of maximum independent set and its complementary problems \emph{minimum vertex cover} and \emph{maximum clique} cover a variety of fields including computer graphics \cite{CG}, network analysis \cite{NW}, rout planning \cite{RP} and computational biology \cite{BIO1, BIO2}, among others. Unfortunately, due to the complexity of those problems, finding exact solutions to most real-world instances is computationally infeasible. However, a lot of work is invested into finding new techniques to handle the complexity. \paragraph{}
+One of the best known techniques for finding exact solutions to those problems, both  in theory and practice, are branch and reduce algorithms. Such algorithms are generally based on kernelization. This means applying a set of reduction rules to decrease the complexity measure (in most cases the size) of an instance while still preserving the solvabilty. A solution to the original instance can then be constructed from a solution of the reduced instance in subexponential time. If an instance can not be reduced further, the algorithm branches into at least two subproblems of lower complexity which are then solved recursively. Branch and reduce algorithms also use problem specific upper and lower bounds to a solution and prune the search space by eliminating solutions which do not satisfy those bounds. \paragraph{}
+So far most studies on branch and reduce algorithms for the maximum independent set problem solely focused on finding new and improved reduction rules and lower or upper bounds, respectively. There are very few publications regarding different branching strategies. However, a comparison of three simple branching strategies by Akiba and Iwata \cite{AkibaIwata} shows that the branching strategy can have a huge impact on the running time of an algorithm.
 
 \subsection{Contributions}
 
-This Thesis experimentally examines various different branching strategies for \textit{maximum independent set}. We essentially followed two main approaches. The first approach is to branch on vertices that decompose the graph and then solve the resulting connected components independently. The second approach is to destroy complex structures by branching on vertices such that the structure can be reduced by kernelization afterwards. We implemented a variety of different branching strategies following both approaches and compared them to the branching strategy used by the state of the art branch and bound algorithm for \textit{maximum independent set} proposed by Akiba and Iwata \cite{AkibaIwata}. For testing we used instances from multiple graph classes.\\\\
+This thesis experimentally examines various different branching strategies for maximum independent set. We essentially follow two main approaches. The first approach is to branch on vertices that decompose the graph and then solve the resulting connected components independently. The second approach is to destroy complex structures by branching on vertices such that the structure can be reduced by kernelization afterwards. We implement a variety of different branching strategies following both approaches and compare them to the branching strategy used by the state of the art branch and reduce algorithm for maximum independent set proposed by Akiba and Iwata \cite{AkibaIwata}. For testing we use instances from multiple graph classes.\paragraph{}
 Branching strategies following the first approach can also be used for other graph problems, but we did not evaluate this. We also did not analyze any of the branching strategies on a theoretical level.  
 
 
 
 \subsection{Structure of Thesis}
 
-Following the brief introduction (section \ref{sec1}), in section \ref{sec2} we state the notation and problem definitions used throughout this Thesis. Here, we also explain the two variants of a branch and bound algorithm for \textit{maximum independent set} that we used as a basic framework for testing our branching strategies. In particular we define the reduction rules used by the algorithm.\\
-Section \ref{sec3} gives an overview of related work focusing on branching strategies used by other branch and bound algorithms for \textit{maximum independent set} or the equivalent problems \textit{minimum vertex cover} and \textit{maximum clique}.
-In section \ref{sec4} we outline our approaches and explain the implemented branching strategies in detail. Section \ref{sec5} contains the experimental results. We start by explaining our testing methodology and then state our results. Subsequently, we compare all branching strategies to each other and discuss the effectiveness of our approaches. Finally, in section \ref{sec6} proposals for future work will be discussed based on the results of the Thesis.
+Following the brief introduction (Section \ref{sec1}), in Section \ref{sec2} we introduce the notation and problem definitions used throughout this Thesis. Here, we also explain the two variants of a branch and reduce algorithm for maximum independent set that we used as a basic framework for testing our branching strategies. In particular we define the reduction rules used by the algorithm.\\
+Section \ref{sec3} gives an overview of related work focusing on branching strategies used by other branch and reduce algorithms for maximum independent set or the equivalent problems minimum vertex cover and maximum clique.
+In Section \ref{sec4} we outline our approaches and explain the implemented branching strategies in detail. Section \ref{sec5} contains the experimental results. We start by explaining our testing methodology and then state our results. Subsequently, we compare all branching strategies to each other and discuss the effectiveness of our approaches. Finally, in Section \ref{sec6} proposals for future work will be discussed based on the results of the Thesis.
 
 \section{Preliminaries} \label{sec2}
 
@@ -48,94 +48,93 @@ This section introduces basic notation and problem definitions used throughout t
 
 \subsection{Basic Definitions}
 
-An undirected graph $G=(V,E)$ is a tuple of a set $V$ of vertices (also called nodes) and a set $E\subseteq \binom{V}{2}$ of edges. Two vertices $v,u\in V$ are called \textit{adjacent} or neighbours, if they are connected by an edge, i.e. $\{v,u\}\in E$. The set $N(v) := \{u \in V\;|\; \{v,u\}\in E \}$ of all neighbours of a vertex $v\in V$ is called the \textit{neighbourhood} of $v$ and $N[v] := N(v) \cup \{v\}$ denotes to the \textit{closed} neighbourhood of $v$. For a subset $S\subseteq V$ the graph $G_S=(S, E\cap\binom{S}{2})$ is called a
-the subgraph \textit{induced by} $S$.\\\\
-A subset $I\subseteq V$ is called an \textit{independent set} of $G$, if no two vertices from $I$ are adjacent, so formally if $\forall v,u\in I: \{v,u\}\notin E$. A \textit{maximum independent set} of $G$ is an \textit{independent set} of largest cardinality.\\
-A subset $S\subseteq V$ is called a \textit{vertex cover} of $G$, if for all neighbors $v$ and $u$ in $G$ either $v$ or $u$ (or both) is in $S$, so formally if $\forall \{v,u\}\in E: v\in S \vee u\in S$. A \textit{minimum vertex cover} of $G$ is a \text{vertex cover} of minimal cardinality. If $I$ is an independent set in $G$, then $V\setminus I$ is a vertex cover in $G$.\\
-A subset $C\subseteq V$ is called a \textit{clique} of $G$, if any two vertices from $C$ are adjacent, so formally if $\forall v,u\in C:{v,u}\in E$. A \textit{maximum clique} of $G$ is a \textit{clique} of largest cardinality. If $I$ is an (\textit{maximum}) \text{independent set} in $G$, then $I$ is also a (\textit{maximum}) \text{clique} in the complement graph $\overline{G}=(V, \binom{V}{2}\setminus E)$.\\\\
-A \textit{simple path} $P=(v_1,\dots,v_k)$ is a sequence of distinct vertices in $G$ such that $\{v_i,v_{i+1}\}\in E$ for all $i \in \{1,\dots,k-1\}$. A subgraph of $G$ induced by a cardinality maximal subset of the vertices such that any two vertices are connected by a path is called a \textit{connected component}. A graph that contains only one connected component is called \textit{connected}. \\\\
-A partition of $V$ into $(S,T)$ is denoted a \text{cut} and the set $C = \{\{v,u\}\in E\;|\;v\in S,\; u\in T\}$ is called its \textit{cut set}. A subset $S\subset V$ is \textit{called} a separator, if $G-S := (V\setminus S, E\cap\binom{V\setminus S}{2})$ has more connected components than $G$ i.e. the removal of $S$ from the graph splits at least one connected component of $G$.
+An undirected graph $G=(V,E)$ is a tuple of a set $V$ of vertices (also called nodes) and a set $E\subseteq \binom{V}{2}$ of edges. Two vertices $v,u\in V$ are called \textit{adjacent} or neighbors if they are connected by an edge, i.e. $\{v,u\}\in E$. The set $N(v) := \{u \in V\;|\; \{v,u\}\in E \}$ of all neighbors of a vertex $v\in V$ is called the \textit{neighborhood} of $v$ and $N[v] := N(v) \cup \{v\}$ denotes to the \textit{closed} neighborhood of $v$. The number $d(v):=|N(v)|$ is called the degree of a vertex. The (closed) neighborhood of a set of vertices $S$ is defined as $N(S) := \bigcup_{v\in V}N(v)\setminus S$ and $N[S] := \bigcup_{v\in V}N[v]$. For a vertex $v\in V$ we define $N^2(v) := N(N(v))\setminus\{v\}$. For a subset $S\subseteq V$ the graph $G_S=(S, E\cap\binom{S}{2})$ is called the subgraph \textit{induced by} $S$.\paragraph{}
+A subset $I\subseteq V$ is called an \emph{independent set} (IS) of $G$, if no two vertices from $I$ are adjacent, so formally if $\forall v,u\in I: \{v,u\}\notin E$. A \emph{maximum independent set} (MIS) of $G$ is an independent set of largest cardinality. The size of a maximum independent set is called the \emph{independence number} of $G$ and is denoted by $\alpha(G)$. \\
+A subset $S\subseteq V$ is called a \emph{vertex cover} of $G$ if for all neighbors $v$ and $u$ in $G$ either $v$ or $u$ (or both) is in $S$, so formally if $\forall \{v,u\}\in E: v\in S \vee u\in S$. A \emph{minimum vertex cover} of $G$ is a vertex cover of minimal cardinality. If $I$ is a (maximum) independent set in $G$, then $V\setminus I$ is a (minimum) vertex cover in $G$.\\
+A subset $C\subseteq V$ is called a \emph{clique} of $G$, if any two vertices from $C$ are adjacent, so formally if $\forall v,u\in C:\{v,u\}\in E$. A \emph{maximum clique} of $G$ is a clique of largest cardinality. If $I$ is an (maximum) independent set in $G$, then $I$ is also a (maximum) clique in the complement graph $\overline{G}=(V, \binom{V}{2}\setminus E)$.\paragraph{}
+A \textit{path} $P=(v_1,\dots,v_k)$ is a sequence of distinct vertices in $G$ such that $\{v_i,v_{i+1}\}\in E$ for all $i \in \{1,\dots,k-1\}$. A subgraph of $G$ induced by a cardinality maximal subset of the vertices such that any two vertices are connected by a path is called a \textit{connected component}. A graph that contains only one connected component is called \textit{connected}. \paragraph{}
+A partition of $V$ into $(S,T)$ is called a \text{cut} and the set $C = \{\{v,u\}\in E\;|\;v\in S,\; u\in T\}$ is called its \textit{cut set}. A subset $S\subset V$ is \textit{called} a separator, if $G-S := (V\setminus S, E\cap\binom{V\setminus S}{2})$ has more connected components than $G$ i.e. the removal of $S$ from the graph splits at least one connected component of $G$.
 
 \subsection{Algorithm Framework}
 
-In this Thesis we solely focused on testing new branching strategies. Thus, we did not implement our own branch and bound algorithm but rather used a state of the art algorithm for \textit{minimum vertex cover} by Akiba and Iwata \cite{AkibaIwata} as a basis, and modified the branching step within it. Since \textit{minimum vertex cover} and \textit{maximum independet set} are complementary problems, the algorithm can be used to find the latter one by just inverting its output. This subsection briefly covers an overview of the algorithm (Algorithm \ref{alg:bb}).\\\\
-Given a graph as input, the algorithm starts with the kernelization step, i.e., reducing the instance's complexity by applying a set of reduction rules (describe in \ref{red}). Next, the algorithm tries to prune the current branch by using different lower bounds to an optimal solution. If pruning was not successful but the reduced graph is empty, the algorithm just returns the current best solution size. Otherwise, the algorithm searches for an optimal solution in every connected component of the graph independently. This is denoted as the decompose step. If a connected component can not be reduced further, the algorithms performs a branching step. In the implementation by Akiba and Iwata, the algorithm finds a vertex $v$ of maximum degree that also minimizes the number of edges in its neighborhood and branches into two subinstances. The first case is to include $v$ into the current solution and the second case is to exclude $v$ from the current solution, including its neighbors instead. Both subinstances are then solved recursively and the current optimal solution gets updated accordingly. The algorithms also makes use of branching rules covered in \ref{red} (not to confuse with the actual branching strategy) that sometimes allow further reductions on branching. The \textit{packing} branching rule manages a set of constraints which is updated on every branch and reduction step, and therefore is also handed to the recursive subcalls. For clarity, we omitted the details of this in the pseudo code. \\\\  
-All of our branching strategies branch on a single vertex in each branching step. Thus, in the algorithm we only needed to change the method that selects the vertex to branch in most cases. Some of our strategies also maintain additional information which gets updated in each branching step and gets distributed to subinstances accordingly. Other branching strategies require structural information which is obtained during each kernelization step. In those cases we also modified the decompose step or the reduction rules, respectively \\\\
-Since our first approach was to branch on vertices that decompose the graph, we also tested a slightly modified version of the algorithm where we added an additional connected components check before the kernelization step. This way, if the graph gets disconnected in a branching step, the instance is decomposed and kernelization afterwards becomes more efficient.
+In this Thesis we solely focus on testing new branching strategies. Thus, we do not implement our own branch and reduce algorithm but rather use a state of the art algorithm for minimum vertex cover by Akiba and Iwata \cite{AkibaIwata} as a basis, and modify the branching step within it. Since minimum vertex cover and maximum independent set are complementary problems, the algorithm can be used to find the latter one by just inverting its output. This subsection briefly covers an overview of the algorithm (Algorithm \ref{alg:bb}) from the perspective of maximum independent set.\paragraph{}
+Given a graph as input, the algorithm starts with the kernelization step, i.e., reducing the instance's complexity by applying a set of reduction rules (described in \ref{red}). Next, the algorithm tries to prune the current branch by using different upper bounds to an optimal solution. If pruning was not successful but the reduced graph is empty, the algorithm just returns the current best solution size. Otherwise, the algorithm searches for an optimal solution in every connected component of the graph independently. This is denoted as the decomposition step. If a connected component can not be reduced further, the algorithm performs a branching step. In the branching step the algorithm uses the branching strategy to choose a vertex $v$ and then branches into two subinstances. The first case is to include $v$ into the current solution and the second case is to exclude $v$ from the current solution, including its neighbors instead. Both subinstances are then solved recursively and the current optimal solution gets updated accordingly. The algorithm also makes use of branching rules covered in \ref{red} (not to confuse with the actual branching strategy) that sometimes allow further reductions on branching. The \textit{packing} branching rule manages a set of constraints which is updated on every branch and reduction step, and therefore is also handed to the recursive subcalls. For clarity, we omit the details of this in the pseudo code and refer the reader to the original article by Akiba and Iwata \cite{AkibaIwata}. \paragraph{}  
+All of our branching strategies branch on a single vertex in each branching step. Thus, in the algorithm we only need to change the method that selects the vertex to branch in most cases. Some of our strategies also maintain additional information which gets updated in each branching step and gets distributed to subinstances accordingly. Other branching strategies require structural information which is obtained during each kernelization step. In those cases we also modify the decompose step or the reduction rules, respectively. \paragraph{}
+Since our first approach is to branch on vertices that decompose the graph, we also test a slightly modified version of the algorithm where we add an additional connected components check before the kernelization step. This way, if the graph gets disconnected in a branching step, the instance is decomposed and kernelization afterwards becomes more efficient.
 
 \begin{algorithm}
-	\caption{branch \& bound algorithm for \textsc{Min Vertex Cover} -- Akiba and Iwata \cite{AkibaIwata}}\label{alg:bb}
+	\caption{branch \& reduce algorithm for \textsc{Max Independent set} -- Akiba and Iwata \cite{AkibaIwata}}\label{alg:bb}
 	\SetKwFunction{S}{Solve}
 	\DontPrintSemicolon
 	
 	\KwIn{A graph $G$, current solution size $c$, current best solution size $k$ }	
 	\S{$G,c,k$}
 	\Begin{
-	$G,c \leftarrow \text{Reduce}(G, c)$ \tcp*{Kernelization}
-	$l \leftarrow \text{LowerBound(G)}$ \tcp*{Calculate lower bounds}
-	\lIf{$c+l\geq k$}{\Return $k$} \tcp*{Prune current branch}
-	\lIf{$G \text{is empty}$}{\Return $k$}\;
-	\uIf{$G$ is not connected}{
-	\ForEach{connected component $G_i$ \KwSty{of} $G$}{
-		$c \leftarrow c +$ \S{$G_i,0,k-c$}  \tcp*{Solve connected components independently}
-	}
-	\Return $\min\{c, k\}$
-}
-$(G_1,c_1,k),(G_2,c_2,k) \leftarrow \text{Branch}(G,c)$ \tcp*{Branch on a vertex $v$ into two subcases}
-$k\leftarrow \min$$\{$$k, \, $ \S{$G_1,c_1,k$}$\}$\;
-$k\leftarrow \min$$\{$$k, \, $ \S{$G_2,c_2,k$}$\}$
-
-\Return $k$
-	
-}
-	
-	\KwOut{the size $k$ of a \textit{minimum vertex cover} or the size $n-k$ of a \textit{maximum independent set}}
+		$G,c \leftarrow \text{Reduce}(G, c)$ \tcp*{Kernelization}
+		$l \leftarrow \text{UpperBound(G)}$ \tcp*{Calculate upper bounds}
+		\lIf{$c+l\leq k$}{\Return $k$} \tcp*{Prune current branch}
+		\lIf{$G \text{ is empty}$}{\Return $k$}\;
+		\uIf{$G$ is not connected}{
+			\ForEach{connected component $G_i$ \KwSty{of} $G$}{
+				$c \leftarrow c\text{ }+$ \S{$G_i,0,k-c$}  \tcp*{Solve connected components independently}
+			}
+			\Return $\max\{c, k\}$
+		}
+		$(G_1,c_1,k),(G_2,c_2,k) \leftarrow \text{Branch}(G,c)$ \tcp*{Branch on a vertex $v$ into two subcases}
+		$k\leftarrow \max$$\{$$k, \, $ \S{$G_1,c_1,k$}$\}$\;
+		$k\leftarrow \max$$\{$$k, \, $ \S{$G_2,c_2,k$}$\}$
 		
+		\Return $k$
+		
+	}
+	
+	\KwOut{the size $k$ of a maximum independent set or the size $n-k$ of a minimum vertex cover}
+	
 \end{algorithm}
 \newpage
 \subsection{Reduction and Branching Rules} \label{red}
 
-In this subsection we explain the various reduction and branching rules used in the kernelization and branching steps of the algorithm by Akiba and Iwata \cite{AkibaIwata}. We formulate all reduction and branching rules for the \textit{maximum independent set} problem, although the algorithm was originally designed for \textit{minimum vertex cover} and therefore uses the equivalent counterparts of those rules. The algorithm also keeps track of the order in which the reduction rules are applied, such that a correct solution to the original instance (a specific \textit{maximum independent set} and not only the size of one) can be constructed from a solution in the reduced graph later on. For clarity, we omitted the details of this.
-\\\\
+In this subsection we explain the various reduction and branching rules used in the kernelization and branching steps of the algorithm by Akiba and Iwata \cite{AkibaIwata}. We formulate all reduction and branching rules for the maximum independent set problem, although the algorithm was originally designed for minimum vertex cover and therefore uses the equivalent counterparts of those rules. The algorithm also keeps track of the order in which the reduction rules are applied, such that a correct solution to the original instance (a specific maximum independent set and not only the size of one) can be constructed from a solution in the reduced graph later on. For clarity, we omit the details of this.
+\paragraph{}
 The first reduction rule, the degree one reduction, is actually completely contained in the dominance and unconfined reductions (covered later in this section). 
 Nevertheless, due to its low computational costs, it is used in addition to those more general rules. 
 
-\begin{theorem} (Degree One Reduction) Let $G=(V,E)$ be a graph with a vertex $v$ of degree one and let $u$ be the only neighbor of $v$. Then, there is a \textit{maximum independent set} that includes $v$ and therefore excludes $u$.	
+\begin{theorem} (Degree One Reduction) Let $G=(V,E)$ be a graph with a vertex $v$ of degree one and let $u$ be the only neighbor of $v$. Then, there is a maximum independent set that includes $v$ and therefore excludes $u$.	
 \end{theorem}
 \begin{proof}
-	Consider a \textit{maximum independent set} $I$ in $G$. $I$ has to contain either $u$ or $v$ because otherwise $I\cup\{v\}$ would be an \textit{independent set} of larger size. If $I$ contains $u$, it can not contain $v$ and thus, $(I\setminus\{u\})\cup\{v\}$ is another  \textit{maximum independent set} that include $v$ and excludes $u$.
+	Consider a maximum independent set $I$ in $G$. $I$ has to contain either $u$ or $v$ because otherwise $I\cup\{v\}$ would be an \textit{independent set} of larger size. If $I$ contains $u$, it can not contain $v$ and thus, $(I\setminus\{u\})\cup\{v\}$ is another  maximum independent set that include $v$ and excludes $u$.
 \end{proof}
 
-At the beginning of each kernelization step, the algorithm searches for vertices of degree one, includes them into the current solution and deletes their neighbors from the graph. The algorithm also checks whether removing a neighbor from the graph produces new degree one vertices, and in this case further applies the degree one reduction. \\\\
+At the beginning of each kernelization step, the algorithm searches for vertices of degree one, includes them into the current solution and deletes their neighbors from the graph. The algorithm also checks whether removing a neighbor from the graph produces new degree one vertices, and in this case further applies the degree one reduction. \paragraph{}
 The next reduction rule deals with vertices of degree two that are not part of a triangle, i.e., whose neighbors are not adjacent and was introduced by Chen et al. \cite{ChenDeg2}.
 
-\begin{theorem} (Degree Two Folding) Let $G=(V,E)$ be a graph with a vertex $v$ of degree two and let $u,w$ be the neighbors of $v$. Let $G'=(V',E')$ be the graph with $V'=(V\setminus N[v])\cup \{x\}$ where $x\notin V$ and $E'=\{ \{y,z\}\in E\;|\;y,z\in V'\}\cup\{ \{x,y\}\;|\;y\in(N(u)\cup N(w))\setminus\{v\} \}$ and let $I'$ be a \textit{maximum independent set} of $G'$. Then,
+\begin{theorem} (Degree Two Folding) Let $G=(V,E)$ be a graph with a vertex $v$ of degree two and let $u,w$ be the neighbors of $v$. Let $G'=(V',E')$ be the graph with $V'=(V\setminus N[v])\cup \{x\}$ where $x\notin V$ and $E'=(E\cap \binom{V'}{2})\cup\{ \{x,y\}\;|\;y\in(N(u)\cup N(w))\setminus\{v\} \}$ and let $I'$ be a maximum independent set of $G'$. Then,
 	
 	\[I=\begin{dcases}
-	I'\cup \{v\} & x\notin I'\\
-	(I'\setminus\{x\})\cup \{u,w\}) & x\in I'
+	I'\cup \{v\} & \text{, if }x\notin I'\\
+	(I'\setminus\{x\})\cup \{u,w\}) & \text{, else}%x\in I'
 	\end{dcases}\]\\
-	is a \textit{maximum independent set} in $G$.
+	is a maximum independent set in $G$.
 \end{theorem}
 \begin{proof}
-	Consider any \textit{maximum independent set} $I$ of $G$. If $I$ contains $v$, then it can not contain $u$ and $w$. Thus, $I\setminus\{v\}$ is an \textit{independent set} in $G'$ of size $|I| - 1$. Otherwise, if $I$ does not contain $v$, $I$ has to include at least one neighbor of $v$ (since $I$ is maximal). If $I$ contains only one neighbor of $v$, removing this neighbor from $I$ yields an \textit{independent set} in $G'$ of size $|I|-1$. If $I$ contains both $u$ and $w$, then $I'=(I\setminus\{u,w\})\cup\{x\}$ is an independent set in $G'$ of size $|I|-1$. So, in total $\alpha(G')\geq \alpha(G) -1$. On the other hand, $I$ constructed from a \textit{maximum independent set} $I'$ of $G'$ is an \textit{independent set} of $G$ of size $|I| = |I'|+1$ and thus, $I$ is a \textit{maximum independent set} in $G$.
+	Consider any maximum independent set $I$ of $G$. If $I$ contains $v$, then it can not contain $u$ and $w$. Thus, $I\setminus\{v\}$ is an \textit{independent set} in $G'$ of size $|I| - 1$. Otherwise, if $I$ does not contain $v$, $I$ has to include at least one neighbor of $v$ (since $I$ is maximal). If $I$ contains only one neighbor of $v$, removing this neighbor from $I$ yields an \textit{independent set} in $G'$ of size $|I|-1$. If $I$ contains both $u$ and $w$, then $I'=(I\setminus\{u,w\})\cup\{x\}$ is an independent set in $G'$ of size $|I|-1$. So, in total $\alpha(G')\geq \alpha(G) -1$. On the other hand, $I$ constructed from a maximum independent set $I'$ of $G'$ is an \textit{independent set} of $G$ of size $|I| = |I'|+1$ and thus, $I$ is a maximum independent set in $G$.
 \end{proof}
 
-So, if the algorithm finds a vertex $v$ of degree two whose neighbors are not adjacent, the algorithm reduces the size of the graph by removing $N[v]$ adding a new vertex connected to $N_2(v)$ instead. This procedure is called \textit{folding} the closed neighborhood of $v$, hence the name degree two folding.\\\\
-The next two reduction rules can be used to delete single vertices that are not required in a \textit{maximum independent set}. The first of those rules (the dominance Reduction) is fully contained in the second rule (the unconfined reduction) and therefore the algorithm only uses the latter one. However, we used the concept of dominance to design one of our branching strategies. For this reason the dominance reduction rule is also featured in detail.
+So, if the algorithm finds a vertex $v$ of degree two whose neighbors are not adjacent, the algorithm reduces the size of the graph by removing $N[v]$ adding a new vertex connected to $N^2(v)$ instead. This procedure is called \textit{folding} the closed neighborhood of $v$, hence the name degree two folding.\paragraph{}
+The next two reduction rules can be used to delete single vertices that are not required in a maximum independent set. The first of those rules (the dominance Reduction) is fully contained in the second rule (the unconfined reduction) and therefore the algorithm only uses the latter one. However, we used the concept of dominance to design one of our branching strategies. For this reason the dominance reduction rule is also featured in detail.
 
 \begin{definition} (Dominance)
-	In a Graph $G=(V,E)$ a vertex $u$ is called dominated by a neighbor $v$, if $N[u]\subseteq N[v]$. The vertex $v$ is said to dominate $u$.
+	In a Graph $G=(V,E)$ a vertex $u$ is called dominated by a neighbor $v$, if $N[u]\subseteq N[v]$.
 \end{definition}
 
 
-\begin{theorem} (Dominance Reduction) In a Graph $G=(V,E)$, if a vertex $u$ is dominated by a neighbor $v$, then, there always exists a \textit{maximum independent set} that does not include $v$, i.e.\[\alpha(G)=\alpha(G-v)\]
+\begin{theorem} (Dominance Reduction) In a Graph $G=(V,E)$, if a vertex $u$ is dominated by a neighbor $v$, then, there always exists a maximum independent set that does not include $v$, i.e.\[\alpha(G)=\alpha(G-v)\]
 \end{theorem}
 \begin{proof}
-Consider a \textit{maximum independent set} $I$ that does contain $v$. Since $N[u]\subseteq N[v]$, $I$ can neither contain $u$ nor any of its neighbors. But then, clearly, $I' = (I\setminus\{v\})\cup\{u\}$ is an \textit{independent set} of the same size as $I$ that does not include $v$.
+Consider a maximum independent set $I$ that does contain $v$. Since $N[u]\subseteq N[v]$, $I$ can neither contain $u$ nor any of its neighbors. But then, clearly, $I' = (I\setminus\{v\})\cup\{u\}$ is an \textit{independent set} of the same size as $I$ that does not include $v$.
 \end{proof}
-Thus, if a vertex $v$ dominates another vertex $u$, one could safely remove $v$ from the graph without compromising the solvabilty of the instance.\\\\
-The core idea of the \textit{unconfined reduction} proposed by Xiao and Nagamochi \cite{XiaoNagamochi} is to detect a vertex that is not required for a \textit{maximum independent set} and therefore can be removed from the graph by algorithmically contradicting the assumption that every \textit{maximum independent set} contains the vertex.
+Thus, if a vertex $v$ dominates another vertex $u$, one could safely remove $v$ from the graph without compromising the solvabilty of the instance.\paragraph{}
+The core idea of the \textit{unconfined reduction} proposed by Xiao and Nagamochi \cite{XiaoNagamochi} is to detect a vertex that is not required for a maximum independent set and therefore can be removed from the graph by algorithmically contradicting the assumption that every maximum independent set contains the vertex.
 \begin{definition} (Removable Vertex)
 	In a graph $G=(V,E)$ a vertex $v$ is called removable, if 
 	\[\alpha(G) = \alpha(G-v)\]
@@ -145,58 +144,83 @@ The core idea of the \textit{unconfined reduction} proposed by Xiao and Nagamoch
 \end{definition}
 
 \begin{theorem} \label{unconfined}
-	In a graph $G=(V,E)$ let $S$ be an \textit{independent set} that is not maximal but is contained in every \textit{maximum independent set} of $G$ and let $v$ be any child of $S$. Then, every \textit{maximum independent set} includes at least one vertex from $N(v)\setminus N[S]$.
+	In a graph $G=(V,E)$ let $S$ be an independent set that is not maximal but is contained in every maximum independent set of $G$ and let $v$ be any child of $S$. Then, every maximum independent set includes at least one vertex from $N(v)\setminus N[S]$.
 \end{theorem}
 \begin{proof}
-	Assume that there is a \textit{maximum independent set}  $I$ that includes $S$ but no vertex from $N(v)\setminus N[s]$ and let $u$ be the parent of $v$ in $S$. But then $I'=(I\setminus\{u\})\cup\{v\}$ is an independent set of the same size as $I$, since $I$ contains no neighbor of $v$ other than $u$. This contradicts the fact that every \textit{maximum independent set} includes $S$.
+	Assume that there is a maximum independent set $I$ that includes $S$ but no vertex from $N(v)\setminus N[S]$ and let $u$ be the parent of $v$ in $S$. Then, $I'=(I\setminus\{u\})\cup\{v\}$ is an independent set of the same size as $I$, since $I$ contains no neighbor of $v$ other than $u$. This contradicts the fact that every maximum independent set includes $S$.
 \end{proof}
 
-Based on Theorem \ref{unconfined} the following algorithm detects so called \textit{unconfined} vertices.\dots TODO
+Based on Theorem \ref{unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
 
-
-\begin{theorem}(Unconfined Reduction)
+\begin{algorithm}
+	\caption{Unconfined -- Xiao and Nagamochi \cite{XiaoUnconfined}}\label{alg:unconf}
+	\SetKwFunction{U}{Unconfined}
+	\DontPrintSemicolon
 	
+	\KwIn{A graph $G$, a vertex $v$}
+	\U{G, v}	
+	\Begin{
+		$S \leftarrow \{v\}$\;
+		\While{$S\text{ has child }u\text{ with } |N(u)\cap S|\leq 1$}{
+			$u \leftarrow \text{child of } S $\;
+			\eIf{$|N(u)\cap S| == 0$}{\Return true\tcp*{Contradiction to Theorem \ref{unconfined}}}{$S\leftarrow S\cup\{u\}$}
+		}
+			
+		\Return $\text{false}$
+		
+	}
+	
+	\KwOut{true if $v$ is unconfined, false otherwise}
+	
+\end{algorithm}
+
+
+\begin{theorem}(Unconfined Reduction) In a Graph $G=(V,E)$, if Algorithm \ref{alg:unconf} returns true for an unconfined vertex $v$, then, there is always a maximum independent set that does not contain $v$.
 \end{theorem}
-\dots TODO\\\\
+\begin{proof}
+	Assume, that $v$ is included in every maximum independent set. Every vertex added to $S$ by the algorithm is the unique neighbor of a child of $S$ that is not already contained in $S$. Therefore, by Theorem \ref{unconfined} it also has to be contained in every maximum independent set. If the algorithm returns true, then there is a child of $S$ that has no neighbor that is not already contained in $S$. Thus, by Theorem \ref{unconfined} either $S$ is a maximum independent set or the assumption that $v$ is included in every maximum independent set was false. 
+\end{proof}
+During kernelization, the branch and reduce algorithm uses Algorithm \ref{alg:unconf} to detect and remove unconfined vertices.\paragraph{}
 The twin reduction by Xiao and Nagamochi \cite{XiaoUnconfined} deals with pairs of degree three vertices that share the same neighborhood.
 
 \begin{definition}(Twins)
 	In a Graph $G=(V,E)$ two vertices $u$ and $v$ are called twins, if $N(u) = N(v)$ and $d(u) = d(v) = 3$.
 \end{definition}
 
-\begin{theorem} (Twin Reduction) In a Graph $G=(V,E)$ let vertices $u$ and $v$ be twins. If there is an edge among $N(u)$, then there is always a \textit{maximum independent set} that includes $\{u,v\}$ and therefore excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus(N(u)\cup\{u,v\}))\cup\{w\}$ where $w\notin V$ and $E'=\{\{x,y\}\in E\;|\;x,y\in V'\}\;\cup \{\{w,x\}\;|\;x\in N_2(u)\})\}$ and let $I'$ be a \textit{maximum vertex cover} in $G'$. Then, 
+\begin{theorem} (Twin Reduction) In a Graph $G=(V,E)$ let vertices $u$ and $v$ be twins. If there is an edge among $N(u)$, then there is always a maximum independent set that includes $\{u,v\}$ and therefore excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be a \textit{maximum vertex cover} in $G'$. Then, 
 	
 	\[I=\begin{dcases}
-	I'\cup \{u,v\} & w\notin I'\\
-	(I'\setminus \{w\})\cup N(u) & w\in I'
+	I'\cup \{u,v\} & \text{, if }w\notin I'\\
+	(I'\setminus \{w\})\cup N(u) & \text{, else} %w\in I'
 	\end{dcases}\]
-	is a \textit{maximum independent set} in $G$.
+	is a maximum independent set in $G$.
 \end{theorem}
 \begin{proof}
-	For the first case (there is an edge among $N(u)$) consider a \textit{maximum independent set} $I$ that does not contain $u$ or $v$. Then, $I$ has to include at least one neighbor of $u$ and $v$, because otherwise $I\cup \{u,v\}$ would be an \textit{independent set} larger than $I$. On the other hand, since there are neighbors of $u$ and $v$ that are adjacent, $I$ can only contain at most two neighbors of $u$ and $v$. But then, $I' = (I\setminus N(u))\cup\{u,v\}$ is an \textit{independent set} of the same size as I that includes $u$ and $v$.\\
-	For the second case (no edges among $N(u)$) note, that the reduction produces a set that in both cases contains exactly two vertices more than a \textit{maximum independent set} in $G'$. Now consider a \textit{maximum independent set} $I$ in $G$. If $N(u)$ is completely contained in $I$ ($N(U)\subseteq I$), then $I$ can not contain any vertex of $N_2(u)$, i.e., any neighbor of $w$ in $G'$. Thus, $I' = (I\setminus N(u))\cup\{w\}$ is an \textit{independent set} of $G'$ of size $|I| - 2$. Otherwise, $I$ contains at most two vertices from $N(u)\cup\{u,v\}$ (either $u$ and $v$ or two vertices from $N(u)$). But then, $I' = I\setminus(N(u)\cup\{u,v\})$ is also an \textit{independent set} of $G'$ of size $|I|-2$.\\
-	In total $\alpha(G) \leq \alpha(G')+2$ and thus, $I$ is a \textit{maximum independent set} of $G$
+	For the first case (there is an edge among $N(u)$) consider a maximum independent set $I$ that does not contain $u$ or $v$. Then, $I$ has to include at least one neighbor of $u$ and $v$, because otherwise $I\cup \{u,v\}$ would be an \textit{independent set} larger than $I$. On the other hand, since there are neighbors of $u$ and $v$ that are adjacent, $I$ can only contain at most two neighbors of $u$ and $v$. But then, $I' = (I\setminus N(u))\cup\{u,v\}$ is an \textit{independent set} of the same size as I that includes $u$ and $v$.\\
+	For the second case (no edges among $N(u)$) note, that the reduction produces a set that in both cases contains exactly two vertices more than a maximum independent set in $G'$. Now consider a maximum independent set $I$ in $G$. If $N(u)$ is completely contained in $I$ ($N(U)\subseteq I$), then $I$ can not contain any vertex of $N^2(u)$, i.e., any neighbor of $w$ in $G'$. Thus, $I' = (I\setminus N(u))\cup\{w\}$ is an \textit{independent set} of $G'$ of size $|I| - 2$. Otherwise, $I$ contains at most two vertices from $N(u)\cup\{u,v\}$ (either $u$ and $v$ or two vertices from $N(u)$). But then, $I' = I\setminus(N(u)\cup\{u,v\})$ is also an \textit{independent set} of $G'$ of size $|I|-2$.\\
+	In total $\alpha(G) \leq \alpha(G')+2$ and thus, $I$ is a maximum independent set of $G$
 	\end{proof}
 
-During the kernelization step, the algorithm searches for twins $u$ and $v$. If there is an edge among $N(u)$, the algorithm includes $u$ and $v$ to the current solution and deletes $\{u,v\}\cup N(u)$. Otherwise, the algorithm still deletes $\{u,v\}\cup N(u)$ introducing a new vertex connected to $N(u)\setminus\{u,v\}$ instead.\\\\
+During the kernelization step, the algorithm searches for twins $u$ and $v$. If there is an edge among $N(u)$, the algorithm includes $u$ and $v$ to the current solution and deletes $\{u,v\}\cup N(u)$. Otherwise, the algorithm still deletes $\{u,v\}\cup N(u)$ introducing a new vertex connected to $N(u)\setminus\{u,v\}$ instead.\paragraph{}
 The next reduction rule as well as its special cases were also proposed by Xiao and Nagamochi \cite{XiaoUnconfined}.
 
 \begin{definition} (Alternative Sets)
-	In a Graph $G=(V,E)$ two non empty, disjoint subsets $A,B\subseteq V$ are called alternatives, if $|A| = |B|$ and there is a \textit{maximum independent set} $I$ in $G$ such that $I\cap(A\cup B)$ is either $A$ or $B$.
+	In a Graph $G=(V,E)$ two non empty, disjoint subsets $A,B\subseteq V$ are called alternatives, if $|A| = |B|$ and there is a maximum independent set $I$ in $G$ such that $I\cap(A\cup B)$ is either $A$ or $B$.
 \end{definition}
 \begin{theorem} (Alternative Reduction)
-	In a Graph $G=(V,E)$ let $A$ and $B$ be alternative sets. Let $G'=(V', E')$ the graph with $V' = V\setminus(A\cup B\cup (N(A)\cap N(B)))$ and $E' = (E\setminus\{ \{x,y\}\;|\;x\in (A\cup B\cup (N(A)\cap N(B))) \})\cup \{ \{x,y\}\;|\; x\in N(A)\setminus N[B], y\in N[B]\setminus N(A) \}$ and let $I'$ be a \textit{maximum independent set} in $G'$. Then,
+	In a Graph $G=(V,E)$ let $A$ and $B$ be alternative sets. Let $G'=(V', E')$ the graph with $V' = V\setminus(A\cup B\cup (N(A)\cap N(B)))$ and $E' = (E\setminus\binom{A\cup B\cup (N(A)\cap N(B))}{2} \cup \{ \{x,y\}\;|\; x\in N(A)\setminus N[B], y\in N[B]\setminus N(A) \}$ and let $I'$ be a maximum independent set in $G'$. Then,
 	
 	\[I=\begin{dcases}
-	I'\cup A & N(B)\setminus N[A]\in I'\\
-	I'\cup B & N(A)\setminus N[B]\in I'
+	I'\cup A & \text{, if } (N(A)\setminus N[B]) \cap I' = \emptyset% N(B)\setminus N[A]\subseteq I'\\
+	\\
+	I'\cup B & \text{, else if } (N(B)\setminus N[A])\cap I' = \emptyset
 	\end{dcases}\]
-	is a \textit{maximum independent set} in $G$.
+	is a maximum independent set in $G$.
 \end{theorem}
 \begin{proof}
-	Consider a \textit{maximum independent set} $I$ in $G$ and without loss of generality let $A\subseteq I$ (by definition $A$ or $B \subseteq I$). Thus, $I\cap ((A\cup B\cup (N(A)\cap N(B))) = |A|$ and $I\cap(N(A)\setminus N[B])=\emptyset$. Now let $I' = I\setminus A$. $I'$ is an \textit{independent set} in $G'$, since each added edge (from $E'\setminus E$) is incident to a vertex from $N(A)\setminus N[B]$ and $|I'| = |I|-|A|$. This implies $\alpha(G')+|A| \geq \alpha(G)$.\\
-	Conversely, let $I'$ be a \textit{maximum independent set} of $G'$. Obviously, $I'$ is also an \textit{independent set} of $G$. Since vertices from $N(A)\setminus N[B]$ are pairwise adjacent to vertices form $N(B)\setminus N[A]$, $I'$ can only contain vertices from either $N(A)\setminus N[B]$ or $N(B)\setminus N[A]$. But then, $I=I'\cup A$ or $I=I'\cup B$ respectively is an \textit{independent set} in $G$. Thus, $\alpha(G')+|A| \leq \alpha(G)$\\
-	In total $\alpha(G')+|A| = \alpha(G)$ and $I$ is a \textit{maximum independent set} in $G$.
+	Consider a maximum independent set $I$ in $G$ and without loss of generality let $A\subseteq I$ (by definition $A$ or $B \subseteq I$). Thus, $I\cap ((A\cup B\cup (N(A)\cap N(B))) = A$ and $I\cap(N(A)\setminus N[B])=\emptyset$. Now let $I' = I\setminus A$. $I'$ is an \textit{independent set} in $G'$, since each added edge (from $E'\setminus E$) is incident to a vertex from $N(A)\setminus N[B]$ and $|I'| = |I|-|A|$. This implies $\alpha(G')+|A| \geq \alpha(G)$.\\
+	Conversely, let $I'$ be a maximum independent set of $G'$. Obviously, $I'$ is also an \textit{independent set} of $G$. Since vertices from $N(A)\setminus N[B]$ are pairwise adjacent to vertices form $N(B)\setminus N[A]$, $I'$ can only contain vertices from either $N(A)\setminus N[B]$ or $N(B)\setminus N[A]$. But then, $I=I'\cup A$ or $I=I'\cup B$ respectively is an \textit{independent set} in $G$. Thus, $\alpha(G')+|A| \leq \alpha(G)$\\
+	In total $\alpha(G')+|A| = \alpha(G)$ and $I$ is a maximum independent set in $G$.
 \end{proof}
 Note that the \textit{alternative reduction} adds new edges between existing vertices of the graph. For this reason, applying the \textit{alternative reduction} is not beneficial in every case. To counteract this, the algorithm only uses the following special cases of the \textit{alternative reduction}.
 
@@ -206,7 +230,7 @@ Note that the \textit{alternative reduction} adds new edges between existing ver
 \begin{theorem} (Funnel Reduction) In a Graph $G=(V,E)$ let $u$ and $v$ be funnels. Then, $\{u\}$ and $\{v\}$ are alternative sets.	
 \end{theorem}
 \begin{proof}
-	We have to show that there is a \textit{maximum independent set} that contains either $v$ or $u$. So, consider a \textit{maximum independent set} $I$ that excludes both $u$ and $v$. Then, $I$ has to include at least one vertex from $N(v)\setminus\{u\}$, because otherwise $I\cup\{v\}$ would be an \textit{independent set} of larger size. On the other hand, $I$ can only contain at most one vertex $x$ from $N(v)\setminus\{u\}$, since $N(v)\setminus\{u\}$ is a clique. But then, $(I\setminus\{x\})\cup\{v\}$ is an \textit{independent set} of the same size as $I$ that does contain $v$. Thus $\{u\}$ and $\{v\}$ are alternative sets.
+	We have to show that there is a maximum independent set that contains either $v$ or $u$. So, consider a maximum independent set $I$ that excludes both $u$ and $v$. Then, $I$ has to include at least one vertex from $N(v)\setminus\{u\}$, because otherwise $I\cup\{v\}$ would be an \textit{independent set} of larger size. On the other hand, $I$ can only contain at most one vertex $x$ from $N(v)\setminus\{u\}$, since $N(v)\setminus\{u\}$ is a clique. But then, $(I\setminus\{x\})\cup\{v\}$ is an \textit{independent set} of the same size as $I$ that does contain $v$. Thus $\{u\}$ and $\{v\}$ are alternative sets.
 \end{proof}
 
 \begin{definition} (Desk)
@@ -216,49 +240,49 @@ Note that the \textit{alternative reduction} adds new edges between existing ver
 	In a Graph $G=(V,E)$ let $u_1u_2u_3u_4$ be a desk. Then, $\{u_1, u_3\}$ and $\{u_2, u_4\}$ are alternative sets.	
 \end{theorem}
 \begin{proof}
-	Consider a \textit{maximum independent set} $I$ of $G$. If $|I\cap \{u_1,u_2,u_3,u_4\}| > 1$, then clearly\\ $I\cap \{u_1,u_2,u_3,u_4\} $ is either $\{u_1, u_3\}$ or $\{u_2, u_4\}$. Otherwise, without loss of generality $u_2,u_3,u_4\notin I$ and $|I\cap N[\{u_1,u_3\}]|=2$. The last equation holds because $|N(\{u_1, u_3\})\setminus\{u_2,u_4\}| \leq 2$ by definition, and $u_1$ has at least one neighbor in $N(\{u_1, u_3\})\setminus\{u_2,u_4\}$ ($d(u_1)\geq3$). But then, $(I\setminus\{N(\{u_1,u_3\})\})\cup\{u_1,u_3\}$ is an \text{independent set} of the same size as $I$ that does contain $\{u_1, u_3\}$. Thus, $\{u_1,u_3\}$ and $\{u_2, u_4\}$ are alternative sets.
+	Consider a maximum independent set $I$ of $G$. If $|I\cap \{u_1,u_2,u_3,u_4\}| > 1$, then clearly\\ $I\cap \{u_1,u_2,u_3,u_4\} $ is either $\{u_1, u_3\}$ or $\{u_2, u_4\}$. Otherwise, without loss of generality $u_2,u_3,u_4\notin I$ and $|I\cap N[\{u_1,u_3\}]|=2$. The last equation holds because $|N(\{u_1, u_3\})\setminus\{u_2,u_4\}| \leq 2$ by definition, and $u_1$ has at least one neighbor in $N(\{u_1, u_3\})\setminus\{u_2,u_4\}$ ($d(u_1)\geq3$). But then, $(I\setminus\{N(\{u_1,u_3\})\})\cup\{u_1,u_3\}$ is an \text{independent set} of the same size as $I$ that does contain $\{u_1, u_3\}$. Thus, $\{u_1,u_3\}$ and $\{u_2, u_4\}$ are alternative sets.
 \end{proof}
 
-During kernelization, the algorithm searches for funnels or desks and reduces those structures according to the alternative reduction.\\\\
-The algorithm also uses a reduction based on a solution to the LP-Relaxation of \textit{maximum independent set}.
+During kernelization, the algorithm searches for funnels or desks and reduces those structures according to the alternative reduction.\paragraph{}
+The algorithm also uses a reduction based on a solution to the LP-Relaxation of maximum independent set.
 \begin{gather*}
 	\text{maximize} \sum_{v\in V}x_v\\
 	0\leq x_v\leq 1 \;\;\; \forall v\in V\\
 	x_v + x_u\leq 1 \;\;\; \forall \{u,v\}\in E
 \end{gather*}
 
-Nemhauser and Trotter showed that there always exists an optimal half integral solution to the LP-Relaxation, i.e., an optimal solution where $x_v\in\{0,\frac{1}{2},1\}$ for all $v\in V$ \cite{NemhauserTrotter}. They also showed that given an optimal half integral solution to the LP-Relaxation, there is always a \textit{maximum independent set} that includes all vertices $v$ with $x_v=1$ and excludes all vertices $u$ with $x_u = 0$. Furthermore, they showed that finding an optimal half integral solution can be reduced to computing a \textit{maximum matching} in a bipartite graph. \\
-Iwata et al. developed an algorithm that given any optimal half integral solution constructs another half integral solution that minimizes the number of variable with half integral value \cite{IwataOkaYoshida}.\\
-The algorithm uses this solution to the LP-Relaxation to reduce the graph and also as an upper bound to an optimal solution.\\\\
+Nemhauser and Trotter show that there always exists an optimal half integral solution to the LP-Relaxation, i.e., an optimal solution where $x_v\in\{0,\frac{1}{2},1\}$ for all $v\in V$ \cite{NemhauserTrotter}. They also show that given an optimal half integral solution to the LP-Relaxation, there is always a maximum independent set that includes all vertices $v$ with $x_v=1$ and excludes all vertices $u$ with $x_u = 0$. Furthermore, they show that finding an optimal half integral solution can be reduced to computing a \textit{maximum matching} in a bipartite graph. \\
+Iwata et al. develop an algorithm that given any optimal half integral solution constructs another half integral solution that minimizes the number of variable with half integral value \cite{IwataOkaYoshida}.\\
+The algorithm uses this solution to the LP-Relaxation to reduce the graph and also as an upper bound to an optimal solution.\paragraph{}
 Apart from reduction rules, the algorithm also uses branching rules that allow further reductions on branching when certain conditions hold. The first branching rule, mirror branching, was introduced by Fomin et al. \cite{Fomin}. According to Kneis et al. it is potentially useful, if the branching vertex has a rather low degree and thus, most likely has some mirror \cite{Kneis}.
 
 \begin{definition} (Mirror)
-	In a graph $G=(V,E)$ a vertex $u$ is called a mirror of a vertex $v$, if $u\in N_2(v)$ and $G_{N(v)\setminus N(u)}$ is a (possibly empty) complete graph, i.e. $N(v)\setminus N(u)$ is a (possibly empty) clique. The set of all mirrors of $v$ is denoted by $\mathcal{M}(v)$ and $\mathcal{M}[v] := \mathcal{M}(v)\cup\{v\}$.
+	In a graph $G=(V,E)$ a vertex $u$ is called a mirror of a vertex $v$, if $u\in N^2(v)$ and $G_{N(v)\setminus N(u)}$ is a (possibly empty) complete graph, i.e. $N(v)\setminus N(u)$ is a (possibly empty) clique. The set of all mirrors of $v$ is denoted by $\mathcal{M}(v)$ and $\mathcal{M}[v] := \mathcal{M}(v)\cup\{v\}$.
 \end{definition} 
 \begin{theorem} (Mirror Branching)
-	In a graph $G=(V,E)$, if there is no \textit{maximum independent set} that contains a vertex $v$, then, every \textit{maximum independent set} also excludes $\mathcal{M}[v]$.
+	In a graph $G=(V,E)$, if there is no maximum independent set that contains a vertex $v$, then, every maximum independent set also excludes $\mathcal{M}[v]$.
 \end{theorem}
 \begin{proof}
-	Consider any \textit{maximum independent set} $I$. Then, $I$ has to contain at least two neighbors of $v$ because otherwise, we could get a \textit{maximum independent set} $I'=(I\setminus N(v))\cup\{v\}$ that includes $v$. Now let $u\in\mathcal{M}(v)$ be a mirror of $v$. Since $N(v)\setminus N(u)$ is a clique, $I$ can only contain at most one vertex from $N(v)\setminus N(u)$. Thus, $I$ contains at least another vertex from $N(v)\cap N(u)$ and therefore has to exclude $u$.
+	Consider any maximum independent set $I$. Then, $I$ has to contain at least two neighbors of $v$ because otherwise, we could get a maximum independent set $I'=(I\setminus N(v))\cup\{v\}$ that includes $v$. Now let $u\in\mathcal{M}(v)$ be a mirror of $v$. Since $N(v)\setminus N(u)$ is a clique, $I$ can only contain at most one vertex from $N(v)\setminus N(u)$. Thus, $I$ contains at least another vertex from $N(v)\cap N(u)$ and therefore has to exclude $u$.
 \end{proof}
 
-So, when branching on a vertex $v$, the algorithm finds its mirrors $\mathcal{M}(v)$ and considers two possible cases. The first cases is that there is a \textit{maximum independent set} that includes $v$ and therefore exclude $N(v)$. And the second case is that no \textit{maximum independent set} includes $v$. In this case, the vertices from $\mathcal{M}(v)$ can also be discarded from the graph.\\\\
-The packing branching rule by Akiba and Iwata \cite{AkibaIwata} is a generalization of the idea behind the satellite branching rule by Kneis et al. \cite{Kneis}. The core idea behind those rules is that when branching in the case of excluding a vertex $v$ from the solution, one can assume that no \textit{maximum independent set} contains $v$. Otherwise, if there is a \textit{maximum independent set} that contains $v$, the algorithm finds it in the branch that includes $v$.\\
-Based on the assumption that no \textit{maximum independent set} includes a vertex $v$, constraints for the remaining vertices can be derived. For example, a \textit{maximum independent set} that does not contain $v$ has to include at least two neighbors of $v$. The corresponding constraint is $\sum_{u\in N(v)}x_u \geq2$, where $x_u$ is a binary variable that indicates whether a vertex is included in the current solution. The algorithm creates such constraints when branching, and updates them accordingly during the kernelization and branching steps. The constraints can then be used to reduce the graph or to prune the current branch when a constraint can not be fulfilled.
+So, when branching on a vertex $v$, the algorithm finds its mirrors $\mathcal{M}(v)$ and considers two possible cases. The first cases is that there is a maximum independent set that includes $v$ and therefore exclude $N(v)$. And the second case is that no maximum independent set includes $v$. In this case, the vertices from $\mathcal{M}(v)$ can also be discarded from the graph.\paragraph{}
+The packing branching rule by Akiba and Iwata \cite{AkibaIwata} is a generalization of the idea behind the satellite branching rule by Kneis et al. \cite{Kneis}. The core idea behind those rules is that when branching in the case of excluding a vertex $v$ from the solution, one can assume that no maximum independent set contains $v$. Otherwise, if there is a maximum independent set that contains $v$, the algorithm finds it in the branch that includes $v$.\\
+Based on the assumption that no maximum independent set includes a vertex $v$, constraints for the remaining vertices can be derived. For example, a maximum independent set that does not contain $v$ has to include at least two neighbors of $v$. The corresponding constraint is $\sum_{u\in N(v)}x_u \geq2$, where $x_u$ is a binary variable that indicates whether a vertex is included in the current solution. The algorithm creates such constraints when branching, and updates them accordingly during the kernelization and branching steps. The constraints can then be used to reduce the graph or to prune the current branch when a constraint can not be fulfilled by the current solution.
 
 
 \newpage
 \section{Related Work} \label{sec3}
 
-This section discusses related work. It focuses on presenting branching strategies used by other branch and bound algorithms for \textit{maximum independent set} or its equivalent problems \textit{minimum vertex cover} and \textit{maximum clique}.\\\\
-The most common branching strategy used for \textit{maximum independent set} and \textit{minimum vertex cover} is branching on a vertex of maximum degree. Fomin et al. gave a theoretical analysis of this using the measure and conquer technique with a weighted degree sum as measure \cite{Fomin}. They showed that choosing a vertex of maximum degree that also minimizes the number of edges in its neighborhood is optimal with respect to their complexity measure. This greedy strategy is also used by the algorithm of Akiba and Iwata\cite{AkibaIwata} and serves as a baseline for comparison in our experiments. Akiba and Iwata already compared this strategy with branching on a vertex of minimum degree and the strategy of choosing a branching vertex at random. Their experiments showed that those strategies are significantly worse than branching on maximum degree vertices.\\\\
-Xiao and Nagamochi proposed a branch and reduce algorithm for \textit{maximum independent set} that, in most cases, branches on a vertex of maximum degree but also uses a special edge branching strategy to handle dense subgraphs \cite{XiaoNagamochi}. Edge branching is based on the principle of \textit{alternative subsets} (like in alternative reduction). Given an edge $\{u,v\}\in E$ a \textit{maximum independent set} can only contain $u$ or $v$ but not both of them. So, if there is a \textit{maximum independet set} that includes $u$ or $v$, then $\{u\}$ and $\{v\}$ are alternative sets. Thus, branching on the edge $\{u,v\}\in E$ yields two cases. The first case is to remove both $u$ and $v$ and to search for a \textit{maximum independent set} that does not include $u$ and $v$. The second case is to compute the alternative reduction of $\{u\}$ and $\{v\}$, i.e., to remove $\{u,v\}\cup(N(u)\cap N(v))$ and insert an edge $\{x,y\}$ between any nonadjacent vertices $x\in N(u)\setminus N(v)$ and $y\in N(v)\setminus N[u]$ and to search for a \textit{maximum independent set} that includes either $u$ or $v$.\\
-The algorithm by Xiao and Nagamochi uses edge branching in degree bounded graphs on edges $\{u,v\}\in E$, where $|N(u)\cap N(v)|$ is sufficiently large (the concrete values depend on the maximum degree of the graph). \\\\
-Bourgeois et al. presented a \textit{branch and bound} algorithm for \textit{maximum independent set} that relies on fast algorithms for graphs with low average degree \cite{Bourgeois}. If the average degree of the graph is at most 4, they use specialized algorithms to solve the instance. Otherwise the algorithm branches on a vertex of maximum degree.\\\\
-Chen, Kanj and Xia developed a branch and bound algorithm for the problem \textit{minimum vertex cover} parameterized by the size $k$ of the \textit{vertex cover}, i.e., the problem of finding a \textit{vertex cover} of size at most $k$ \cite{ChenXiaKanj}. In their algorithm, they use the concept of so called tuples and good pairs. A good pair is a pair of adjacent vertices that are advantageous for branching (the details are omitted here). A tuple is a set $S$ of vertices together with the number of vertices in $S$ that can be excluded from a \textit{minimum vertex cover}. This information can be exploited during the branching to eliminate additional vertices. For example, consider the pair $(\{u,v\}, 1)$. We know that either $u$ or $v$ can be excluded from a \textit{minimum vertex cover} and thus, if we include $u$ to the \textit{vertex cover}, we can exclude $v$. Otherwise, if we exclude $u$ from the \textit{vertex cover}, we can include $v$. Akiba and Iwata used the same idea in their \textit{packing} reduction \cite{AkibaIwata}. The algorithm by Chen, Kanj and Xia maintains a set of those structures as well as vertices of high degree and updates them accordingly during kernelization and branching. At each branching step the algorithm chooses the best structure and branches on it.\\\\
-Most branch and reduce algorithms for \textit{maximum clique} use some sort of greedy coloring to find an upper bound to the size of a \textit{maximum clique} and also to reduce the number of possible vertices for branching. Given a coloring $c:V \rightarrow \mathbb{N}$ and the size $c_\text{max}$ of a current best solution, it is easy to see that for $A = \{v\in V \;|\; c(v)\leq c_\text{max}\}$, $G_A$ can not contain a clique larger than the current best solution. Thus, only vertices from $V\setminus A$ are considered for branching. More sophisticated algorithms use a MaxSAT encoding of \textit{maximum clique} to achieve better upper bounds and to further reduce the set of branching vertices \cite{LiJiang,LiFangXu}. \\\\
-A common strategy for choosing the branching vertex is to calculate a so called \textit{degeneracy ordering} $v_1 < v_2 < \dots < v_n$ where $v_i$ is a vertex of smallest degree in $G - \{v_1, \dots, v_{i-1} \}$, and to choose the vertices for branching in descending order \cite{CarraghanPardalos}.\\\\
-Li et al. introduced another vertex ordering for branching using \textit{maximum independent sets} \cite{LiFangXu}. While $G$ is not empty, they repeatedly search for \textit{maximum independent sets} and remove them from the graph. For two vertices $u$ and $v$, $u < v$ if $u$ has been removed later than $v$ or if $u$ and $v$ have been removed at the same time and $u < v$ in the \textit{degeneracy ordering}. 
+This section discusses related work. It focuses on presenting branching strategies used by other branch and reduce algorithms for maximum independent set or its equivalent problems minimum vertex cover and maximum clique.\paragraph{}
+The most common branching strategy used for maximum independent set and minimum vertex cover is branching on a vertex of maximum degree. Fomin et al. gave a theoretical analysis of this using the measure and conquer technique with a weighted degree sum as measure \cite{Fomin}. They showed that choosing a vertex of maximum degree that also minimizes the number of edges in its neighborhood is optimal with respect to their complexity measure. This greedy strategy is also used by the algorithm of Akiba and Iwata\cite{AkibaIwata} and serves as a baseline for comparison in our experiments. Akiba and Iwata already compared this strategy with branching on a vertex of minimum degree and the strategy of choosing a branching vertex at random. Their experiments showed that those strategies are significantly worse than branching on maximum degree vertices.\paragraph{}
+Xiao and Nagamochi proposed a branch and reduce algorithm for maximum independent set that, in most cases, branches on a vertex of maximum degree but also uses a special edge branching strategy to handle dense subgraphs \cite{XiaoNagamochi}. Edge branching is based on the principle of alternative subsets (like in alternative reduction). Given an edge $\{u,v\}\in E$ a maximum independent set can only contain $u$ or $v$ but not both of them. So, if there is a maximum independet set that includes $u$ or $v$, then $\{u\}$ and $\{v\}$ are alternative sets. Thus, branching on the edge $\{u,v\}\in E$ yields two cases. The first case is to remove both $u$ and $v$ and to search for a maximum independent set that does not include $u$ and $v$. The second case is to compute the alternative reduction of $\{u\}$ and $\{v\}$, i.e., to remove $\{u,v\}\cup(N(u)\cap N(v))$ and insert an edge $\{x,y\}$ between any nonadjacent vertices $x\in N(u)\setminus N(v)$ and $y\in N(v)\setminus N[u]$ and to search for a maximum independent set that includes either $u$ or $v$.\\
+The algorithm by Xiao and Nagamochi uses edge branching in degree bounded graphs on edges $\{u,v\}\in E$, where $|N(u)\cap N(v)|$ is sufficiently large (the concrete values depend on the maximum degree of the graph). \paragraph{}
+Bourgeois et al. presented branch and reduce algorithm for maximum independent set that relies on fast algorithms for graphs with low average degree \cite{Bourgeois}. If the average degree of the graph is greater than 4, the algorithm branches on a vertex of maximum degree. Otherwise, if the average degree of the graph is at most 4, they use a specialized algorithm to solve the instance. If there is no vertex with degree at least 5, this algorithm branches on vertices contained in 3- or 4-cycles.\paragraph{}
+Chen, Kanj and Xia developed a branch and reduce algorithm for the problem minimum vertex cover parameterized by the size $k$ of the vertex cover, i.e., the problem of finding a vertex cover of size at most $k$ \cite{ChenXiaKanj}. In their algorithm, they use the concept of so called tuples and good pairs. A good pair is a pair of adjacent vertices that are advantageous for branching (the details are omitted here). A tuple is a set $S$ of vertices together with the number of vertices in $S$ that can be excluded from a minimum vertex cover. This information can be exploited during the branching to eliminate additional vertices. For example, consider the pair $(\{u,v\}, 1)$. We know that either $u$ or $v$ can be excluded from a minimum vertex cover and thus, if we include $u$ to the vertex cover, we can exclude $v$. Otherwise, if we exclude $u$ from the vertex cover, we can include $v$. Akiba and Iwata used the same idea in their packing reduction \cite{AkibaIwata}. The algorithm by Chen, Kanj and Xia maintains a set of those structures as well as vertices of high degree and updates them accordingly during kernelization and branching. At each branching step the algorithm chooses the best structure and branches on it.\paragraph{}
+Most branch and reduce algorithms for maximum clique use some sort of greedy coloring to find an upper bound to the size of a maximum clique and also to reduce the number of possible vertices for branching. Given a coloring $c:V \rightarrow \mathbb{N}$ and the size $c_\text{max}$ of a current best solution, it is easy to see that for $A = \{v\in V \;|\; c(v)\leq c_\text{max}\}$, $G_A$ can not contain a clique larger than the current best solution. Thus, only vertices from $V\setminus A$ are considered for branching. More sophisticated algorithms use a MaxSAT encoding of maximum clique to achieve better upper bounds and to further reduce the set of branching vertices \cite{LiJiang,LiFangXu}. Another approach to decrease the number of branches in branch and reduce algorithms for maximum clique is to choose branching vertices in a specific, beneficial order. \paragraph{}
+A common strategy for choosing the branching vertex is to calculate a so called \textit{degeneracy ordering} $v_1 < v_2 < \dots < v_n$ where $v_i$ is a vertex of smallest degree in $G - \{v_1, \dots, v_{i-1} \}$, and to choose the vertices for branching in descending order \cite{CarraghanPardalos}.\paragraph{}
+Li et al. introduced another vertex ordering for branching using maximum independent sets \cite{LiFangXu}. While $G$ is not empty, they repeatedly search for maximum independent sets and remove them from the graph. Then, the vertex ordering is defined in the following way using the degeneracy ordering for tie breaking: For two vertices $u$ and $v$, $u < v$ if $u$ has been removed later than $v$ or if $u$ and $v$ have been removed at the same time but $u < v$ in the degeneracy ordering. 
 
 \newpage
 \section{Branching Strategies} \label{sec4}
