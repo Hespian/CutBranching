@@ -33,6 +33,8 @@
 #include <algorithm> // sort()
 #include <deque>
 #include <chrono>
+#include <list>
+#include <set>
 
 #include <cstring>
 #include "../Metis/include/metis.h"
@@ -49,7 +51,11 @@ long branch_and_reduce_algorithm::nBranchings = 0;
 int branch_and_reduce_algorithm::debug = 0;
 
 int branch_and_reduce_algorithm::EXTRA_DECOMP = 0;
-int branch_and_reduce_algorithm::ND_LEVEL = 64;
+int branch_and_reduce_algorithm::ND_LEVEL = 32;
+
+long branch_and_reduce_algorithm::TUNING_PARAM1 = 7;
+double branch_and_reduce_algorithm::TUNING_PARAM2 = 0.1;
+long branch_and_reduce_algorithm::TUNING_PARAM3 = 10;
 
 long branch_and_reduce_algorithm::defaultBranchings = 0;
 bool branch_and_reduce_algorithm::defaultBranch = false;
@@ -61,7 +67,7 @@ long branch_and_reduce_algorithm::prunes = 0;
 long branch_and_reduce_algorithm::ro = 1;
 
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
-    : adj(), n(_adj.size()), used(n * 2)
+    : adj(), n(_adj.size()), used(n * 2), domination_graph(n), chainLength(n), chains(n), chain_vec(n)
 {
     SHRINK = 0.5;
     depth = 0;
@@ -122,24 +128,6 @@ void branch_and_reduce_algorithm::set(int v, int a)
     x[v] = a;
     vRestore[--rn] = v;
 
-    // disable v in bc_index
-    if (bc_index_built)
-    {
-        int cnt = 0;
-        for (int u : adj[v])
-        {
-            if (x[u] < 0)
-            {
-                bc_index->DeleteEdge(nodeMapping[u], nodeMapping[v]);
-                bc_index->DeleteEdge(nodeMapping[v], nodeMapping[u]);
-                removedEdges.emplace_back(nodeMapping[u], nodeMapping[v]);
-                removedEdges.emplace_back(nodeMapping[v], nodeMapping[u]);
-                cnt += 2;
-            }
-        }
-        removedEdgesCnt.push_back(cnt);
-        nDisabled++;
-    }
     if (a == 0)
     {
         for (int u : adj[v])
@@ -148,25 +136,6 @@ void branch_and_reduce_algorithm::set(int v, int a)
                 x[u] = 1;
                 crt++;
                 vRestore[--rn] = u;
-
-                if (bc_index_built)
-                {
-                    // disable u in bc_index
-                    int cnt = 0;
-                    for (int w : adj[u])
-                    {
-                        if (x[w] < 0)
-                        {
-                            bc_index->DeleteEdge(nodeMapping[u], nodeMapping[w]);
-                            bc_index->DeleteEdge(nodeMapping[w], nodeMapping[u]);
-                            removedEdges.emplace_back(nodeMapping[u], nodeMapping[w]);
-                            removedEdges.emplace_back(nodeMapping[w], nodeMapping[u]);
-                            cnt += 2;
-                        }
-                    }
-                    removedEdgesCnt.push_back(cnt);
-                    nDisabled++;
-                }
             }
     }
 }
@@ -349,19 +318,6 @@ void branch_and_reduce_algorithm::restore(int n)
             crt -= x[v];
             x[v] = -1;
             rn++;
-
-            if (nDisabled >= 0)
-            {
-                int nEdges = removedEdgesCnt.back();
-                removedEdgesCnt.pop_back();
-                nDisabled--;
-                for (int i = 0; i < nEdges; i++)
-                {
-                    std::pair<int, int> edge = removedEdges.back();
-                    removedEdges.pop_back();
-                    bc_index->InsertEdge(edge.first, edge.second);
-                }
-            }
         }
         else
         {
@@ -795,10 +751,24 @@ bool branch_and_reduce_algorithm::dominateReduction()
             for (int u : adj[v])
                 if (x[u] < 0)
                 {
+                    int cnt = 0;
+                    int vtx = -1;
                     for (int w : adj[u])
                     {
                         if (x[w] < 0 && !used.get(w))
+                        {
+                            cnt++;
+                            vtx = w;
+                        }
+                        if (cnt >= 2)
                             goto loop;
+                    }
+                    if (cnt == 1)
+                    {
+                        domin_vtcs.push_back(vtx);
+                    }
+                    else
+                    {
                         set(v, 1);
                         break;
                     }
@@ -809,6 +779,40 @@ bool branch_and_reduce_algorithm::dominateReduction()
         fprintf(stderr, "%sdominate: %d -> %d\n", debugString().c_str(), oldn, rn);
 #endif // 0
     return oldn != rn;
+}
+
+bool branch_and_reduce_algorithm::almost_dominated()
+{
+    bool found = false;
+    for (int v = 0; v < n; v++)
+        if (x[v] < 0)
+        {
+            used.clear();
+            used.add(v);
+            for (int u : adj[v])
+                if (x[u] < 0)
+                    used.add(u);
+            for (int u : adj[v])
+                if (x[u] < 0)
+                {
+                    int cnt = 0;
+                    int vtx = -1;
+                    for (int w : adj[u])
+                    {
+                        if (x[w] < 0 && !used.get(w))
+                        {
+                            cnt++;
+                            vtx = w;
+                        }
+                        if (cnt >= 2)
+                            goto loop;
+                    }
+                    found = true;
+                    domin_vtcs.push_back(vtx);
+                loop:;
+                }
+        }
+    return found;
 }
 
 bool branch_and_reduce_algorithm::fold2Reduction()
@@ -889,7 +893,16 @@ bool branch_and_reduce_algorithm::twinReduction()
                                         set(v, 0);
                                         set(w, 0);
                                     }
+                                    //cout << "twin: " << nBranchings << endl;
                                     goto loop;
+                                }
+                                else if (BRANCHING == 15 && p == 3 && deg(w) == 4)
+                                {
+                                    for (int z : adj[w])
+                                    {
+                                        if (x[z] < 0 && vUsed[z] == 0)
+                                            twin_vtcs.push_back(z);
+                                    }
                                 }
                             }
                         }
@@ -903,6 +916,9 @@ bool branch_and_reduce_algorithm::twinReduction()
 
 bool branch_and_reduce_algorithm::funnelReduction()
 {
+    if (BRANCHING == 16)
+        return funnelReduction_a();
+
     int oldn = rn;
     for (int v = 0; v < n; v++)
         if (x[v] < 0)
@@ -991,6 +1007,305 @@ bool branch_and_reduce_algorithm::funnelReduction()
     return oldn != rn;
 }
 
+bool branch_and_reduce_algorithm::checkFunnel(int v)
+{
+    used.clear();
+    std::vector<int> &tmp = level;
+    int p = 0;
+    for (int u : adj[v])
+        if (x[u] < 0 && used.add(u))
+        {
+            tmp[p++] = u;
+        }
+    if (p <= 1)
+        return false;
+    int u1 = -1;
+    for (int i = 0; i < p; i++)
+    {
+        int d = 0;
+        for (int u : adj[tmp[i]])
+            if (x[u] < 0 && used.get(u))
+                d++;
+        if (d + 1 < p)
+        {
+            u1 = tmp[i];
+            break;
+        }
+    }
+    if (u1 < 0)
+    {
+        return false;
+    }
+    else
+    {
+        std::vector<int> &id = iter;
+        for (int i = 0; i < p; i++)
+            id[tmp[i]] = -1;
+        for (int u : adj[u1])
+            if (x[u] < 0)
+                id[u] = 0;
+        int u2 = -1;
+        for (int i = 0; i < p; i++)
+            if (tmp[i] != u1 && id[tmp[i]] < 0)
+            {
+                u2 = tmp[i];
+                break;
+            }
+        assert(u2 >= 0);
+        used.remove(u1);
+        used.remove(u2);
+        int d1 = 0, d2 = 0;
+        for (int w : adj[u1])
+            if (x[w] < 0 && used.get(w))
+                d1++;
+        for (int w : adj[u2])
+            if (x[w] < 0 && used.get(w))
+                d2++;
+        if (d1 < p - 2 && d2 < p - 2)
+            return false;
+        for (int i = 0; i < p; i++)
+        {
+            int u = tmp[i];
+            if (u == u1 || u == u2)
+                continue;
+            int d = 0;
+            for (int w : adj[u])
+                if (x[w] < 0 && used.get(w))
+                    d++;
+            if (d < p - 3)
+                return false;
+        }
+        return true;
+    }
+}
+
+bool branch_and_reduce_algorithm::funnelReduction_a()
+{
+    int oldn = rn;
+    for (int v = 0; v < n; v++)
+        if (x[v] < 0)
+        {
+            used.clear();
+            std::vector<int> &tmp = level;
+            int p = 0;
+            for (int u : adj[v])
+                if (x[u] < 0 && used.add(u))
+                {
+                    tmp[p++] = u;
+                }
+            if (p <= 1)
+            {
+                set(v, 0);
+                continue;
+            }
+            int u1 = -1;
+            for (int i = 0; i < p; i++)
+            {
+                int d = 0;
+                for (int u : adj[tmp[i]])
+                    if (x[u] < 0 && used.get(u))
+                        d++;
+                if (d + 1 < p)
+                {
+                    u1 = tmp[i];
+                    break;
+                }
+            }
+            if (u1 < 0)
+            {
+                set(v, 0);
+                continue;
+            }
+            else
+            {
+                std::vector<int> &id = iter;
+                for (int i = 0; i < p; i++)
+                    id[tmp[i]] = -1;
+                for (int u : adj[u1])
+                    if (x[u] < 0)
+                        id[u] = 0;
+                int u2 = -1;
+                for (int i = 0; i < p; i++)
+                    if (tmp[i] != u1 && id[tmp[i]] < 0)
+                    {
+                        u2 = tmp[i];
+                        break;
+                    }
+                assert(u2 >= 0);
+                used.remove(u1);
+                used.remove(u2);
+                int d1 = 0, d2 = 0;
+                for (int w : adj[u1])
+                    if (x[w] < 0 && used.get(w))
+                        d1++;
+                for (int w : adj[u2])
+                    if (x[w] < 0 && used.get(w))
+                        d2++;
+                if (!(d1 < p - 2 && d2 < p - 2))
+                {
+                    for (int i = 0; i < p; i++)
+                    {
+                        int u = tmp[i];
+                        if (u == u1 || u == u2)
+                            continue;
+                        int d = 0;
+                        for (int w : adj[u])
+                            if (x[w] < 0 && used.get(w))
+                                d++;
+                        if (d < p - 3)
+                        {
+                            goto loop;
+                        }
+                    }
+                    int u = (d1 == p - 2) ? u2 : u1;
+                    std::vector<int> const v1{v};
+                    std::vector<int> const v2{u};
+                    compute_alternative(v1, v2);
+                }
+                else
+                {
+                    int cnt = 0;
+                    for (int i = 0; i < p; i++)
+                    {
+                        int d = 0;
+                        for (int w : adj[tmp[i]])
+                        {
+                            if (x[w] < 0 && used.get(w))
+                                d++;
+                        }
+                        if (d < p - 3)
+                            cnt++;
+
+                        if (cnt >= 3)
+                            goto loop;
+                    }
+
+                    for (int i : adj[v])
+                    {
+                        if (x[i] < 0)
+                        {
+                            x[i] = 3;
+                            if (checkFunnel(v))
+                            {
+                                funnel_vtcs.push_back(i);
+                            }
+
+                            x[i] = -1;
+                        }
+                    }
+                }
+            }
+        loop:;
+        }
+    if (debug >= 3 && depth <= maxDepth && oldn != rn)
+        fprintf(stderr, "%sfunnel: %d -> %d\n", debugString().c_str(), oldn, rn);
+    return oldn != rn;
+}
+
+bool branch_and_reduce_algorithm::funnelReduction_b()
+{
+    int oldn = rn;
+    for (int v = 0; v < n; v++)
+        if (x[v] < 0)
+        {
+            used.clear();
+            std::vector<int> &tmp = level;
+            int p = 0;
+            for (int u : adj[v])
+                if (x[u] < 0 && used.add(u))
+                {
+                    tmp[p++] = u;
+                }
+            if (p <= 1) // deg 1 vtx.
+            {
+                set(v, 0);
+                continue;
+            }
+            int u1 = -1;
+            for (int i = 0; i < p; i++)
+            {
+                int d = 0;
+                for (int u : adj[tmp[i]])
+                    if (x[u] < 0 && used.get(u))
+                        d++;
+                if (d + 1 < p)
+                {
+                    u1 = tmp[i];
+                    break;
+                }
+            }
+            if (u1 < 0) // d >= p-1 for all neighbors => v and neighbours induce a clique
+            {
+                set(v, 0);
+                continue;
+            }
+            else
+            {
+                std::vector<int> &id = iter;
+                for (int i = 0; i < p; i++)
+                    id[tmp[i]] = -1;
+                for (int u : adj[u1])
+                    if (x[u] < 0)
+                        id[u] = 0;
+                int u2 = -1;
+                for (int i = 0; i < p; i++)
+                    if (tmp[i] != u1 && id[tmp[i]] < 0)
+                    {
+                        u2 = tmp[i];
+                        break;
+                    }
+                assert(u2 >= 0);
+                used.remove(u1);
+                used.remove(u2);
+                int d1 = 0, d2 = 0;
+                for (int w : adj[u1])
+                    if (x[w] < 0 && used.get(w))
+                        d1++;
+                for (int w : adj[u2])
+                    if (x[w] < 0 && used.get(w))
+                        d2++;
+                if (d1 < p - 2 && d2 < p - 2)
+                    continue;
+
+                int cnt = 0;
+                int kv = -1;
+                for (int i = 0; i < p; i++)
+                {
+                    int u = tmp[i];
+                    if (u == u1 || u == u2)
+                        continue;
+                    int d = 0;
+                    for (int w : adj[u])
+                        if (x[w] < 0 && used.get(w))
+                            d++;
+                    if (d < p - 3)
+                    {
+                        if (cnt >= 1)
+                            goto loop;
+                        kv = u;
+                        cnt++;
+                    }
+                }
+
+                if (cnt == 1)
+                {
+                    funnel_vtcs.push_back(kv);
+                    goto loop;
+                }
+
+                int u = (d1 == p - 2) ? u2 : u1;
+                std::vector<int> const v1{v};
+                std::vector<int> const v2{u};
+                compute_alternative(v1, v2);
+                //std::cout << "funnel: " << nBranchings << endl;
+            }
+        loop:;
+        }
+    if (debug >= 3 && depth <= maxDepth && oldn != rn)
+        fprintf(stderr, "%sfunnel: %d -> %d\n", debugString().c_str(), oldn, rn);
+    return oldn != rn;
+}
+
 bool branch_and_reduce_algorithm::deskReduction()
 {
     int oldn = rn;
@@ -1057,6 +1372,7 @@ bool branch_and_reduce_algorithm::deskReduction()
                                         if (sA <= 2)
                                         {
                                             compute_alternative(std::vector<int>{v, w}, std::vector<int>{u1, u2});
+                                            //std::cout << "desk: " << nBranchings << endl;
                                             goto loop;
                                         }
                                     }
@@ -1075,6 +1391,9 @@ bool branch_and_reduce_algorithm::deskReduction()
 
 bool branch_and_reduce_algorithm::unconfinedReduction()
 {
+    if (BRANCHING == 18)
+        return unconfinedReduction_a();
+
     int oldn = rn;
 #if 1
     std::vector<int> &NS = level;
@@ -1150,6 +1469,168 @@ bool branch_and_reduce_algorithm::unconfinedReduction()
                                 }
                             }
                     }
+                }
+            }
+        whileloopend:
+            if (x[v] < 0 && p >= 2)
+            {
+                used.clear();
+                for (int i = 0; i < size; i++)
+                    used.add(NS[i]);
+                std::vector<int> &vs = que;
+                for (int i = 0; i < size; i++)
+                {
+                    vs[i] = vs[n + i] = -1;
+                    int u = NS[i];
+                    if (deg[u] != 2)
+                        continue;
+                    int v1 = -1, v2 = -1;
+                    for (int w : adj[u])
+                        if (x[w] < 0 && !used.get(w))
+                        {
+                            if (v1 < 0)
+                                v1 = w;
+                            else if (v2 < 0)
+                                v2 = w;
+                            else
+                            {
+                                v1 = v2 = -1;
+                                break;
+                            }
+                        }
+                    if (v1 > v2)
+                    {
+                        int t = v1;
+                        v1 = v2;
+                        v2 = t;
+                    }
+                    vs[i] = v1;
+                    vs[n + i] = v2;
+                }
+                for (int i = 0; i < size; i++)
+                    if (vs[i] >= 0 && vs[n + i] >= 0)
+                    {
+                        int u = NS[i];
+                        used.clear();
+                        for (int w : adj[u])
+                            if (x[w] < 0)
+                                used.add(w);
+                        for (int j = i + 1; j < size; j++)
+                            if (vs[i] == vs[j] && vs[n + i] == vs[n + j] && !used.get(NS[j]))
+                            {
+                                if (REDUCTION >= 3)
+                                {
+                                    std::vector<int> &qs = que;
+                                    int q = 0;
+                                    qs[q++] = 1;
+                                    for (int w : adj[v])
+                                        if (x[w] < 0)
+                                            qs[q++] = w;
+                                    std::vector<int> copyOfqs(qs.begin(), qs.begin() + q);
+                                    packing.emplace_back(std::move(copyOfqs));
+                                }
+                                set(v, 1);
+                                goto forloopend;
+                            }
+                    }
+            forloopend:;
+            }
+        }
+    if (debug >= 3 && depth <= maxDepth && oldn != rn)
+        fprintf(stderr, "%sunconfined: %d -> %d\n", debugString().c_str(), oldn, rn);
+#endif //0
+    return oldn != rn;
+}
+
+bool branch_and_reduce_algorithm::unconfinedReduction_a()
+{
+    int oldn = rn;
+#if 1
+    std::vector<int> &NS = level;
+    std::vector<int> &deg = iter;
+    for (int v = 0; v < n; v++)
+        if (x[v] < 0)
+        {
+            used.clear();
+            used.add(v); // add v to set S
+            int p = 1, size = 0;
+            for (int u : adj[v]) // add N(v) to set S
+                if (x[u] < 0)
+                {
+                    used.add(u);
+                    NS[size++] = u;
+                    deg[u] = 1;
+                }
+            bool ok = false;
+
+            while (!ok) //
+            {
+                ok = true;
+                std::vector<int> extends;
+
+                for (int i = 0; i < size; i++)
+                {
+                    int const u = NS[i];
+                    if (deg[u] != 1)
+                    {
+                        continue;
+                    }
+                    int z = -1;
+                    for (int const w : adj[u])
+                        if (x[w] < 0 && !used.get(w)) // w is in N(u) but not N(S)
+                        {
+                            if (z >= 0)
+                            {
+                                z = -2; // |N(u)\N(S)| >= 2
+                                break;
+                            }
+                            z = w;
+                        }
+                    if (z == -1) // u is child with N(u)\N(S) = 0
+                    {
+                        if (REDUCTION >= 3)
+                        {
+                            std::vector<int> &qs = que;
+                            int q = 0;
+                            qs[q++] = 1;
+                            for (int w : adj[v])
+                                if (x[w] < 0)
+                                    qs[q++] = w;
+                            std::vector<int> copyOfqs(qs.begin(), qs.begin() + q);
+                            packing.emplace_back(std::move(copyOfqs));
+                        }
+                        set(v, 1);
+                        goto whileloopend;
+                    }
+                    else if (z >= 0) // u is extending child
+                    {
+                        extends.push_back(z);
+                    }
+                }
+
+                if (extends.size() > 0)
+                {
+                    if (extends.size() == 1)
+                    {
+                        unconf_vtcs.push_back(extends[0]);
+                    }
+                    int z = extends[0];
+                    ok = false;
+                    used.add(z);
+                    p++;
+                    for (int w : adj[z])
+                        if (x[w] < 0)
+                        {
+                            if (used.add(w))
+                            {
+                                NS[size++] = w;
+                                deg[w] = 1;
+                            }
+                            else
+                            {
+                                deg[w]++;
+                            }
+                        }
                 }
             }
         whileloopend:
@@ -1392,6 +1873,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         {
             stratPicks++;
             v = cv;
+            cout << "d: " << depth << endl;
         }
 
         dv = deg(v);
@@ -1415,7 +1897,33 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
             if (branch_t == 0)
             {
                 get_stcut_vertices();
-                branch_t = 10;
+                branch_t = TUNING_PARAM3;
+            }
+            else
+            {
+                cut.push_back(get_max_deg_vtx());
+                branch_t--;
+
+                defaultPicks++;
+                defaultBranch = true;
+            }
+        }
+
+        v = cut.back();
+        cut.pop_back();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 55) // st cuts
+    {
+        while (!cut.empty() && x[cut.back()] != -1)
+            cut.pop_back();
+
+        if (cut.empty())
+        {
+            if (branch_t == 0)
+            {
+                get_stcut_vertices();
+                branch_t = TUNING_PARAM3;
             }
             else
             {
@@ -1432,6 +1940,35 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         dv = deg(v);
     }
     else if (BRANCHING == 6) // nested dissection
+    {
+        if (nd_computed == false)
+        {
+            nd_computed = true;
+            compute_nd_order();
+        }
+
+        while (!nd_order.empty() && x[nd_order.back()] != -1)
+            nd_order.pop_back();
+
+        branch_t--;
+
+        if (nd_order.empty())
+        {
+            //cout << "nd is empty!" << endl;
+            nd_order.push_back(get_max_deg_vtx());
+            defaultPicks++;
+            defaultBranch = true;
+        }
+        else
+            stratPicks++;
+
+        v = nd_order.back();
+        nd_order.pop_back();
+        dv = deg(v);
+
+        dv = deg(v);
+    }
+    else if (BRANCHING == 66) 
     {
         if (nd_computed == false && branch_t == 0)
         {
@@ -1459,139 +1996,169 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         nd_order.pop_back();
         dv = deg(v);
     }
-    else if (BRANCHING == 7) // improved nested dissection
+
+    else if (BRANCHING == 13) // max N2
     {
-        if (nd_computed == false)
-        {
-            compute_improved_nd_order();
-            nd_computed = true;
-        }
-
-        while (!nd_order.empty() && x[nd_order.back()] != -1)
-            nd_order.pop_back();
-
-        if (nd_order.empty())
-        {
-            //cout << "nd is empty!" << endl;
-            nd_order.push_back(get_max_deg_vtx());
-            defaultPicks++;
-            defaultBranch = true;
-        }
-        else
-            stratPicks++;
-
-        v = nd_order.back();
-        nd_order.pop_back();
+        v = max_nh_vtx();
         dv = deg(v);
     }
-    else if (BRANCHING == 8) // dynamic betweenness centrality
+    else if (BRANCHING == 14) // almost dominated
     {
-        if (!bc_index_built)
+        almost_dominated();
+
+        int vv = -1;
+        int dvv = -1;
+        for (int i = 0; i < domin_vtcs.size(); i++)
         {
-            bc_index_built = true;
-
-            bc_index = new DynamicCentralityHAY();
-            std::vector<std::pair<int, int>> es;
-            for (int v = 0; v < adj.size(); v++)
+            if (x[domin_vtcs[i]] < 0 && deg(domin_vtcs[i]) > dvv)
             {
-                if (x[v] < 0)
-                {
-                    for (int u : adj[v])
-                    {
-                        if (x[u] < 0)
-                            es.emplace_back(u, v);
-                    }
-                }
+                dvv = deg(domin_vtcs[i]);
+                vv = domin_vtcs[i];
             }
-            nVert = rn;
-            bc_index->PreCompute(es, 5000);
-
-            // top level -> mapping = id
-            nodeMapping.resize(adj.size());
-            for (int i = 0; i < nodeMapping.size(); i++)
-            {
-                nodeMapping[i] = i;
-            }
-
-            cout << "ok" << endl;
         }
 
-        double topCentr = 0;
-        v = -1;
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
 
+        domin_vtcs.clear();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 15) // almost twin
+    {
+        int vv = -1;
+        int dvv = -1;
+        for (int i = 0; i < twin_vtcs.size(); i++)
+        {
+            if (x[twin_vtcs[i]] < 0 && deg(twin_vtcs[i]) > dvv)
+            {
+                dvv = deg(twin_vtcs[i]);
+                vv = twin_vtcs[i];
+            }
+        }
+
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
+
+        twin_vtcs.clear();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 16) // funnel
+    {
+        int vv = -1;
+        int dvv = -1;
+        for (int i = 0; i < funnel_vtcs.size(); i++)
+        {
+            if (x[funnel_vtcs[i]] < 0 && deg(funnel_vtcs[i]) > dvv)
+            {
+                dvv = deg(funnel_vtcs[i]);
+                vv = funnel_vtcs[i];
+            }
+        }
+
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
+
+        funnel_vtcs.clear();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 17) // unconfined
+    {
+        int vv = -1;
+        int dvv = -1;
+        for (int i = 0; i < unconf_vtcs.size(); i++)
+        {
+            if (x[unconf_vtcs[i]] < 0 && deg(unconf_vtcs[i]) > dvv)
+            {
+                dvv = deg(unconf_vtcs[i]);
+                vv = unconf_vtcs[i];
+            }
+        }
+
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
+
+        unconf_vtcs.clear();
+        dv = deg(v);
+    }
+
+    else if (BRANCHING == 18)
+    {
+        build_domination_graph();
+        find_chains();
+        calc_chain_vec();
+        int maxdel = 0;
+        pair<int, int> vec;
+        v = -1;
         for (int i = 0; i < n; i++)
         {
-            if (x[i] < 0)
+            if (x[i] < 0 && chain_vec[i].first + chain_vec[i].second > maxdel)
             {
-                double centr = bc_index->QueryCentrality(nodeMapping[i]);
-                if (centr > topCentr)
-                {
-                    v = i;
-                    topCentr = centr;
-                }
+                vec = chain_vec[i];
+                maxdel = chain_vec[i].first + chain_vec[i].second;
+                v = i;
             }
         }
-        //if (v == -1) v = get_max_deg_vtx();
-        dv = deg(v);
-    }
-    else if (BRANCHING == 9) // static betweenness centrality
-    {
-        if (nd_computed == false)
-        {
-            nd_computed = true;
-            bc_index_built = false;
 
-            bc_index = new DynamicCentralityHAY();
-            std::vector<std::pair<int, int>> es;
-            for (int v = 0; v < adj.size(); v++)
-            {
-                if (x[v] < 0)
-                {
-                    for (int u : adj[v])
-                    {
-                        if (x[u] < 0)
-                            es.emplace_back(u, v);
-                    }
-                }
-            }
-            nVert = rn;
-            bc_index->PreCompute(es, 1000);
-
-            std::vector<std::pair<double, int>> ranking;
-            cout << "rn: " << rn << endl;
-            for (int i = 0; i < adj.size(); i++)
-            {
-                if (x[i] < 0)
-                    ranking.emplace_back(bc_index->QueryCentrality(i), i);
-            }
-            std::sort(ranking.begin(), ranking.end());
-            for (int i = 0; i < ranking.size(); i++)
-                nd_order.push_back(ranking[i].second);
-            cout << "ok" << endl;
-        }
-
-        while (!nd_order.empty() && x[nd_order.back()] != -1)
-            nd_order.pop_back();
-
-        if (nd_order.empty())
-        {
-            //cout << "nd is empty!" << endl;
-            nd_order.push_back(get_max_deg_vtx());
-            defaultPicks++;
-            defaultBranch = true;
-        }
-        else
-            stratPicks++;
-
-        v = nd_order.back();
-        nd_order.pop_back();
         dv = deg(v);
     }
 
-    branchTree.push_back({depth, v});
-    // opt branch order
-    optBranchOrder.push_back(v);
-    std::vector<int> crntBranchOrder(optBranchOrder);
+
     int crntBest = opt;
 
     std::vector<int> &ps = iter;
@@ -1684,7 +2251,6 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         defaultBranchings++;
         defaultBranch = false;
     }
-    optBranchOrder.swap(crntBranchOrder);
 
     if (mirrorN == 0)
     {
@@ -1745,12 +2311,6 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
     lb = oldLB;
     depth--;
     restore(pn);
-
-    if (opt == crntBest)
-    {
-        // v in vc is better => restore branching order
-        optBranchOrder.swap(crntBranchOrder);
-    }
 }
 
 bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
@@ -1973,8 +2533,7 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
             vcs[i]->nd_computed = this->nd_computed;
             vcs[i]->nd_order.swap(sub_nd_order);
 
-            // mapping for bc index
-            if (BRANCHING == 8)
+            /*if (BRANCHING == 8 && bc_index_built)
             {
                 std::vector<int> sub_nodeMapping(nodeMapping.size());
                 for (int i = 0; i < vs.size(); i++)
@@ -1983,7 +2542,7 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
                 vcs[i]->bc_index_built = this->bc_index_built;
                 vcs[i]->bc_index = this->bc_index;
                 vcs[i]->nodeMapping.swap(sub_nodeMapping);
-            }
+            }*/
 
             for (unsigned int j = 0; j < vs.size(); j++)
             {
@@ -2180,11 +2739,6 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
     {
         branch_and_reduce_algorithm *pAlg = vcs[i];
         std::vector<int> &vs = vss[i];
-        for (int j = 0; j < pAlg->branchTree.size(); j++)
-        {
-            std::vector<int> &bn = pAlg->branchTree[j];
-            this->branchTree.push_back({bn[0], vs[bn[1]]});
-        }
     }
 
     if (opt > sum) // new best solution found -> set solution
@@ -2199,17 +2753,6 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
             // if(!optChanged[i]) continue;
             for (unsigned int j = 0; j < vss[i].size(); j++)
                 y[vss[i][j]] = vcs[i]->y[j];
-        }
-
-        // get branching nodes
-        for (int i = 0; i < vcs.size(); i++)
-        {
-            branch_and_reduce_algorithm *pAlg = vcs[i];
-            std::vector<int> &vs = vss[i];
-            for (int j = 0; j < pAlg->optBranchOrder.size(); j++)
-            {
-                this->optBranchOrder.push_back(vs[pAlg->optBranchOrder[j]]);
-            }
         }
 
         reverse();
@@ -2234,6 +2777,7 @@ bool branch_and_reduce_algorithm::reduce()
         // if (n > 100 && n * SHRINK >= rn && !outputLP && decompose()) return true;
         if (REDUCTION >= 0 && REDUCTION < 2 && dominateReduction())
             continue;
+
         if (REDUCTION >= 2 && unconfinedReduction())
             continue;
         if (REDUCTION >= 1 && lpReduction())
@@ -3183,6 +3727,14 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
 
     s = mapping[v1];
     t = mapping[v2];
+
+    if (BRANCHING == 55)
+    {
+        s = t = rand() % rn;
+        while (t == s)
+            t = rand() % rn;
+    }
+
     // find_st_vtcs(graph, ss, tt);
 
     std::shared_ptr<flow_graph> m_graph(new flow_graph());
@@ -3253,7 +3805,8 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     cut.swap(vc);
 
     double perc = (double)res.size() / (double)number_of_nodes_remaining();
-    if (cut.size() > 7 || perc < 0.1 || perc > 0.9)
+    //cout << "size: " << cut.size() << "  ---  balance: " << perc << endl;
+    if (cut.size() > TUNING_PARAM1 || perc < TUNING_PARAM2 || perc > (1.0 - TUNING_PARAM2))
     {
         // to big, use max. deg. vertex instead
         cut.clear();
@@ -3368,7 +3921,7 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
 
     seps.push_back(t_sep);
 
-    if (level == 1)
+    if (level == 0)
         return seps;
 
     // recursively extract separators of lower levels
@@ -3379,6 +3932,7 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
 
     int32_t *l_ptr = lsize_arr;
     int32_t *r_ptr = rsize_arr;
+
 
     for (int i = level - 2; i >= 0; i--)
     {
@@ -3422,6 +3976,7 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
 
 void branch_and_reduce_algorithm::compute_nd_order()
 {
+
     nd_threshold = std::max(30, (int)(0.1 * number_of_nodes_remaining()));
 
     int32_t n;
@@ -3429,12 +3984,17 @@ void branch_and_reduce_algorithm::compute_nd_order()
     std::vector<int32_t> adjncy_v;
     std::vector<NodeID> rm;
     convert_to_metis(&n, xadj_v, adjncy_v, rm);
-    int p = pow(2, ceil(log2(n))) / ND_LEVEL;
 
-    if (p < 8)
-        p = 8;
+    int p = 4;
 
-    //cout << "p: " << p << endl;
+    if (TUNING_PARAM2 > 0)
+        p = pow(2, TUNING_PARAM1);
+    else
+    {
+        p = pow(2, ceil(log2(n)) - TUNING_PARAM1);
+        if (p < 2)
+            p = 2;
+    }
 
     int32_t *xadj = (int32_t *)malloc(sizeof(int32_t) * xadj_v.size());
     int32_t *adjncy = (int32_t *)malloc(sizeof(int32_t) * adjncy_v.size());
@@ -3462,26 +4022,34 @@ void branch_and_reduce_algorithm::compute_nd_order()
     // {
     //     degs[i] = maxdeg + 1 - degs[i];
     // }
-
     int r = METIS_NodeNDP(n, xadj, adjncy, NULL, p, NULL, perm, iperm, sizes);
     //int r = METIS_NodeNDP(n, xadj, adjncy, degs, p, NULL, perm, iperm, sizes);
 
-    for (int i = p; i < 2 * p; i++)
+    if (BRANCHING != 6666)
     {
-        if (sizes[i] > nd_threshold)
+        double thresh = 0;
+        if (TUNING_PARAM3 > 0)
+            thresh = TUNING_PARAM3;
+        else if (TUNING_PARAM3 == 0)
+            thresh = std::max(30, (int)ceil(log2(rn)));
+        else
+            thresh = std::max(30, (int)((-TUNING_PARAM3) * (rn / 100)));
+
+        for (int i = p; i < 2 * p; i++)
         {
-            nd_computed = false;
-            free(xadj);
-            free(adjncy);
-            free(perm);
-            free(iperm);
-            free(sizes);
-            return;
+            if (sizes[i] > nd_threshold)
+            {
+                nd_computed = false;
+                free(xadj);
+                free(adjncy);
+                free(perm);
+                free(iperm);
+                free(sizes);
+                return;
+            }
         }
     }
-
     std::vector<std::vector<int>> seps = get_nd_separators(perm, sizes, sizes + p, n, p, NULL);
-
     for (int i = seps.size() - 1; i >= 0; i--)
     {
         for (int j = 0; j < seps[i].size(); j++)
@@ -3489,7 +4057,7 @@ void branch_and_reduce_algorithm::compute_nd_order()
             nd_order.push_back(rm[seps[i][j]]);
         }
     }
-
+    //cout << "p: " << p << endl;
     //cout << *(sizes + 2 * p - 2) << endl;
     //cout << nd_order.size() << endl;
 
@@ -3502,105 +4070,144 @@ void branch_and_reduce_algorithm::compute_nd_order()
     //free(degs);
 }
 
-void branch_and_reduce_algorithm::compute_improved_nd_order()
+int branch_and_reduce_algorithm::max_nh_vtx()
 {
-    PartitionConfig partition_config;
-    std::vector<nested_dissection_reduction_type> rorder(4);
-    rorder[0] = (nested_dissection_reduction_type)0;
-    rorder[1] = (nested_dissection_reduction_type)1;
-    rorder[2] = (nested_dissection_reduction_type)4;
-    rorder[3] = (nested_dissection_reduction_type)5;
-    partition_config.reduction_order = rorder;
-    partition_config.max_simplicial_degree = 12;
+    int v = -1;
+    int maxN2 = 0;
 
-    bool suppress_output = true;
-
-    std::streambuf *backup = std::cout.rdbuf();
-    if (suppress_output)
-        std::cout.rdbuf(nullptr);
-
-    std::shared_ptr<graph_access> input_graph(new graph_access());
-    std::vector<NodeID> m(0);
-    std::vector<NodeID> rm(number_of_nodes_remaining());
-    convert_to_ga(input_graph, rm, m);
-
-    graph_access *active_graph;
-    std::vector<std::unique_ptr<Reduction>> reduction_stack;
-    bool used_reductions = apply_reductions(partition_config, *input_graph, reduction_stack);
-    if (used_reductions)
+    for (int i = 0; i < n; i++)
     {
-        active_graph = &reduction_stack.back()->get_reduced_graph();
-    }
-    else
-    {
-        active_graph = &(*input_graph);
-    }
+        if (x[i] < 0)
+        {
+            used.clear();
+            for (int u : adj[i])
+            {
+                if (x[u] < 0)
+                    used.add(u);
+            }
 
-    idx_t num_nodes = active_graph->number_of_nodes(); // graph data structure
-    idx_t *xadj = active_graph->UNSAFE_metis_style_xadj_array();
-    idx_t *adjncy = active_graph->UNSAFE_metis_style_adjncy_array();
-    idx_t *perm = new idx_t[active_graph->number_of_nodes()];
-    idx_t *iperm = new idx_t[active_graph->number_of_nodes()]; // inverse ordering. This is the one we are interested in.
-    idx_t *metis_options = new idx_t[METIS_NOPTIONS];
+            int cnt = 0;
+            for (int u : adj[i])
+            {
+                for (int v : adj[u])
+                {
+                    if (!used.get(v))
+                    {
+                        cnt++;
+                        used.add(v);
+                    }
+                }
+            }
 
-    int p = pow(2, ceil(log2(num_nodes))) / ND_LEVEL;
-
-    if (p < 8)
-        p = 8;
-
-    idx_t *sizes = new idx_t[p * 2];
-
-    // Perform nested dissection with Metis
-    if (num_nodes > 0)
-    {
-        METIS_SetDefaultOptions(metis_options);
-        //METIS_NodeND(&num_nodes, xadj, adjncy, nullptr, metis_options, perm, iperm);
-        METIS_NodeNDP(num_nodes, xadj, adjncy, nullptr, p, metis_options, perm, iperm, sizes);
-    }
-    // Place labels of reduced graph in a vector for uncontracting
-    std::vector<NodeID> reduced_labels(active_graph->number_of_nodes(), 0);
-    for (size_t i = 0; i < active_graph->number_of_nodes(); ++i)
-    {
-        reduced_labels[i] = iperm[i];
+            if (cnt > maxN2)
+            {
+                v = i;
+                maxN2 = cnt;
+            }
+        }
     }
 
-    std::vector<std::vector<int>> seps = get_nd_separators(perm, sizes, sizes + p, num_nodes, p, NULL);
-    std::vector<NodeID> seps_flat;
-    for (int i = seps.size() - 1; i >= 0; i--)
+    return v;
+}
+
+void branch_and_reduce_algorithm::build_domination_graph()
+{
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < seps[i].size(); j++)
-            seps_flat.push_back(seps[i][j]);
+        if (x[i] < 0)
+            domination_graph[i].clear();
     }
 
-    // Map ordering of reduced graph to input graph
-    std::vector<NodeID> final_labels;
-    std::vector<NodeID> final_seps;
+    for (int v = 0; v < n; v++)
+        if (x[v] < 0)
+        {
+            used.clear();
+            used.add(v);
+            for (int u : adj[v])
+                if (x[u] < 0)
+                    used.add(u);
+            for (int u : adj[v])
+                if (x[u] < 0)
+                {
+                    int cnt = 0;
+                    int vtx = -1;
+                    for (int w : adj[u])
+                    {
+                        if (x[w] < 0 && !used.get(w))
+                        {
+                            cnt++;
+                            vtx = w;
+                        }
+                        if (cnt >= 2)
+                            goto loop;
+                    }
+                    domination_graph[vtx].push_back(v);
+                loop:;
+                }
+        }
+}
 
-    if (used_reductions)
+void branch_and_reduce_algorithm::find_chains()
+{
+    for (int i = 0; i < n; i++)
     {
-        map_ordering(reduction_stack, reduced_labels, final_labels);
-        map_separators(reduction_stack, seps_flat, final_seps);
+        if (x[i] >= 0)
+            continue;
+
+        chains[i].clear();
+        int len = 1;
+
+        std::vector<int> scanned(n, 0);
+        std::queue<int> q;
+        q.emplace(i);
+        chains[i].push_back(i);
+        scanned[i] = 1;
+
+        while (!q.empty())
+        {
+            int v = q.front();
+            q.pop();
+            for (int u : domination_graph[v])
+            {
+                if (scanned[u] == 0)
+                {
+                    scanned[u] = 1;
+                    q.push(u);
+                    len++;
+
+                    chains[i].push_back(u);
+                }
+            }
+        }
+        chainLength[i] = len;
     }
-    else
+}
+
+void branch_and_reduce_algorithm::calc_chain_vec()
+{
+    for (int i = 0; i < n; i++)
     {
-        final_labels = reduced_labels;
-        final_seps = seps_flat;
+        if (x[i] >= 0)
+            chain_vec[i] = make_pair(0, 0);
+
+        used.clear();
+        int cnt = 0;
+        for (int w : chains[i])
+        {
+            if (used.add(w))
+                cnt++;
+        }
+        for (int u : adj[i])
+        {
+            if (x[u] < 0)
+            {
+                for (int w : chains[u])
+                {
+                    if (used.add(w))
+                        cnt++;
+                }
+            }
+        }
+        chain_vec[i] = make_pair(chainLength[i], cnt);
     }
-
-    // for (int i = final_seps.size() - 1; i >= 0; i--)
-    // {
-    //     nd_order.push_back(rm[final_seps[i]]);
-    // }
-
-    nd_order.swap(final_labels);
-
-    // Restore cout output stream
-    std::cout.rdbuf(backup);
-
-    delete[] xadj;
-    delete[] adjncy;
-    delete[] perm;
-    delete[] iperm;
-    delete[] metis_options;
-    delete[] sizes;
 }

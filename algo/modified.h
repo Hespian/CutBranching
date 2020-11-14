@@ -23,9 +23,6 @@
 #include <vector>
 #include <cassert>
 
-#include "algorithm/dynamic_centrality_hay.hpp"
-using namespace betweenness_centrality;
-
 class branch_and_reduce_algorithm;
 
 class modified {

@@ -5,6 +5,9 @@ VieCut
 reduced_instances
 branch_orders
 .vscode*
+branch_order
+branch_trees
+networkit
 
 
 pg.cpp

@@ -40,22 +40,16 @@
 #include <memory>
 #include <cstring>
 
-#include "../NestedDissection/extern/argtable3-3.0.3/argtable3.h"
 #include <iostream>
 #include <fstream>
 #include <regex.h>
 #include <memory>
-#include "metis.h"
+#include "../Metis/include/metis.h"
 
 #include "data_structure/graph_access.h"
 #include "dissection/reductions.h"
 #include "io/graph_io.h"
-//#include "../RND/app/parse_parameters.h"
 #include "partition/partition_config.h"
-
-#include "algorithm/dynamic_centrality_hay.hpp"
-
-using namespace betweenness_centrality;
 
 class branch_and_reduce_algorithm
 {
@@ -72,6 +66,9 @@ public:
 	// 1 for extra decompose step
 	static int EXTRA_DECOMP;
 	static int ND_LEVEL;
+	static long TUNING_PARAM1;
+	static double TUNING_PARAM2;
+	static long TUNING_PARAM3;
 
 	// statistics
 	static long defaultBranchings;
@@ -93,8 +90,8 @@ public:
 		nDecomps = 0;
 	}
 
-	std::vector<int> optBranchOrder;
-	std::vector<std::vector<int>>  branchTree;
+	//std::vector<int> optBranchOrder;
+	//std::vector<std::vector<int>>  branchTree;
 
 	std::vector<std::vector<int>> adj;
 	static long nBranchings;
@@ -176,8 +173,12 @@ public:
 	bool fold2Reduction();
 	bool twinReduction();
 	bool funnelReduction();
+	bool funnelReduction_a();
+	bool funnelReduction_b();
+	bool checkFunnel(int v);
 	bool deskReduction();
 	bool unconfinedReduction();
+	bool unconfinedReduction_a();
 	int packingReduction();
 
 	// lower bounds for pruning
@@ -244,6 +245,7 @@ public:
 	// articulation points
     std::vector<int> articulation_points;
 	void get_articulation_points();
+	void get_artics();
 
 	std::vector<int> visited;
     std::vector<int> minNr;      
@@ -285,24 +287,46 @@ public:
 	void compute_nd_order();
 	std::vector<std::vector<int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
 
-	// Improved Nested Dissection
-	void compute_improved_nd_order();
-
-
-
 	// Betweenness Centrality
-	DynamicCentralityBase *bc_index;
-	bool bc_index_built = false;
-	bool done = false;
-	int nVert = -1;
+	// DynamicCentralityBase *bc_index;
+	// bool bc_index_built = false;
+	// bool done = false;
+	// int nVert = -1;
 
-	int nDisabled = -1;
-	std::vector<std::pair<int, int>> removedEdges;
-	std::vector<int> removedEdgesCnt;
+	// int nDisabled = -1;
+	// std::vector<std::pair<int, int>> removedEdges;
+	// std::vector<int> removedEdgesCnt;
 	
-	std::vector<int> nodeMapping;
+	// std::vector<int> nodeMapping;
 
 
+	// chordal
+	// void lex_bfs(std::vector<int>& node_ordering, std::vector<int>& reverse_mapping);
+	// bool check_for_pes (std::vector<int>& node_ordering, std::vector<int>& reverse_mapping);
+
+	// int num_ind_cycles(int root);
+
+	// quasi dominated
+	std::vector<int> domin_vtcs;
+	bool almost_dominated();
+
+	// quasi unconfined
+	std::vector<int> unconf_vtcs;
+
+	void build_domination_graph();
+	void find_chains();
+	void calc_chain_vec();
+	std::vector<std::vector<int>> domination_graph;
+	std::vector<int> chainLength;
+	std::vector<std::vector<int>> chains;
+	std::vector<std::pair<int,int>> chain_vec;
+
+	// quasi twins 
+	std::vector<int> twin_vtcs;
+	// quasi funnel
+	std::vector<int> funnel_vtcs;
+
+	int max_nh_vtx();
 
 #if 0
 }

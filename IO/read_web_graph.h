@@ -10,8 +10,8 @@
 
 std::vector<std::vector<int>> readWebGraph(std::istream &infile)
 {
-    int numVertices;
-    int numEdges;
+    int numVertices = 0;
+    int numEdges = 0;
     std::string line;
     while (getline(infile, line))
     {
