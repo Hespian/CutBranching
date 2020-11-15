@@ -36,6 +36,7 @@
 
 // system includes
 #include <vector>
+#include <stack> 
 #include <string>
 #include <memory>
 #include <cstring>
@@ -244,16 +245,19 @@ public:
 
 	// articulation points
     std::vector<int> articulation_points;
-	void get_articulation_points();
-	void get_artics();
-
 	std::vector<int> visited;
     std::vector<int> minNr;      
     int current_dfs_num = 0;
 
 	int get_articulation_point();
+	void get_articulation_points();
 	void dfs_root(int s);
 	void dfs(int v, int in);
+
+	void get_articulation_points_iteratively();
+	void dfs_iteratively(int v);
+	std::stack<std::pair<int,int>> dfs_stack;
+
 	// ----------
 
 	// global mincuts

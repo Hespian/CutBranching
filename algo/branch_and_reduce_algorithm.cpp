@@ -1873,7 +1873,6 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         {
             stratPicks++;
             v = cv;
-            cout << "d: " << depth << endl;
         }
 
         dv = deg(v);
@@ -3439,7 +3438,7 @@ void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>> &
 
 int branch_and_reduce_algorithm::get_articulation_point()
 {
-    get_articulation_points();
+    get_articulation_points_iteratively();
 
     for (int i = 0; i < n; i++)
         if (articulation_points[i] == 1 && x[i] < 0)
@@ -3511,6 +3510,68 @@ void branch_and_reduce_algorithm::dfs(int v, int in)
         else if (x[u] < 0 && u != in) // backwards edge
             minNr[v] = min(minNr[v], visited[u]);
     }
+}
+
+void branch_and_reduce_algorithm::get_articulation_points_iteratively() {
+    current_dfs_num = 0;
+    const int n = adj.size();
+
+    visited = {};
+    minNr = {};
+    articulation_points = {};
+
+    visited.resize(n, -1);
+    minNr.resize(n, -1);
+    articulation_points.resize(n, 0);
+
+    for (int i = 0; i < n; i++)
+        if (x[i] < 0 && visited[i] < 0) // node active but not yet visited
+            dfs_iteratively(i);
+}
+
+void branch_and_reduce_algorithm::dfs_iteratively(int s) 
+{
+    dfs_stack.emplace(s, s);
+    int child_cnt = -1;
+
+    while (!dfs_stack.empty()) 
+    {
+        std::pair<int, int> e = dfs_stack.top();
+        int v = e.first;
+        int p = e.second;
+
+        if (visited[v] < 0) // not yet visited
+        {
+            if (p == s) child_cnt++;
+
+            visited[v] = current_dfs_num;
+            minNr[v] = current_dfs_num++;
+
+            for (int u : adj[v])
+            {
+                if (x[u] < 0 && visited[u] < 0) // tree edge
+                    dfs_stack.emplace(u, v);
+                else if (x[u] < 0 && u != p) // back edge
+                    minNr[v] = min(minNr[v], visited[u]); 
+            }
+        }
+        else
+        {
+            dfs_stack.pop();
+            if (visited[v] <= n) // backtrack
+            {
+                visited[v] += (n + 1); // set v finished
+                minNr[p] = min(minNr[p], minNr[v]);
+
+                if (minNr[v] >= visited[p]) // articulation point found
+                    articulation_points[p] = 1;
+            }
+        }     
+    }
+
+    if (child_cnt < 2) // root is no cut vertex
+        articulation_points[s] = 0;  
+    else articulation_points[s] = 1;
 }
 
 int branch_and_reduce_algorithm::get_mincut_vertex()
