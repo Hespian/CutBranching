@@ -39,8 +39,6 @@
 #include <cstring>
 #include "../Metis/include/metis.h"
 
-typedef unsigned int NodeID;
-
 using namespace std;
 
 int branch_and_reduce_algorithm::REDUCTION = 3;
@@ -65,6 +63,13 @@ long branch_and_reduce_algorithm::nDecomps = 0;
 long branch_and_reduce_algorithm::prunes = 0;
 
 long branch_and_reduce_algorithm::ro = 1;
+
+inline int getReverseIndex(std::vector<std::vector<int>> &adj, int source, int target)
+{
+    for (int i = 0; i < adj[source].size(); i++)
+        if (adj[source][i] == target)
+            return i;
+}
 
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
     : adj(), n(_adj.size()), used(n * 2), domination_graph(n), chainLength(n), chains(n), chain_vec(n)
@@ -2520,7 +2525,7 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
             vcs[i] = new branch_and_reduce_algorithm(adj2, size[i]);
 
             // inherit nd branching order ypp
-            std::vector<NodeID> sub_nd_order(0);
+            std::vector<int> sub_nd_order(0);
             for (int i = 0; i < this->nd_order.size(); i++)
             {
                 if (std::find(vs.begin(), vs.end(), this->nd_order[i]) != vs.end())
@@ -2863,7 +2868,8 @@ void branch_and_reduce_algorithm::addStartingSolution(std::vector<int> solution,
 int branch_and_reduce_algorithm::solve(timer &t, double time_limit)
 {
     if (t.elapsed() >= time_limit)
-        return -1;
+        return -1;    
+
     // PrintState();
     if (LOWER_BOUND >= 2 && REDUCTION <= 0 && !outputLP)
     {
@@ -3251,86 +3257,86 @@ void branch_and_reduce_algorithm::get_solved_is(std::vector<bool> &independent_s
     }
 }
 
-void branch_and_reduce_algorithm::convert_adj_lists(graph_access &G, std::vector<NodeID> &reverse_mapping) const
+// void branch_and_reduce_algorithm::convert_adj_lists(graph_access &G, std::vector<NodeID> &reverse_mapping) const
+// {
+//     // Number of nodes
+//     unsigned int const node_count = number_of_nodes_remaining();
+//     // Number of edges
+//     int m = 0;
+
+//     // Nodes -> Range
+//     std::vector<NodeID> mapping(adj.size(), 10000000);
+//     // Get number of edges and reorder nodes
+//     unsigned int node_counter = 0;
+//     for (NodeID node = 0; node < adj.size(); ++node)
+//         if (x[node] < 0)
+//         {
+//             for (int const neighbor : adj[node])
+//                 if (x[neighbor] < 0)
+//                     m++;
+//             mapping[node] = node_counter;
+//             reverse_mapping[node_counter] = node;
+//             node_counter++;
+//         }
+
+//     // Create the adjacency array
+//     std::vector<int> xadj(node_count + 1);
+//     std::vector<int> adjncy(m);
+//     unsigned int adjncy_counter = 0;
+//     for (unsigned int i = 0; i < node_count; ++i)
+//     {
+//         xadj[i] = adjncy_counter;
+//         for (int const neighbor : adj[reverse_mapping[i]])
+//         {
+//             if (mapping[neighbor] == i)
+//                 continue;
+//             if (mapping[neighbor] == 10000000)
+//                 continue;
+//             adjncy[adjncy_counter++] = mapping[neighbor];
+//         }
+//         std::sort(std::begin(adjncy) + xadj[i], std::begin(adjncy) + adjncy_counter);
+//     }
+//     xadj[node_count] = adjncy_counter;
+
+//     // Build the graph
+//     G.build_from_metis(node_count, &xadj[0], &adjncy[0]);
+
+// #if 0
+//     std::vector<std::set<int>> neighbors;
+//     neighbors.resize(G.number_of_nodes());
+//     // verify the graph
+//     forall_nodes(G, node) {
+//         forall_out_edges(G, edge, node) {
+//             NodeID neighbor = G.getEdgeTarget(edge);
+//             neighbors[node].insert(neighbor);
+//         } endfor
+//     } endfor
+
+//     for (int vertex = 0; vertex < node_count; ++vertex) {
+//         size_t neighbors_in_subgraph(0);
+//         for (int const neighbor : adj[reverse_mapping[vertex]]) {
+//             bool const in_mapping(mapping[neighbor] != UINT_MAX);
+//             if (in_mapping) {
+//                 bool const in_graph(neighbors[vertex].find(mapping[neighbor]) != neighbors[vertex].end());
+//                 if (in_graph) neighbors_in_subgraph++;
+//             }
+//         }
+
+//         if (neighbors_in_subgraph != neighbors[vertex].size()) {
+//             cout << "ERROR: subgraph verification failed" << endl << flush;
+//         }
+//     }
+// #endif // DEBUG
+// }
+
+void branch_and_reduce_algorithm::convert_to_metis(int32_t *nNodes, std::vector<int32_t> &xadj, std::vector<int32_t> &adjncy, std::vector<int> &reverse_mapping)
 {
-    // Number of nodes
     unsigned int const node_count = number_of_nodes_remaining();
     // Number of edges
     int m = 0;
 
     // Nodes -> Range
-    std::vector<NodeID> mapping(adj.size(), 10000000);
-    // Get number of edges and reorder nodes
-    unsigned int node_counter = 0;
-    for (NodeID node = 0; node < adj.size(); ++node)
-        if (x[node] < 0)
-        {
-            for (int const neighbor : adj[node])
-                if (x[neighbor] < 0)
-                    m++;
-            mapping[node] = node_counter;
-            reverse_mapping[node_counter] = node;
-            node_counter++;
-        }
-
-    // Create the adjacency array
-    std::vector<int> xadj(node_count + 1);
-    std::vector<int> adjncy(m);
-    unsigned int adjncy_counter = 0;
-    for (unsigned int i = 0; i < node_count; ++i)
-    {
-        xadj[i] = adjncy_counter;
-        for (int const neighbor : adj[reverse_mapping[i]])
-        {
-            if (mapping[neighbor] == i)
-                continue;
-            if (mapping[neighbor] == 10000000)
-                continue;
-            adjncy[adjncy_counter++] = mapping[neighbor];
-        }
-        std::sort(std::begin(adjncy) + xadj[i], std::begin(adjncy) + adjncy_counter);
-    }
-    xadj[node_count] = adjncy_counter;
-
-    // Build the graph
-    G.build_from_metis(node_count, &xadj[0], &adjncy[0]);
-
-#if 0
-    std::vector<std::set<int>> neighbors;
-    neighbors.resize(G.number_of_nodes());
-    // verify the graph
-    forall_nodes(G, node) {
-        forall_out_edges(G, edge, node) {
-            NodeID neighbor = G.getEdgeTarget(edge);
-            neighbors[node].insert(neighbor);
-        } endfor
-    } endfor
-
-    for (int vertex = 0; vertex < node_count; ++vertex) {
-        size_t neighbors_in_subgraph(0);
-        for (int const neighbor : adj[reverse_mapping[vertex]]) {
-            bool const in_mapping(mapping[neighbor] != UINT_MAX);
-            if (in_mapping) {
-                bool const in_graph(neighbors[vertex].find(mapping[neighbor]) != neighbors[vertex].end());
-                if (in_graph) neighbors_in_subgraph++;
-            }
-        }
-
-        if (neighbors_in_subgraph != neighbors[vertex].size()) {
-            cout << "ERROR: subgraph verification failed" << endl << flush;
-        }
-    }
-#endif // DEBUG
-}
-
-void branch_and_reduce_algorithm::convert_to_metis(int32_t *nNodes, std::vector<int32_t> &xadj, std::vector<int32_t> &adjncy, std::vector<NodeID> &reverse_mapping)
-{
-    unsigned int const node_count = number_of_nodes_remaining();
-    // Number of edges
-    int m = 0;
-
-    // Nodes -> Range
-    std::vector<NodeID> mapping(adj.size(), 10000000);
+    std::vector<int> mapping(adj.size(), 10000000);
     reverse_mapping.resize(node_count, -1);
     // Get number of edges and reorder nodes
     unsigned int node_counter = 0;
@@ -3365,7 +3371,7 @@ void branch_and_reduce_algorithm::convert_to_metis(int32_t *nNodes, std::vector<
     xadj[node_count] = adjncy_counter;
     *nNodes = node_count;
 }
-
+/*
 void branch_and_reduce_algorithm::convert_to_ga(std::shared_ptr<graph_access> G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping)
 {
     // Number of nodes
@@ -3401,8 +3407,8 @@ void branch_and_reduce_algorithm::convert_to_ga(std::shared_ptr<graph_access> G,
     // Build the graph
     G->build_from_adj(adja);
 }
-
-void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>> &G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping)
+*/
+void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>> &G, std::vector<int> &reverse_mapping, std::vector<int> &mapping)
 {
     unsigned int const node_count = number_of_nodes_remaining();
 
@@ -3410,7 +3416,7 @@ void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>> &
     reverse_mapping.resize(node_count, -1);
 
     unsigned int node_counter = 0;
-    for (NodeID node = 0; node < adj.size(); ++node)
+    for (int node = 0; node < adj.size(); ++node)
     {
         if (x[node] < 0)
         {
@@ -3421,11 +3427,11 @@ void branch_and_reduce_algorithm::convert_to_adj(std::vector<std::vector<int>> &
     }
     G.resize(node_count);
 
-    for (NodeID node = 0; node < adj.size(); ++node)
+    for (int node = 0; node < adj.size(); ++node)
     {
         if (x[node] < 0)
         {
-            for (NodeID neigh : adj[node])
+            for (int neigh : adj[node])
             {
                 if (x[neigh] < 0)
                     G[mapping[node]].push_back(mapping[neigh]);
@@ -3606,77 +3612,75 @@ int branch_and_reduce_algorithm::get_mincut_vertex()
     return get_max_deg_vtx();
 }
 
-void branch_and_reduce_algorithm::find_st_vtcs(std::shared_ptr<graph_access> graph, NodeID ss, NodeID tt)
-{
-    int v = -1;
-    deque<NodeID> queue;
+// void branch_and_reduce_algorithm::find_st_vtcs(std::shared_ptr<graph_access> graph, NodeID ss, NodeID tt)
+// {
+//     int v = -1;
+//     deque<NodeID> queue;
 
-    if (ss == -1)
-    {
-        visited.resize(0);
-        visited.resize(graph->number_of_nodes(), 0);
-        queue.push_back(0);
+//     if (ss == -1)
+//     {
+//         visited.resize(0);
+//         visited.resize(graph->number_of_nodes(), 0);
+//         queue.push_back(0);
 
-        while (!queue.empty())
-        {
-            NodeID node = queue[0];
-            queue.pop_front();
-            visited[node] = 1;
-            v = node;
+//         while (!queue.empty())
+//         {
+//             NodeID node = queue[0];
+//             queue.pop_front();
+//             visited[node] = 1;
+//             v = node;
 
-            for (EdgeID e : graph->edges_of(node))
-            {
-                NodeID n_id = graph->getEdgeTarget(e);
-                if (visited[n_id] == 0)
-                    queue.push_back(n_id);
-            }
-        }
-        s = v;
-    }
-    else
-        s = ss;
-    if (tt == -1)
-    {
-        visited.resize(0);
-        visited.resize(graph->number_of_nodes(), 0);
-        queue.clear();
-        queue.push_back(s);
+//             for (EdgeID e : graph->edges_of(node))
+//             {
+//                 NodeID n_id = graph->getEdgeTarget(e);
+//                 if (visited[n_id] == 0)
+//                     queue.push_back(n_id);
+//             }
+//         }
+//         s = v;
+//     }
+//     else
+//         s = ss;
+//     if (tt == -1)
+//     {
+//         visited.resize(0);
+//         visited.resize(graph->number_of_nodes(), 0);
+//         queue.clear();
+//         queue.push_back(s);
 
-        while (!queue.empty())
-        {
-            NodeID node = queue[0];
-            queue.pop_front();
-            visited[node] = 1;
-            v = node;
+//         while (!queue.empty())
+//         {
+//             NodeID node = queue[0];
+//             queue.pop_front();
+//             visited[node] = 1;
+//             v = node;
 
-            for (EdgeID e : graph->edges_of(node))
-            {
-                NodeID n_id = graph->getEdgeTarget(e);
-                if (visited[n_id] == 0)
-                    queue.push_back(n_id);
-            }
-        }
-        t = v;
-    }
-    else
-        t = tt;
-}
+//             for (EdgeID e : graph->edges_of(node))
+//             {
+//                 NodeID n_id = graph->getEdgeTarget(e);
+//                 if (visited[n_id] == 0)
+//                     queue.push_back(n_id);
+//             }
+//         }
+//         t = v;
+//     }
+//     else
+//         t = tt;
+// }
 
-void hc_karp_DFS(std::shared_ptr<graph_access> &graph, std::vector<int> &dist, std::vector<int> &matched, std::stack<NodeID> stack, NodeID u, std::vector<NodeID> &vis)
+void hc_karp_DFS(std::vector<std::vector<int>> & G, std::vector<int> &dist, std::vector<int> &matched, std::stack<int> & stack, int u, std::vector<int> &vis)
 {
     vis[u] = 1;
-    for (EdgeID e : graph->edges_of(u))
+    for (int t : G[u])
     {
-        NodeID t = graph->getEdgeTarget(e);
-
-        if (vis[t] == 0 && dist[t] != -1)
+        if (vis[t] == 0 && dist[t] == dist[u] + 1)
         {
             stack.push(t);
+            vis[t] = 1;
             if (matched[t] == -1)
             {
                 while (!stack.empty())
                 {
-                    vis[t] = 1;
                     int u = stack.top();
                     stack.pop();
                     int v = stack.top();
@@ -3689,14 +3693,19 @@ void hc_karp_DFS(std::shared_ptr<graph_access> &graph, std::vector<int> &dist, s
             }
             else
             {
-                hc_karp_DFS(graph, dist, matched, stack, t, vis);
+                stack.push(matched[t]);
+                hc_karp_DFS(G, dist, matched, stack, matched[t], vis);
             };
         }
     }
-    stack.pop();
+    if (!stack.empty())
+    {
+        stack.pop();
+        stack.pop();
+    }
 }
 
-void hc_karp(std::shared_ptr<graph_access> graph, std::vector<NodeID> U, std::vector<NodeID> V, std::vector<NodeID> &vc)
+void hc_karp(std::vector<std::vector<int>> & G, std::vector<int> & U, std::vector<int> & V, std::vector<int> &vc) 
 {
     int n = U.size() + V.size();
     std::vector<int> matched(n, -1);
@@ -3711,7 +3720,7 @@ void hc_karp(std::shared_ptr<graph_access> graph, std::vector<NodeID> U, std::ve
         dist.clear();
         dist.resize(n, -1);
 
-        std::queue<NodeID> q;
+        std::queue<int> q;
 
         // push unmatched nodes of U into queue
         for (auto u : U)
@@ -3726,23 +3735,27 @@ void hc_karp(std::shared_ptr<graph_access> graph, std::vector<NodeID> U, std::ve
         // BFS until augmenting path found
         while (!q.empty())
         {
-            NodeID v = q.front();
+            int v = q.front();
             q.pop();
 
             int dist_v = dist[v];
 
-            for (EdgeID e : graph->edges_of(v))
+            for (int t : G[v])
             {
-                NodeID t = graph->getEdgeTarget(e);
                 if (dist[t] == -1)
                 {
                     dist[t] = dist_v + 1;
 
                     if (matched[t] == -1)
+                    {
                         aug = true;
-
-                    if (!aug)
-                        q.push(t);
+                        break;
+                    }
+                    else
+                    {
+                        dist[matched[t]] = dist_v + 2;
+                        q.push(matched[t]);
+                    }
                 }
             }
         }
@@ -3751,14 +3764,14 @@ void hc_karp(std::shared_ptr<graph_access> graph, std::vector<NodeID> U, std::ve
             break;
 
         // augment matching along path
-        std::vector<NodeID> vis(n, 0);
+        std::vector<int> vis(n, 0);
         for (auto u : U)
         {
             if (dist[u] == 0)
             {
-                std::stack<NodeID> stack;
+                std::stack<int> stack;
                 stack.push(u);
-                hc_karp_DFS(graph, dist, matched, stack, u, vis);
+                hc_karp_DFS(G, dist, matched, stack, u, vis);
             }
         }
     }
@@ -3775,98 +3788,62 @@ void hc_karp(std::shared_ptr<graph_access> graph, std::vector<NodeID> U, std::ve
 
 void branch_and_reduce_algorithm::get_stcut_vertices()
 {
-    std::shared_ptr<graph_access> graph(new graph_access());
-    std::vector<NodeID> reverseMapping(number_of_nodes_remaining());
-    std::vector<NodeID> mapping;
-    convert_to_ga(graph, reverseMapping, mapping);
-
     // choose s and t with max deg
     NodeID v1 = get_max_deg_vtx();
     x[v1] = 0;
     NodeID v2 = get_max_deg_vtx();
     x[v1] = -1;
 
-    s = mapping[v1];
-    t = mapping[v2];
+    s = v1;
+    t = v2;
 
-    if (BRANCHING == 55)
+    std::vector<int> res = {};
+    std::vector<std::pair<int, int>> edges;
+
+    push_relabel flow_algo(adj, x);
+    int s2 = flow_algo.solve_max_flow_min_cut(rn, s, t, true, res, true, edges);
+
+    std::vector<int> mapping(n, -1);
+    std::vector<int> reverseMapping;
+    std::vector<int> U, V;
+    std::vector<std::vector<int>> biGraph;
+
+    int id = 0;
+    for (auto edge: edges)
     {
-        s = t = rand() % rn;
-        while (t == s)
-            t = rand() % rn;
-    }
-
-    // find_st_vtcs(graph, ss, tt);
-
-    std::shared_ptr<flow_graph> m_graph(new flow_graph());
-    generate_flow_graph(graph, m_graph);
-    std::vector<NodeID> res(0);
-    flow_algo.solve_max_flow_min_cut(*m_graph, s, t, true, res);
-
-    std::vector<NodeID> cut1, cut2;
-    std::vector<NodeID> edgesInCut;
-    // find edges in cut and vtcs. adjacent to them
-    for (int i = 0; i < res.size(); i++)
-    {
-        for (auto neig : graph->edges_of(res[i]))
+        int u = edge.first;
+        int v = edge.second;        
+        if (mapping[u] == -1)
         {
-            NodeID id = graph->getEdgeTarget(neig);
-            if (std::find(res.begin(), res.end(), id) == res.end())
-            {
-                // not in cut
-                edgesInCut.push_back(res[i]);
-                edgesInCut.push_back(id);
-
-                if (std::find(cut2.begin(), cut2.end(), id) == cut2.end())
-                    cut2.emplace_back(id);
-
-                if (std::find(cut1.begin(), cut1.end(), id) == cut1.end())
-                    cut1.emplace_back(res[i]);
-            }
+            mapping[u] = id;
+            reverseMapping.push_back(u);
+            U.push_back(id);
+            biGraph.push_back(std::vector<int>());
+            id++;
         }
+        if (mapping[v] == -1)
+        {
+            mapping[v] = id;
+            reverseMapping.push_back(v);
+            V.push_back(id);
+            biGraph.push_back(std::vector<int>());
+            id++;
+        }
+
+        biGraph[mapping[u]].push_back(mapping[v]);
+        biGraph[mapping[v]].push_back(mapping[u]);
     }
 
-    // construct bipartit graph induced by the cut
-    std::shared_ptr<graph_access> bipart_graph(new graph_access);
-    std::vector<NodeID> rm(cut1.size() + cut2.size());
-    std::vector<NodeID> map(graph->number_of_nodes());
-    bipart_graph->start_construction(cut1.size() + cut2.size(), edgesInCut.size());
-
-    for (int i = 0; i < cut1.size(); i++)
-    {
-        NodeID v = bipart_graph->new_node();
-        rm[v] = reverseMapping[cut1[i]];
-        map[cut1[i]] = v;
-        cut1[i] = v;
-    }
-
-    for (int i = 0; i < cut2.size(); i++)
-    {
-        NodeID v = bipart_graph->new_node();
-        rm[v] = reverseMapping[cut2[i]];
-        map[cut2[i]] = v;
-        cut2[i] = v;
-    }
-
-    for (int i = 0; i < edgesInCut.size(); i += 2)
-    {
-        bipart_graph->new_edge(map[edgesInCut[i]], map[edgesInCut[i + 1]]);
-    }
-
-    bipart_graph->finish_construction();
-
-    // calculate min vc (the separator) on bipartite graph
-    std::vector<NodeID> vc;
-    hc_karp(bipart_graph, cut1, cut2, vc);
+    std::vector<int> vc;
+    hc_karp(biGraph, U, V, vc);
     for (int i = 0; i < vc.size(); i++)
     {
-        vc[i] = rm[vc[i]];
+        vc[i] = reverseMapping[vc[i]];
     }
 
     cut.swap(vc);
 
     double perc = (double)res.size() / (double)number_of_nodes_remaining();
-    //cout << "size: " << cut.size() << "  ---  balance: " << perc << endl;
     if (cut.size() > TUNING_PARAM1 || perc < TUNING_PARAM2 || perc > (1.0 - TUNING_PARAM2))
     {
         // to big, use max. deg. vertex instead
@@ -3910,47 +3887,6 @@ int inline branch_and_reduce_algorithm::get_max_deg_vtx()
         }
 
     return v;
-}
-
-int inline branch_and_reduce_algorithm::get_min_deg_vtx(std::shared_ptr<graph_access> g)
-{
-    int v = -1;
-    int dv = n + 1;
-
-    for (int i = 0; i < g->number_of_nodes(); i++)
-    {
-        int ddv = g->getNodeDegree(i);
-        if (ddv < dv)
-        {
-            v = i;
-            dv = ddv;
-        }
-    }
-
-    return v;
-}
-
-bool inline branch_and_reduce_algorithm::is_neighbour_of(std::shared_ptr<graph_access> graph, NodeID v, NodeID u)
-{
-    for (EdgeID e : graph->edges_of(u))
-        if (graph->getEdgeTarget(e) == v)
-            return true;
-
-    return false;
-}
-
-void branch_and_reduce_algorithm::generate_flow_graph(std::shared_ptr<graph_access> graph, std::shared_ptr<flow_graph> flow)
-{
-    flow->start_construction(graph->number_of_nodes());
-
-    for (EdgeID e : graph->edges())
-    {
-        NodeID s1 = graph->getEdgeSource(e);
-        NodeID t1 = graph->getEdgeTarget(e);
-        flow->new_edge(s1, t1, 1);
-    }
-
-    flow->finish_construction();
 }
 
 std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int32_t *perm, int32_t *part_sizes, int32_t *sep_sizes, int n, int p, int32_t *weights)
@@ -4043,7 +3979,7 @@ void branch_and_reduce_algorithm::compute_nd_order()
     int32_t n;
     std::vector<int32_t> xadj_v;
     std::vector<int32_t> adjncy_v;
-    std::vector<NodeID> rm;
+    std::vector<int> rm;
     convert_to_metis(&n, xadj_v, adjncy_v, rm);
 
     int p = 4;

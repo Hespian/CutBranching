@@ -24,15 +24,8 @@
 // local includes
 #include "fast_set.h"
 #include "modified.h"
-
-//#include "definitions.h"
-#include "data_structure/graph_access.h"
-#include "algorithms/push_relabel.h"
-
-
-#include "definitions.h"
 #include "timer.h"
-
+#include "max_flow.h"
 
 // system includes
 #include <vector>
@@ -46,12 +39,6 @@
 #include <regex.h>
 #include <memory>
 #include "../Metis/include/metis.h"
-
-#include "data_structure/graph_access.h"
-#include "dissection/reductions.h"
-#include "io/graph_io.h"
-#include "partition/partition_config.h"
-
 class branch_and_reduce_algorithm
 {
 	friend class modified;
@@ -232,11 +219,11 @@ public:
 	void extend_finer_is(std::vector<bool> &independent_set);
 	void get_solved_is(std::vector<bool> &independent_set);
 
-	void convert_adj_lists(graph_access &G, std::vector<NodeID> &reverse_mapping) const;
+	//void convert_adj_lists(graph_access &G, std::vector<int> &reverse_mapping) const;
 
-	void convert_to_ga(std::shared_ptr<graph_access> G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping);
-	void convert_to_metis(int32_t* nNodes, std::vector<int32_t> &xadj, std::vector<int32_t> &adjncy, std::vector<NodeID> &reverse_mapping);
-	void convert_to_adj(std::vector<std::vector<int>>& G, std::vector<NodeID> &reverse_mapping, std::vector<NodeID> &mapping);
+	// void convert_to_ga(std::shared_ptr<graph_access> G, std::vector<int> &reverse_mapping, std::vector<int> &mapping);
+	void convert_to_metis(int32_t* nNodes, std::vector<int32_t> &xadj, std::vector<int32_t> &adjncy, std::vector<int> &reverse_mapping);
+	void convert_to_adj(std::vector<std::vector<int>>& G, std::vector<int> &reverse_mapping, std::vector<int> &mapping);
 
 	void addStartingSolution(std::vector<int> solution, int solutionSize);
 
@@ -259,56 +246,30 @@ public:
 	std::stack<std::pair<int,int>> dfs_stack;
 
 	// ----------
-
 	// global mincuts
-	//viecut cut_algo;
 	int get_mincut_vertex();
 	// ----------
 
 
 	// st cuts
-	NodeID s, t;
+	int s, t;
 	int branch_t = 0;
-	push_relabel flow_algo;
-	std::vector<NodeID> cut;
+	std::vector<int> cut;
 
 	void get_stcut_vertices();
-	void find_st_vtcs(std::shared_ptr<graph_access> graph, NodeID ss = -1, NodeID tt = -1);
-	void generate_flow_graph(std::shared_ptr<graph_access> graph, std::shared_ptr<flow_graph> flow);
+	// void find_st_vtcs(std::shared_ptr<graph_access> graph, int ss = -1, int tt = -1);
 	// ------------
 
 	// utility
 	inline int get_max_deg_vtx();
-	inline int get_min_deg_vtx(std::shared_ptr<graph_access> g);
-	inline bool is_neighbour_of(std::shared_ptr<graph_access> graph, NodeID v, NodeID u);
-
 
 	// Nested Dissection
 	bool nd_computed = false;
 	int nd_threshold = 30;
-	std::vector<NodeID> nd_order;
+	std::vector<int> nd_order;
 
 	void compute_nd_order();
 	std::vector<std::vector<int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
-
-	// Betweenness Centrality
-	// DynamicCentralityBase *bc_index;
-	// bool bc_index_built = false;
-	// bool done = false;
-	// int nVert = -1;
-
-	// int nDisabled = -1;
-	// std::vector<std::pair<int, int>> removedEdges;
-	// std::vector<int> removedEdgesCnt;
-	
-	// std::vector<int> nodeMapping;
-
-
-	// chordal
-	// void lex_bfs(std::vector<int>& node_ordering, std::vector<int>& reverse_mapping);
-	// bool check_for_pes (std::vector<int>& node_ordering, std::vector<int>& reverse_mapping);
-
-	// int num_ind_cycles(int root);
 
 	// quasi dominated
 	std::vector<int> domin_vtcs;

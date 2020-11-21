@@ -3,10 +3,7 @@
 #include <algorithm>
 
 #include "algo/branch_and_reduce_algorithm.h"
-#include "timer.h"
-#include "data_structure/graph_access.h"
-
-
+#include "algo/timer.h"
 
 #include "IO/read_pace.h"
 #include "IO/read_web_graph.h"
@@ -29,14 +26,10 @@ int main(int argc, char **argv)
     branch_and_reduce_algorithm::TUNING_PARAM2 = atof(argv[4]);
     branch_and_reduce_algorithm::TUNING_PARAM3 = atoi(argv[5]);
 
-    std::string of = "../Benchmarks/" + to_string(branch_and_reduce_algorithm::BRANCHING) 
-    + "_" + to_string(branch_and_reduce_algorithm::EXTRA_DECOMP) 
-    + "_" + "tuning" + "_" 
-    + to_string(branch_and_reduce_algorithm::TUNING_PARAM1) + "::" 
-    + to_string(branch_and_reduce_algorithm::TUNING_PARAM2) + "::"  
-    + to_string(branch_and_reduce_algorithm::TUNING_PARAM3) + ".txt";
+    std::string of = "../Benchmarks/" + to_string(branch_and_reduce_algorithm::BRANCHING) + "_" + to_string(branch_and_reduce_algorithm::EXTRA_DECOMP) + "_" + "tuning" + "_" + to_string(branch_and_reduce_algorithm::TUNING_PARAM1) + "::" + to_string(branch_and_reduce_algorithm::TUNING_PARAM2) + "::" + to_string(branch_and_reduce_algorithm::TUNING_PARAM3) + ".txt";
 
-    int instances[] = {41,42,43,44,45,
+    int instances[] = {38,
+                       41,42,43,44,45,
                        51,52,53,54,55,
                        61,62,63,64,65,
                        71,72,73,74,75,
@@ -44,7 +37,8 @@ int main(int argc, char **argv)
                        46,47,48,49,50,
                        56,57,58,59,60,
                        66,67,68,69,70, };
-    
+
+    double ts = 0;
     for (int i : instances)
     {
         std::string fn = "../demo_instances/vc-exact_";
@@ -62,6 +56,7 @@ int main(int argc, char **argv)
         t.restart();
         int sol = algo.solve(t, 1800);
         double secs = t.elapsed();
+        ts += secs;
 
         Result res(to_string(i), algo.nBranchings, secs, sol, algo.defaultBranchings);
         res.nDefaultPicks = branch_and_reduce_algorithm::defaultPicks;
