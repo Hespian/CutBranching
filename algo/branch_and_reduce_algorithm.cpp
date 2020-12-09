@@ -72,7 +72,7 @@ inline int getReverseIndex(std::vector<std::vector<int>> &adj, int source, int t
 }
 
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
-    : adj(), n(_adj.size()), used(n * 2), domination_graph(n), chainLength(n), chains(n), chain_vec(n)
+    : adj(), n(_adj.size()), used(n * 2), pq(n), unconf_map(n, -1), twin_map(n, -1), funnel_map(n, -1), funnel_vtcs(n)
 {
     SHRINK = 0.5;
     depth = 0;
@@ -3518,7 +3518,8 @@ void branch_and_reduce_algorithm::dfs(int v, int in)
     }
 }
 
-void branch_and_reduce_algorithm::get_articulation_points_iteratively() {
+void branch_and_reduce_algorithm::get_articulation_points_iteratively()
+{
     current_dfs_num = 0;
     const int n = adj.size();
 
@@ -3548,7 +3549,8 @@ void branch_and_reduce_algorithm::dfs_iteratively(int s)
 
         if (visited[v] < 0) // not yet visited
         {
-            if (p == s) child_cnt++;
+            if (p == s)
+                child_cnt++;
 
             visited[v] = current_dfs_num;
             minNr[v] = current_dfs_num++;
@@ -3577,7 +3579,8 @@ void branch_and_reduce_algorithm::dfs_iteratively(int s)
 
     if (child_cnt < 2) // root is no cut vertex
         articulation_points[s] = 0;  
-    else articulation_points[s] = 1;
+    else
+        articulation_points[s] = 1;
 }
 
 int branch_and_reduce_algorithm::get_mincut_vertex()
@@ -3668,7 +3671,7 @@ int branch_and_reduce_algorithm::get_mincut_vertex()
 //         t = tt;
 // }
 
-void hc_karp_DFS(std::vector<std::vector<int>> & G, std::vector<int> &dist, std::vector<int> &matched, std::stack<int> & stack, int u, std::vector<int> &vis)
+bool hc_karp_DFS(std::vector<std::vector<int>> &G, std::vector<int> &dist, std::vector<int> &matched, std::stack<int> &stack, int u, std::vector<int> &vis)
 {
     vis[u] = 1;
     for (int t : G[u])
@@ -3689,12 +3692,13 @@ void hc_karp_DFS(std::vector<std::vector<int>> & G, std::vector<int> &dist, std:
                     matched[u] = v;
                     matched[v] = u;
                 }
-                return;
+                return true;
             }
             else
             {
                 stack.push(matched[t]);
-                hc_karp_DFS(G, dist, matched, stack, matched[t], vis);
+                if (hc_karp_DFS(G, dist, matched, stack, matched[t], vis))
+                    return true;
             };
         }
     }
@@ -3703,9 +3707,10 @@ void hc_karp_DFS(std::vector<std::vector<int>> & G, std::vector<int> &dist, std:
         stack.pop();
         stack.pop();
     }
+    return false;
 }
 
-void hc_karp(std::vector<std::vector<int>> & G, std::vector<int> & U, std::vector<int> & V, std::vector<int> &vc) 
+void hc_karp(std::vector<std::vector<int>> &G, std::vector<int> &U, std::vector<int> &V, std::vector<int> &vc)
 {
     int n = U.size() + V.size();
     std::vector<int> matched(n, -1);
@@ -3809,7 +3814,7 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     std::vector<std::vector<int>> biGraph;
 
     int id = 0;
-    for (auto edge: edges)
+    for (auto edge : edges)
     {
         int u = edge.first;
         int v = edge.second;        
@@ -3840,7 +3845,6 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     {
         vc[i] = reverseMapping[vc[i]];
     }
-
     cut.swap(vc);
 
     double perc = (double)res.size() / (double)number_of_nodes_remaining();
@@ -3929,7 +3933,6 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
 
     int32_t *l_ptr = lsize_arr;
     int32_t *r_ptr = rsize_arr;
-
 
     for (int i = level - 2; i >= 0; i--)
     {
@@ -4105,106 +4108,4 @@ int branch_and_reduce_algorithm::max_nh_vtx()
     }
 
     return v;
-}
-
-void branch_and_reduce_algorithm::build_domination_graph()
-{
-    for (int i = 0; i < n; i++)
-    {
-        if (x[i] < 0)
-            domination_graph[i].clear();
-    }
-
-    for (int v = 0; v < n; v++)
-        if (x[v] < 0)
-        {
-            used.clear();
-            used.add(v);
-            for (int u : adj[v])
-                if (x[u] < 0)
-                    used.add(u);
-            for (int u : adj[v])
-                if (x[u] < 0)
-                {
-                    int cnt = 0;
-                    int vtx = -1;
-                    for (int w : adj[u])
-                    {
-                        if (x[w] < 0 && !used.get(w))
-                        {
-                            cnt++;
-                            vtx = w;
-                        }
-                        if (cnt >= 2)
-                            goto loop;
-                    }
-                    domination_graph[vtx].push_back(v);
-                loop:;
-                }
-        }
-}
-
-void branch_and_reduce_algorithm::find_chains()
-{
-    for (int i = 0; i < n; i++)
-    {
-        if (x[i] >= 0)
-            continue;
-
-        chains[i].clear();
-        int len = 1;
-
-        std::vector<int> scanned(n, 0);
-        std::queue<int> q;
-        q.emplace(i);
-        chains[i].push_back(i);
-        scanned[i] = 1;
-
-        while (!q.empty())
-        {
-            int v = q.front();
-            q.pop();
-            for (int u : domination_graph[v])
-            {
-                if (scanned[u] == 0)
-                {
-                    scanned[u] = 1;
-                    q.push(u);
-                    len++;
-
-                    chains[i].push_back(u);
-                }
-            }
-        }
-        chainLength[i] = len;
-    }
-}
-
-void branch_and_reduce_algorithm::calc_chain_vec()
-{
-    for (int i = 0; i < n; i++)
-    {
-        if (x[i] >= 0)
-            chain_vec[i] = make_pair(0, 0);
-
-        used.clear();
-        int cnt = 0;
-        for (int w : chains[i])
-        {
-            if (used.add(w))
-                cnt++;
-        }
-        for (int u : adj[i])
-        {
-            if (x[u] < 0)
-            {
-                for (int w : chains[u])
-                {
-                    if (used.add(w))
-                        cnt++;
-                }
-            }
-        }
-        chain_vec[i] = make_pair(chainLength[i], cnt);
-    }
 }
