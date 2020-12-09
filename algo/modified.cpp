@@ -42,6 +42,20 @@ modified::modified(int const _add, std::vector<int> &_removed, std::vector<int> 
         oldAdj[i].swap(pAlg->adj[vs[i]]);
         pAlg->adj[vs[i]].swap(newAdj[i]);
     }
+
+    // update pq
+    if (pAlg->uses_pq)
+    {
+        for (int v : vs)
+        {
+            if (pAlg->pq.contains_id(v))
+            {
+                unsigned int key = pAlg->pq.get_key(v);
+                int n_key = pAlg->n - pAlg->deg(v);
+                pAlg->pq.update_key(RoutingKit::IDKeyPair(v, n_key));
+            }            
+        }
+    }
 }
 
 modified::modified(std::vector<int> &_removed, std::vector<int> &_vs, branch_and_reduce_algorithm *_pAlg)
@@ -78,6 +92,20 @@ void modified::restore()
         {
             pAlg->in[pAlg->out[vs[i]]] = -1;
             pAlg->out[vs[i]] = -1;
+        }
+    }
+
+    // update pq
+    if (pAlg->uses_pq)
+    {
+        for (int v : vs)
+        {
+            if (pAlg->pq.contains_id(v))
+            {
+                unsigned int key = pAlg->pq.get_key(v);
+                int n_key = pAlg->n - pAlg->deg(v);
+                pAlg->pq.update_key(RoutingKit::IDKeyPair(v, n_key));
+            }            
         }
     }
 }

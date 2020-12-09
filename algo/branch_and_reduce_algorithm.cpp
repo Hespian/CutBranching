@@ -64,13 +64,6 @@ long branch_and_reduce_algorithm::prunes = 0;
 
 long branch_and_reduce_algorithm::ro = 1;
 
-inline int getReverseIndex(std::vector<std::vector<int>> &adj, int source, int target)
-{
-    for (int i = 0; i < adj[source].size(); i++)
-        if (adj[source][i] == target)
-            return i;
-}
-
 branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector<int>> &_adj, int const _N)
     : adj(), n(_adj.size()), used(n * 2), pq(n), unconf_map(n, -1), twin_map(n, -1), funnel_map(n, -1), funnel_vtcs(n)
 {
@@ -113,6 +106,9 @@ branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector
 
     // MODIFICATIONS
     s = t = -1;
+
+    if (BRANCHING >= 14)
+        uses_pq = true;
 }
 
 int branch_and_reduce_algorithm::deg(int v)
@@ -813,7 +809,16 @@ bool branch_and_reduce_algorithm::almost_dominated()
                             goto loop;
                     }
                     found = true;
-                    domin_vtcs.push_back(vtx);
+                    if (uses_pq)
+                    {
+                        if (!pq.contains_id(vtx))
+                            pq.push(RoutingKit::IDKeyPair(vtx, n - deg(vtx)));
+                    }
+                    else
+                    {
+                        b_vtcs.push_back(vtx);
+                    }
+                    
                 loop:;
                 }
         }
@@ -901,12 +906,23 @@ bool branch_and_reduce_algorithm::twinReduction()
                                     //cout << "twin: " << nBranchings << endl;
                                     goto loop;
                                 }
-                                else if (BRANCHING == 15 && p == 3 && deg(w) == 4)
+                                else if ((BRANCHING == 15 || BRANCHING == 20 || BRANCHING == 13) && p == 3 && deg(w) == 4)
                                 {
                                     for (int z : adj[w])
                                     {
                                         if (x[z] < 0 && vUsed[z] == 0)
-                                            twin_vtcs.push_back(z);
+                                        {
+                                            if (uses_pq) {
+                                            if (!pq.contains_id(z))
+                                                pq.push(RoutingKit::IDKeyPair(z, n - deg(z)));
+                                            twin_map[z] = w;
+                                            }
+                                            else
+                                            {
+                                                b_vtcs.push_back(z);
+                                            }
+                                            
+                                        }
                                     }
                                 }
                             }
@@ -919,9 +935,50 @@ bool branch_and_reduce_algorithm::twinReduction()
     return oldn != rn;
 }
 
+bool branch_and_reduce_algorithm::is_twin(int v)
+{
+    if (x[v] != -1) return false;
+    if (deg(v) == 3)
+    {
+        std::vector<int> NS(3, 0);
+        int p = 0;
+
+        std::vector<int> &vUsed = iter;
+
+        for (int u : adj[v])
+            if (x[u] < 0)
+            {
+                NS[p++] = u;
+                _uid++;
+                for (int w : adj[u])
+                    if (x[w] < 0 && w != v)
+                    {
+                        if (p == 1)
+                            vUsed[w] = _uid;
+                        else if (vUsed[w] == _uid - 1)
+                        {
+                            vUsed[w]++;
+                            if (p == 3 && deg(w) == 3)
+                                return true;
+                        }
+                    }
+            }
+    }
+    return false;
+}
+
+bool branch_and_reduce_algorithm::is_almost_twin(int v)
+{
+    if (twin_map[v] == -1) return false;
+    x[v] = 2;
+    bool res = is_twin(twin_map[v]);
+    x[v] = -1;
+    return res;
+}
+
 bool branch_and_reduce_algorithm::funnelReduction()
 {
-    if (BRANCHING == 16)
+    if (BRANCHING == 16 || BRANCHING == 20 || BRANCHING == 13)
         return funnelReduction_a();
 
     int oldn = rn;
@@ -1014,6 +1071,7 @@ bool branch_and_reduce_algorithm::funnelReduction()
 
 bool branch_and_reduce_algorithm::checkFunnel(int v)
 {
+    if (x[v] != -1) return false;
     used.clear();
     std::vector<int> &tmp = level;
     int p = 0;
@@ -1192,9 +1250,18 @@ bool branch_and_reduce_algorithm::funnelReduction_a()
                             x[i] = 3;
                             if (checkFunnel(v))
                             {
-                                funnel_vtcs.push_back(i);
+                                x[i] = -1;
+                                // funnel_vtcs.push_back(i);
+                                if (uses_pq) {
+                                    if (!pq.contains_id(i))
+                                        pq.push(RoutingKit::IDKeyPair(i, n - deg(i)));
+                                    funnel_map[i] = v;
+                                }
+                                else
+                                {
+                                   b_vtcs.push_back(i); 
+                                }
                             }
-
                             x[i] = -1;
                         }
                     }
@@ -1207,108 +1274,13 @@ bool branch_and_reduce_algorithm::funnelReduction_a()
     return oldn != rn;
 }
 
-bool branch_and_reduce_algorithm::funnelReduction_b()
+bool branch_and_reduce_algorithm::is_almost_funnel(int v)
 {
-    int oldn = rn;
-    for (int v = 0; v < n; v++)
-        if (x[v] < 0)
-        {
-            used.clear();
-            std::vector<int> &tmp = level;
-            int p = 0;
-            for (int u : adj[v])
-                if (x[u] < 0 && used.add(u))
-                {
-                    tmp[p++] = u;
-                }
-            if (p <= 1) // deg 1 vtx.
-            {
-                set(v, 0);
-                continue;
-            }
-            int u1 = -1;
-            for (int i = 0; i < p; i++)
-            {
-                int d = 0;
-                for (int u : adj[tmp[i]])
-                    if (x[u] < 0 && used.get(u))
-                        d++;
-                if (d + 1 < p)
-                {
-                    u1 = tmp[i];
-                    break;
-                }
-            }
-            if (u1 < 0) // d >= p-1 for all neighbors => v and neighbours induce a clique
-            {
-                set(v, 0);
-                continue;
-            }
-            else
-            {
-                std::vector<int> &id = iter;
-                for (int i = 0; i < p; i++)
-                    id[tmp[i]] = -1;
-                for (int u : adj[u1])
-                    if (x[u] < 0)
-                        id[u] = 0;
-                int u2 = -1;
-                for (int i = 0; i < p; i++)
-                    if (tmp[i] != u1 && id[tmp[i]] < 0)
-                    {
-                        u2 = tmp[i];
-                        break;
-                    }
-                assert(u2 >= 0);
-                used.remove(u1);
-                used.remove(u2);
-                int d1 = 0, d2 = 0;
-                for (int w : adj[u1])
-                    if (x[w] < 0 && used.get(w))
-                        d1++;
-                for (int w : adj[u2])
-                    if (x[w] < 0 && used.get(w))
-                        d2++;
-                if (d1 < p - 2 && d2 < p - 2)
-                    continue;
-
-                int cnt = 0;
-                int kv = -1;
-                for (int i = 0; i < p; i++)
-                {
-                    int u = tmp[i];
-                    if (u == u1 || u == u2)
-                        continue;
-                    int d = 0;
-                    for (int w : adj[u])
-                        if (x[w] < 0 && used.get(w))
-                            d++;
-                    if (d < p - 3)
-                    {
-                        if (cnt >= 1)
-                            goto loop;
-                        kv = u;
-                        cnt++;
-                    }
-                }
-
-                if (cnt == 1)
-                {
-                    funnel_vtcs.push_back(kv);
-                    goto loop;
-                }
-
-                int u = (d1 == p - 2) ? u2 : u1;
-                std::vector<int> const v1{v};
-                std::vector<int> const v2{u};
-                compute_alternative(v1, v2);
-                //std::cout << "funnel: " << nBranchings << endl;
-            }
-        loop:;
-        }
-    if (debug >= 3 && depth <= maxDepth && oldn != rn)
-        fprintf(stderr, "%sfunnel: %d -> %d\n", debugString().c_str(), oldn, rn);
-    return oldn != rn;
+    if (funnel_map[v] == -1) return false;
+    x[v] = 2;
+    bool res = checkFunnel(funnel_map[v]);
+    x[v] = -1;
+    return res;
 }
 
 bool branch_and_reduce_algorithm::deskReduction()
@@ -1396,7 +1368,7 @@ bool branch_and_reduce_algorithm::deskReduction()
 
 bool branch_and_reduce_algorithm::unconfinedReduction()
 {
-    if (BRANCHING == 18)
+    if (BRANCHING == 17 || BRANCHING == 20 || BRANCHING == 13)
         return unconfinedReduction_a();
 
     int oldn = rn;
@@ -1617,7 +1589,17 @@ bool branch_and_reduce_algorithm::unconfinedReduction_a()
                 {
                     if (extends.size() == 1)
                     {
-                        unconf_vtcs.push_back(extends[0]);
+                        // unconf_vtcs.push_back(extends[0]);
+                        int vtx = extends[0];
+                        if (uses_pq) {
+                            if (!pq.contains_id(vtx))
+                                pq.push(RoutingKit::IDKeyPair(vtx, n - this->deg(vtx)));
+                            unconf_map[vtx] = v;
+                        }
+                        else
+                        {
+                            b_vtcs.push_back(vtx);
+                        }
                     }
                     int z = extends[0];
                     ok = false;
@@ -1707,6 +1689,95 @@ bool branch_and_reduce_algorithm::unconfinedReduction_a()
         fprintf(stderr, "%sunconfined: %d -> %d\n", debugString().c_str(), oldn, rn);
 #endif //0
     return oldn != rn;
+}
+
+bool branch_and_reduce_algorithm::is_unconfined(int v)
+{
+    if (x[v] != -1) return false;
+    std::vector<int> &NS = level;
+    std::vector<int> &deg = iter;
+
+    used.clear();
+    used.add(v); // add v to set S
+    int p = 1, size = 0;
+    for (int u : adj[v]) // add N(v) to set S
+        if (x[u] < 0)
+        {
+            used.add(u);
+            NS[size++] = u;
+            deg[u] = 1;
+        }
+    bool ok = false;
+
+    while (!ok) //
+    {
+        ok = true;
+        std::vector<int> extends;
+
+        for (int i = 0; i < size; i++)
+        {
+            int const u = NS[i];
+            if (deg[u] != 1)
+            {
+                continue;
+            }
+            int z = -1;
+            for (int const w : adj[u])
+                if (x[w] < 0 && !used.get(w)) // w is in N(u) but not N(S)
+                {
+                    if (z >= 0)
+                    {
+                        z = -2; // |N(u)\N(S)| >= 2
+                        break;
+                    }
+                    z = w;
+                }
+            if (z == -1) // u is child with N(u)\N(S) = 0
+            {
+                if (REDUCTION >= 3)
+                {
+                    std::vector<int> &qs = que;
+                    int q = 0;
+                    qs[q++] = 1;
+                    for (int w : adj[v])
+                        if (x[w] < 0)
+                            qs[q++] = w;
+                    std::vector<int> copyOfqs(qs.begin(), qs.begin() + q);
+                    packing.emplace_back(std::move(copyOfqs));
+                }
+                return true;
+            }
+            else if (z >= 0)
+            {
+                ok = false;
+                used.add(z);
+                p++;
+                for (int w : adj[z])
+                    if (x[w] < 0)
+                    {
+                        if (used.add(w))
+                        {
+                            NS[size++] = w;
+                            deg[w] = 1;
+                        }
+                        else
+                        {
+                            deg[w]++;
+                        }
+                    }
+            }
+        }
+    }
+    return false;
+}
+
+bool branch_and_reduce_algorithm::is_almost_unconfined(int v)
+{
+    if (unconf_map[v] == -1) return false;
+    x[v] = 2;
+    bool res = is_unconfined(unconf_map[v]);
+    x[v] = -1;
+    return res;
 }
 
 int branch_and_reduce_algorithm::packingReduction()
@@ -1972,7 +2043,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
 
         dv = deg(v);
     }
-    else if (BRANCHING == 66) 
+    else if (BRANCHING == 66)
     {
         if (nd_computed == false && branch_t == 0)
         {
@@ -2001,25 +2072,63 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         dv = deg(v);
     }
 
-    else if (BRANCHING == 13) // max N2
+    else if (BRANCHING == 12) // max N2
     {
         v = max_nh_vtx();
         dv = deg(v);
     }
+    else if (BRANCHING == 13)
+    {
+        int vv = -1;
+        int dvv = -1;
+
+        for (int i = 0; i < b_vtcs.size(); i++)
+        {
+            if (x[b_vtcs[i]] < 0 && deg(b_vtcs[i]) > dvv)
+            {
+                dvv = deg(b_vtcs[i]);
+                vv = b_vtcs[i];
+            }
+        }
+
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
+
+        b_vtcs.clear();
+        dv = deg(v);
+    }
+
     else if (BRANCHING == 14) // almost dominated
     {
         almost_dominated();
 
         int vv = -1;
         int dvv = -1;
-        for (int i = 0; i < domin_vtcs.size(); i++)
-        {
-            if (x[domin_vtcs[i]] < 0 && deg(domin_vtcs[i]) > dvv)
-            {
-                dvv = deg(domin_vtcs[i]);
-                vv = domin_vtcs[i];
-            }
-        }
+        // for (int i = 0; i < domin_vtcs.size(); i++)
+        // {
+        //     if (x[domin_vtcs[i]] < 0 && deg(domin_vtcs[i]) > dvv)
+        //     {
+        //         dvv = deg(domin_vtcs[i]);
+        //         vv = domin_vtcs[i];
+        //     }
+        // }
+
+        if (!pq.empty())
+            vv = pq.pop().id;
 
         if (vv == -1)
         {
@@ -2038,130 +2147,188 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
                 v = vvv;
         }
 
-        domin_vtcs.clear();
+        // domin_vtcs.clear();
+        pq.clear();
         dv = deg(v);
     }
     else if (BRANCHING == 15) // almost twin
     {
-        int vv = -1;
-        int dvv = -1;
-        for (int i = 0; i < twin_vtcs.size(); i++)
-        {
-            if (x[twin_vtcs[i]] < 0 && deg(twin_vtcs[i]) > dvv)
-            {
-                dvv = deg(twin_vtcs[i]);
-                vv = twin_vtcs[i];
-            }
-        }
+        v = get_max_deg_vtx();
+        dv = deg(v);
+        bool strat_pick = false;
 
-        if (vv == -1)
+        while (!pq.empty())
         {
-            v = get_max_deg_vtx();
-            defaultPicks++;
-        }
-        else
-        {
-            int vvv = get_max_deg_vtx();
-            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            RoutingKit::IDKeyPair u = pq.peek();
+            int d = n - u.key;
+            if (d < dv - TUNING_PARAM1)
+                break;
+
+            if (x[u.id] != -1)
             {
-                v = vv;
-                stratPicks++;
+                pq.pop();
+                continue;
+            }
+
+            int _deg = deg(u.id);
+            if (d == _deg)
+            {
+                pq.pop();
+                if (is_almost_twin(u.id))
+                {
+                    v = u.id;
+                    dv = _deg;
+                    twin_map[u.id] = -1;
+                    break;
+                }
+                twin_map[u.id] = -1;
             }
             else
-                v = vvv;
+                pq.update_key(RoutingKit::IDKeyPair(u.id, n - _deg));
         }
+        if (TUNING_PARAM3 == 1)
+            pq.clear();
 
-        twin_vtcs.clear();
-        dv = deg(v);
+        if (strat_pick)
+            stratPicks++;
+        else
+            defaultPicks++;            
     }
     else if (BRANCHING == 16) // funnel
     {
-        int vv = -1;
-        int dvv = -1;
-        for (int i = 0; i < funnel_vtcs.size(); i++)
-        {
-            if (x[funnel_vtcs[i]] < 0 && deg(funnel_vtcs[i]) > dvv)
-            {
-                dvv = deg(funnel_vtcs[i]);
-                vv = funnel_vtcs[i];
-            }
-        }
+        v = get_max_deg_vtx();
+        dv = deg(v);
+        bool strat_pick = false;
 
-        if (vv == -1)
+        while (!pq.empty())
         {
-            v = get_max_deg_vtx();
-            defaultPicks++;
-        }
-        else
-        {
-            int vvv = get_max_deg_vtx();
-            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            RoutingKit::IDKeyPair u = pq.peek();
+            int d = n - u.key;
+            if (d < dv - TUNING_PARAM1)
+                break;
+
+            if (x[u.id] != -1)
             {
-                v = vv;
-                stratPicks++;
+                pq.pop();
+                continue;
+            }
+
+            int _deg = deg(u.id);
+            if (d == _deg)
+            {
+                pq.pop();
+                if (is_almost_funnel(u.id))
+                {
+                    v = u.id;
+                    dv = _deg;
+                    funnel_map[u.id] = -1;
+                    break;
+                }
+                funnel_map[u.id] = -1;
             }
             else
-                v = vvv;
+                pq.update_key(RoutingKit::IDKeyPair(u.id, n - _deg));
         }
+        if (TUNING_PARAM3 == 1)
+            pq.clear();
 
-        funnel_vtcs.clear();
-        dv = deg(v);
+        if (strat_pick)
+            stratPicks++;
+        else
+            defaultPicks++;   
+        
     }
     else if (BRANCHING == 17) // unconfined
     {
-        int vv = -1;
-        int dvv = -1;
-        for (int i = 0; i < unconf_vtcs.size(); i++)
+        v = get_max_deg_vtx();
+        dv = deg(v);
+        bool strat_pick = false;
+        while (!pq.empty())
         {
-            if (x[unconf_vtcs[i]] < 0 && deg(unconf_vtcs[i]) > dvv)
-            {
-                dvv = deg(unconf_vtcs[i]);
-                vv = unconf_vtcs[i];
-            }
-        }
+            RoutingKit::IDKeyPair u = pq.peek();
+            int d = n - u.key;
+            if (d < dv - TUNING_PARAM1)
+                break;
 
-        if (vv == -1)
-        {
-            v = get_max_deg_vtx();
-            defaultPicks++;
-        }
-        else
-        {
-            int vvv = get_max_deg_vtx();
-            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            if (x[u.id] != -1)
             {
-                v = vv;
-                stratPicks++;
+                pq.pop();
+                continue;
+            }
+
+            int _deg = deg(u.id);
+            if (d == _deg)
+            {
+                pq.pop();
+                if (is_almost_unconfined(u.id))
+                {
+                    v = u.id;
+                    dv = _deg;
+                    unconf_map[u.id] = -1;
+                    break;
+                }
+                unconf_map[u.id] = -1;
             }
             else
-                v = vvv;
+                pq.update_key(RoutingKit::IDKeyPair(u.id, n - _deg));
         }
+        if (TUNING_PARAM3 == 1)
+            pq.clear();
 
-        unconf_vtcs.clear();
-        dv = deg(v);
+        if (strat_pick)
+            stratPicks++;
+        else
+            defaultPicks++;   
     }
 
-    else if (BRANCHING == 18)
+    else if (BRANCHING == 20)
     {
-        build_domination_graph();
-        find_chains();
-        calc_chain_vec();
-        int maxdel = 0;
-        pair<int, int> vec;
-        v = -1;
-        for (int i = 0; i < n; i++)
+        v = get_max_deg_vtx();
+        dv = deg(v);
+        bool strat_pick = false;
+
+        while (!pq.empty())
         {
-            if (x[i] < 0 && chain_vec[i].first + chain_vec[i].second > maxdel)
+            RoutingKit::IDKeyPair u = pq.peek();
+            int d = n - u.key;
+            if (d < dv - TUNING_PARAM1)
+                break;
+
+            if (x[u.id] != -1)
             {
-                vec = chain_vec[i];
-                maxdel = chain_vec[i].first + chain_vec[i].second;
-                v = i;
+                pq.pop();
+                continue;
             }
+
+            int _deg = deg(u.id);
+            if (d == _deg)
+            {
+                pq.pop();
+                if (is_almost_funnel(u.id) || is_almost_twin(u.id) || is_almost_unconfined(u.id))
+                {
+                    v = u.id;
+                    dv = _deg;
+                    funnel_map[u.id] = -1;
+                    twin_map[u.id] = -1;
+                    unconf_map[u.id] = -1;
+                    break;
+                }
+                funnel_map[u.id] = -1;
+                twin_map[u.id] = -1;
+                unconf_map[u.id] = -1;
+            }
+            else
+                pq.update_key(RoutingKit::IDKeyPair(u.id, n - _deg));
         }
 
-        dv = deg(v);
-    }
+        if (TUNING_PARAM3 == 1)
+            pq.clear();
 
+        if (strat_pick)
+            stratPicks++;
+        else
+            defaultPicks++;   
+    }
 
     int crntBest = opt;
 
@@ -2231,6 +2398,8 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
             fprintf(stderr, "%sbranch (%d): 1\n", debugString().c_str(), dv);
     }
     depth++;
+    if (depth > max_depth)
+        max_depth = depth;
     rec(t, time_limit);
     while (packing.size() > oldP)
         packing.pop_back();
@@ -2309,6 +2478,8 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
     if (debug >= 2 && depth <= maxDepth)
         fprintf(stderr, "%sbranch (%d): 0\n", debugString().c_str(), dv);
     depth++;
+    if (depth > max_depth)
+        max_depth = depth;
     rec(t, time_limit);
     while (packing.size() > oldP)
         packing.pop_back();
@@ -2868,7 +3039,7 @@ void branch_and_reduce_algorithm::addStartingSolution(std::vector<int> solution,
 int branch_and_reduce_algorithm::solve(timer &t, double time_limit)
 {
     if (t.elapsed() >= time_limit)
-        return -1;    
+        return -1;
 
     // PrintState();
     if (LOWER_BOUND >= 2 && REDUCTION <= 0 && !outputLP)
@@ -3536,12 +3707,12 @@ void branch_and_reduce_algorithm::get_articulation_points_iteratively()
             dfs_iteratively(i);
 }
 
-void branch_and_reduce_algorithm::dfs_iteratively(int s) 
+void branch_and_reduce_algorithm::dfs_iteratively(int s)
 {
     dfs_stack.emplace(s, s);
     int child_cnt = -1;
 
-    while (!dfs_stack.empty()) 
+    while (!dfs_stack.empty())
     {
         std::pair<int, int> e = dfs_stack.top();
         int v = e.first;
@@ -3560,7 +3731,7 @@ void branch_and_reduce_algorithm::dfs_iteratively(int s)
                 if (x[u] < 0 && visited[u] < 0) // tree edge
                     dfs_stack.emplace(u, v);
                 else if (x[u] < 0 && u != p) // back edge
-                    minNr[v] = min(minNr[v], visited[u]); 
+                    minNr[v] = min(minNr[v], visited[u]);
             }
         }
         else
@@ -3574,11 +3745,11 @@ void branch_and_reduce_algorithm::dfs_iteratively(int s)
                 if (minNr[v] >= visited[p]) // articulation point found
                     articulation_points[p] = 1;
             }
-        }     
+        }
     }
 
     if (child_cnt < 2) // root is no cut vertex
-        articulation_points[s] = 0;  
+        articulation_points[s] = 0;
     else
         articulation_points[s] = 1;
 }
@@ -3817,7 +3988,7 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     for (auto edge : edges)
     {
         int u = edge.first;
-        int v = edge.second;        
+        int v = edge.second;
         if (mapping[u] == -1)
         {
             mapping[u] = id;

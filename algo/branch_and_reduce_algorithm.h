@@ -25,7 +25,9 @@
 #include "fast_set.h"
 #include "modified.h"
 #include "timer.h"
+
 #include "max_flow.h"
+#include "id_queue.h"
 
 // system includes
 #include <vector>
@@ -162,7 +164,6 @@ public:
 	bool twinReduction();
 	bool funnelReduction();
 	bool funnelReduction_a();
-	bool funnelReduction_b();
 	bool checkFunnel(int v);
 	bool deskReduction();
 	bool unconfinedReduction();
@@ -245,11 +246,8 @@ public:
 	void dfs_iteratively(int v);
 	std::stack<std::pair<int,int>> dfs_stack;
 
-	// ----------
 	// global mincuts
 	int get_mincut_vertex();
-	// ----------
-
 
 	// st cuts
 	int s, t;
@@ -258,7 +256,6 @@ public:
 
 	void get_stcut_vertices();
 	// void find_st_vtcs(std::shared_ptr<graph_access> graph, int ss = -1, int tt = -1);
-	// ------------
 
 	// utility
 	inline int get_max_deg_vtx();
@@ -271,27 +268,35 @@ public:
 	void compute_nd_order();
 	std::vector<std::vector<int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
 
-	// quasi dominated
+	// almost dominated
+	RoutingKit::MinIDQueue pq;
 	std::vector<int> domin_vtcs;
 	bool almost_dominated();
 
-	// quasi unconfined
+	// almost unconfined
 	std::vector<int> unconf_vtcs;
+	std::vector<int> unconf_map;
+	bool is_almost_unconfined(int v);
+	bool is_unconfined(int v);
 
-	void build_domination_graph();
-	void find_chains();
-	void calc_chain_vec();
-	std::vector<std::vector<int>> domination_graph;
-	std::vector<int> chainLength;
-	std::vector<std::vector<int>> chains;
-	std::vector<std::pair<int,int>> chain_vec;
-
-	// quasi twins 
+	// almost twins 
 	std::vector<int> twin_vtcs;
-	// quasi funnel
+	std::vector<int> twin_map;
+	bool is_almost_twin(int v);
+	bool is_twin(int v);
+	int _uid;
+	// almost funnel
+
 	std::vector<int> funnel_vtcs;
+	std::vector<int> funnel_map;
+	bool is_almost_funnel(int v);
+
+	std::vector<int> b_vtcs;
 
 	int max_nh_vtx();
+
+	bool uses_pq = false;
+	int max_depth = 0;
 
 #if 0
 }

@@ -17,6 +17,8 @@ public:
     long nStratPicks = -2;
     long nDecomps = -2;
 
+    long max_depth = -2;
+
     Result(std::string i, long nBrnch, double t, long mis, long nDB) : instance {i}, nBranchings {nBrnch}, time {t}, mis_size {mis}, nDefaultBranchings {nDB}
     {
     }
@@ -34,6 +36,7 @@ void writeResult(Result& sol, std::ostream &f) {
       << " nDefPicks: " << sol.nDefaultPicks
       << " nStratPicks: " << sol.nStratPicks
       << " nDecomp: " << sol.nDecomps
+      << " maxDepth: " << sol.max_depth 
       << std::endl;
 }
 
