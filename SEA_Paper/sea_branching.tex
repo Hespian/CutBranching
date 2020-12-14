@@ -1,6 +1,5 @@
 
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
-%This is a template for producing LIPIcs articles. 
 %See lipics-v2021-authors-guidelines.pdf for further information.
 %for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
 %for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
@@ -88,6 +87,13 @@
 \ArticleNo{23}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Custom
+\newcommand{\ie}{i.\,e.,\xspace}
+\newcommand{\eg}{e.\,g.,\xspace}
+\newcommand{\etal}{et~al.\xspace}
+\newcommand{\Wlog}{w.\,l.\,o.\,g.\ }
+\newcommand{\wrt}{w.\,r.\,t.\xspace}
+
 \begin{document}
 
 \maketitle
@@ -100,11 +106,15 @@
 \newpage
 
 \section{Introduction}
-Sebastian
+% Probably cite Schorr~\cite{schorr2020improved}.
+An \emph{independent set} of a graph $G = (V,E)$ is a set of vertices $I \subseteq V$ of $G$ such that no two vertices in this set are adjacent. The problem of finding such an independent set of maximum cardinality, the \emph{maximum independent set problem}, is a fundamental NP-hard problem~\cite{Garey1974}. Its applications cover a wide variety of fields including computer graphics \cite{CG}, network analysis \cite{NW}, route planning \cite{RP} and computational biology \cite{BIO1, BIO2}. In computer graphics for instance, large independent sets can be used to optimize the traversal of mesh edges in a triangle mesh. Further applications stem from its complementary problems minimum vertex cover and maximum clique.
 
-Probably cite Schorr~\cite{schorr2020improved}.
+One of the best known techniques for finding maximum independent sets, both in theory~\cite{XiaoNagamochi, ChenXiaKanj} and practice \cite{AkibaIwata}, are \emph{kernelization algorithms}. These algorithms apply a set of reduction rules to decrease the complexity of an instance while maintaining the ability to compute an optimal solution afterwards. A recently successful type of kernelization algorithms are so-called \emph{branch-and-reduce algorithms}~\cite{AkibaIwata,WGYC}, which exhaustively apply a set of reduction rules to compute a \emph{kernel}. If no further rule can be applied, the algorithm branches into (at least) two subproblems of lower complexity, which are then solved recursively. To make them more efficient in practice, these algorithms also make use of problem specific upper and lower bounds to quickly prune the search space.
+
+Due to the practical impact of kernelization, most of the research aimed at improving the performance of branch-and-reduce algorithms so far has been focused on either proposing more practically efficient special cases of already existing rules~\cite{ChangKern,dahlum2016accelerating}, or maintaining dependencies between reduction rules to reduce unnecessary checks~\cite{alsahafy2020computing,hespe2019scalable}. In comparison, efforts to improve other aspects of branch-and-reduce, in particular the branching strategy are still lacking. However, the branching strategy in particular has been shown to have a significant impact on the running time~\cite{AkibaIwata}. Up to now, the most frequently used branching strategy employed in many state-of-the-art solvers selects branching vertices solely based on their degree. Other factors, such as the actual reduction rules used during the algorithm are rarely taken into account.
 
 \subsection{Contribution}
+In this paper, we propose and examine several novel strategies for selecting branching vertices. These strategies follow two main approaches that are motivated by existing research: (1) Branching on vertices that decompose the graph into several connected components that can be solved independently. This has been shown to significantly improve the performance of branch-and-reduce in practice, especially when the side of the largest component is kept small~\cite{alsahafy2020computing}. (2) Branching on vertices whose removal leads to reduction rules becoming applicable again. In turn, this leads to a smaller reduced graph and thus improved performance. For each approach we present several concrete strategies that vary in their complexity. Finally, we evaluate their performance by comparing them to the aforementioned default strategy used in the state-of-the-art solver by Akiba and Iwata~\cite{AkibaIwata}. For this purpose we make of a wide spectrum of instances from different graph classes and applications. Our experiments indicate \ldots.
 
 \section{Preliminaries}
 Sebastian
