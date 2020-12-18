@@ -120,10 +120,35 @@ In this paper, we propose and examine several novel strategies for selecting bra
 Sebastian
 
 Graph, Subgraph, Independent Set, MIS, Vertex Cover, Clique, Kernelization,
-degeneracy order
+degeneracy order, branch and reduce.
+
+Ich verwende in related work die Abkürzungen MIS, MVC und MC
 
 \section{Related Work}
-Demian
+Selecting branching vertices is a part of every branch and reduce or branch and
+bound algorithm. In this section we give an overview of the techniques used in
+algorithms for MIS, MVC and MC.
+
+The most commonly used branching strategy for MIS and MVC is to select a vertex
+of maximum degree. Fomin et al.~\cite{Fomin} show that using a vertex of maximum
+degree that also minimizes the numbe of edges in its neighborhood is optimal
+with respect to their complexity measure. The Algorithm by Akiba and Iwata~\cite{AkibaIwata}
+(which we use for our experiments) also uses this strategy. Akiba and Iwata also
+compare this strategy to branching on a vertex of minimum degree and a random
+vertex. They show that both of these perform significantly worse than branching
+on a maximum degree vertex.
+
+Xiao and Nagamochi~\cite{XiaoNagamochi} also use
+this strategy in most cases. For dense subgraphs, however, they use as edge
+branching strategy: They branch on an edge $\{u, v\}$ where $|N(u) \cap N(v)|$
+is large enough (depending on the maximum degree of the graph) by
+excluding both $u$ and $v$ in one branch and applying the alternative reduction
+(see Section~\ref{sec:reduction_branching}) to $\{u\}$ and $\{v\}$ in the other branch.
+
+Buurgeois et al.~\cite{Bourgeois} use maximum degree branching as long as the
+average degree of the graph is above 4. Otherwise, if there is no vertex with degree of at least 5, their algorithm branches on vertices
+contained in 3- or 4-cycles. \textcolor{red}{TODO: @Christian weißt du auch, was
+passiert, wenn es Knoten mit höherem Grad gibt?}
 
 \subsection{Branch and Reduce Algorithm by Akiba and Iwata~\cite{AkibaIwata}}
 
@@ -131,6 +156,7 @@ Demian
 Sebastian
 
 \section{Reduction Branching}
+\label{sec:reduction_branching}
 Demian
 
 \section{Experimental Evaluation}
