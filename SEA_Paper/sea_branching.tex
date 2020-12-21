@@ -123,6 +123,8 @@ We assume that $G$ is \emph{simple}, \ie it has no self loops or multi-edges.
 The \emph{(open) neighborhood} of a vertex $v \in V$ is denoted by $N(v) = \{u \mid \{v,u\} \in E\}$.
 Furthermore, we denote the \emph{closed neighborhood} of a vertex by $N[v]=N(v) \cup \{v\}$.
 We define the open and closed neighborhood of a set of vertices $U \subseteq V$ as $N(U) = \cup_{u \in U} N(v)$ and $N[U] = N(U) \cup U$, respectively.
+The \emph{degree} of a vertex $v \in V$ is the size of its neighborhood $d(v) = |N(v)|$.
+For a vertex $v \in V$, we further define $N^2(v) = N(N(v))$.
 Finally, for a subset of vertices $S \subseteq V$, the \emph{induced subgraph} $G[S] = (S, E_S)$ is given by restricting edges to vertices of $S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in S\}$.
 
 An \emph{independent set} of a graph is a subset of vertices $I \subseteq V$ such that no two vertices of $I$ are adjacent. 
@@ -132,6 +134,8 @@ A \emph{vertex cover} is a set of vertices $C \subseteq V$ such that for each ed
 The complement of a (maximum) independent set of a graph $G$ is a \emph{(minimum) vertex cover} (MVC) of $G$.
 A \emph{clique} is a subset of vertices $K \subseteq V$ such that all vertices of $K$ are adjacent to each other, \ie $\forall u,v \in K: \{u,v\} \in E$.
 A (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\bar{G} = (V, \bar{E})$, where $\bar{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
+
+To-Do: Components? Cuts?
 
 \section{Related Work}
 Selecting branching vertices is a part of every branch and reduce or branch and
