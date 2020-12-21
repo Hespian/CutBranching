@@ -88,6 +88,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Custom
+\usepackage{xspace}
 \newcommand{\ie}{i.\,e.,\xspace}
 \newcommand{\eg}{e.\,g.,\xspace}
 \newcommand{\etal}{et~al.\xspace}
@@ -117,12 +118,24 @@ Due to the practical impact of kernelization, most of the research aimed at impr
 In this paper, we propose and examine several novel strategies for selecting branching vertices. These strategies follow two main approaches that are motivated by existing research: (1) Branching on vertices that decompose the graph into several connected components that can be solved independently. This has been shown to significantly improve the performance of branch-and-reduce in practice, especially when the side of the largest component is kept small~\cite{alsahafy2020computing}. (2) Branching on vertices whose removal leads to reduction rules becoming applicable again. In turn, this leads to a smaller reduced graph and thus improved performance. For each approach we present several concrete strategies that vary in their complexity. Finally, we evaluate their performance by comparing them to the aforementioned default strategy used in the state-of-the-art solver by Akiba and Iwata~\cite{AkibaIwata}. For this purpose we make of a wide spectrum of instances from different graph classes and applications. Our experiments indicate \ldots.
 
 \section{Preliminaries}
-Sebastian
+Let $G=(V,E)$ be an undirected graph, where $V = \{0, \ldots, n-1\}$ is a set of $n$ vertices and $E \subseteq  \{\{u,v\} \mid u,v \in V\}$ is a set of $m$ edges. 
+We assume that $G$ is \emph{simple}, \ie it has no self loops or multi-edges.
+The \emph{(open) neighborhood} of a vertex $v \in V$ is denoted by $N(v) = \{u \mid \{v,u\} \in E\}$.
+Furthermore, we denote the \emph{closed neighborhood} of a vertex by $N[v]=N(v) \cup \{v\}$.
+We define the open and closed neighborhood of a set of vertices $U \subseteq V$ as $N(U) = \cup_{u \in U} N(v)$ and $N[U] = N(U) \cup U$, respectively.
+The \emph{degree} of a vertex $v \in V$ is the size of its neighborhood $d(v) = |N(v)|$.
+For a vertex $v \in V$, we further define $N^2(v) = N(N(v))$.
+Finally, for a subset of vertices $S \subseteq V$, the \emph{induced subgraph} $G[S] = (S, E_S)$ is given by restricting edges to vertices of $S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in S\}$.
 
-Graph, Subgraph, Independent Set, MIS, Vertex Cover, Clique, Kernelization,
-degeneracy order, branch and reduce.
+An \emph{independent set} of a graph is a subset of vertices $I \subseteq V$ such that no two vertices of $I$ are adjacent. 
+A \emph{maximum independent set} (MIS) is an independent set of maximum cardinality.
+Closely related to independent set are vertex covers and cliques.
+A \emph{vertex cover} is a set of vertices $C \subseteq V$ such that for each edge $\{u,v\} \in E$ either $u$ or $v$ is contained in $C$.
+The complement of a (maximum) independent set of a graph $G$ is a \emph{(minimum) vertex cover} (MVC) of $G$.
+A \emph{clique} is a subset of vertices $K \subseteq V$ such that all vertices of $K$ are adjacent to each other, \ie $\forall u,v \in K: \{u,v\} \in E$.
+A (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\bar{G} = (V, \bar{E})$, where $\bar{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
 
-Ich verwende in related work die Abkürzungen MIS, MVC und MC
+To-Do: Components? Cuts?
 
 \section{Related Work}
 Selecting branching vertices is a part of every branch and reduce or branch and
