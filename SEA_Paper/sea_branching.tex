@@ -145,7 +145,14 @@ Furthermore, we denote the \emph{closed neighborhood} of a vertex by $N[v]=N(v) 
 We define the open and closed neighborhood of a set of vertices $U \subseteq V$ as $N(U) = \cup_{u \in U} N(v)$ and $N[U] = N(U) \cup U$, respectively.
 The \emph{degree} of a vertex $v \in V$ is the size of its neighborhood $d(v) = |N(v)|$.
 For a vertex $v \in V$, we further define $N^2(v) = N(N(v))$.
-Finally, for a subset of vertices $S \subseteq V$, the \emph{induced subgraph} $G[S] = (S, E_S)$ is given by restricting edges to vertices of $S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in S\}$.
+
+For a subset of vertices $V_S \subseteq V$, the \emph{(vertex-)induced subgraph} $G[V_S] = (V_S, E_S)$ is given by restricting the edges of $G$ to vertices of $V_S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in V_S\}$.
+Likewise, for a subset of edges $E_S \subseteq E$, the \emph{edge-induced subgraph} $G[E_S] = (V_S, E_S)$ is given by restricting the vertices of $G$ to the endpoints of edges in $E_S$, \ie $V_S = \{u \in V \mid \{u,v\} \in E_S\}$.
+A \emph{path} $P=(v_1, \ldots, v_k)$ of length $k$ is a sequence of $k$ distinct vertices in $G$ such that $\{v_i, v_{i+1}\} \in E$ for all $i \in \{1, \ldots, k-1\}$.
+A subgraph of $G$ induced by a maximal subset of vertices that are connected by a path is called a \emph{connected component}.
+Furthermore, a graph that only contains one connected components is called \emph{connected}.
+Likewise, a graph with more than one connected component is called \emph{disconnected}.
+A subset $S \subset V$ of a connected graph $G$ is called a \emph{vertex separator}, if the removal of $S$ from $G$ makes the graph disconnected.
 
 An \emph{independent set} of a graph is a subset of vertices $I \subseteq V$ such that no two vertices of $I$ are adjacent. 
 A \emph{maximum independent set} (MIS) is an independent set of maximum cardinality.
@@ -153,9 +160,7 @@ Closely related to independent set are vertex covers and cliques.
 A \emph{vertex cover} is a set of vertices $C \subseteq V$ such that for each edge $\{u,v\} \in E$ either $u$ or $v$ is contained in $C$.
 The complement of a (maximum) independent set of a graph $G$ is a \emph{(minimum) vertex cover} (MVC) of $G$.
 A \emph{clique} is a subset of vertices $K \subseteq V$ such that all vertices of $K$ are adjacent to each other, \ie $\forall u,v \in K: \{u,v\} \in E$.
-A (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\bar{G} = (V, \bar{E})$, where $\bar{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
-
-To-Do: Edge-induced Subgraphs, Separators, Components
+Finally, a (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\bar{G} = (V, \bar{E})$, where $\bar{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
 
 \section{Related Work}
 Selecting branching vertices is a part of every branch and reduce or branch and
@@ -232,7 +237,7 @@ A \emph{cut} $(S,T)$ is a partitioning of $V$ into two sets $S$ and $T=V\setminu
 Furthermore, a cut is called minimum if its \emph{cut set} $C = \{\{u,v\} \in E \mid u \in S, v \in T\}$ has minimal cardinality.
 However, in practice, finding minimum cuts often yields trivial cuts with either $S$ or $T$ only consisting of a single vertex with minimum degree. 
 Thus, we are interested in finding \emph{$s$-$t$-cuts}, \ie cuts where $S$ and $T$ contain specific vertices $s,t \in V$.
-Finding these cuts can be done efficiently in practice, \eg using a preflow push algorithm.
+Finding these cuts can be done efficiently in practice, \eg using a preflow push algorithm~\cite{goldberg1988new}.
 However, selecting the vertices $s$ and $t$ to ensure reasonably balanced cuts can be tricky.
 Natural choices include random vertices, as well as vertices that are far apart in terms of their shortest path distance.
 However, our preliminary experiments indicate that selecting the highest degree vertices for $s$ and $t$ seems to produce the best results.
@@ -251,20 +256,21 @@ Furthermore, in this case we do not try to find a new separator for a fixed numb
 Both of our previous strategies dynamically maintain a set of possible branching vertices.
 Even though this comes at the advantage that most of the computed vertices remain viable candidates for some branching steps, it introduces a noticeable overhead.
 To alleviate this, our last strategy uses a static ordering of possible branching vertices that is computed once at the beginning of the algorithm.
-For this purpose we make use of \emph{nested dissection ordering}.
+For this purpose we make use of a \emph{nested dissection ordering}~\cite{george1973nested}.
 
-A nested dissection ordering of the vertices of a graph $G$ is obtained by recursively computinig balanced bipartitions $(A,B)$ and a vertex separator $S$.
+A nested dissection ordering of the vertices of a graph $G$ is obtained by recursively computing balanced bipartitions $(A,B)$ and a vertex separator $S$, that separates $A$ and $B$.
 The actual ordering is then given by concatenating the orderings of $A$ and $B$ followed by the vertices of $S$.
-Thus, if we select branching vertices based on the reverse nested dissection ordering (while also skipping non-separator vertices), we continiously branch on vertices that disconnect the graph into balanced partitions. 
+Thus, if we select branching vertices based on the reverse nested dissection ordering (while also skipping non-separator vertices), we continuously branch on vertices that disconnect the graph into balanced partitions. 
 We compute such an ordering once, after finishing the initial kernelization phase.
 
 There are two main optimizations that we use when considering the nested dissection ordering.
-First, we noticed that vertices at the end of the ordering seldomly lead to a decomposition of the graph. 
+First, we noticed that vertices at the end of the ordering seldom lead to a decomposition of the graph. 
 This is due to vertices being removed by kernelization which can lead to separators becoming invalid.
 Thus, we limit the number of recursive calls during the nested dissection computation.
 Furthermore, similar to the edge cut based strategy, we limit the size of separators considered during branching using a threshold.
 Again, this is done to ensure that we do not require to many branching steps to decompose the graph.
-Finally, if this threshold is exceeded, the default branching strategy is used.
+The specific value for this size threshold is given in Section~\ref{sec:algo_conf}.
+Finally, if this threshold is exceeded, and we can not select a vertex from the nested dissection ordering, the default branching strategy is used.
 
 \section{Reduction Branching}
 \label{sec:reduction_branching}
