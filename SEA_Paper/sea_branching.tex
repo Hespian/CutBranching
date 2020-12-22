@@ -230,6 +230,23 @@ Finally, if no suitable separator is found, we use the default branching strateg
 Furthermore, in this case we do not try to find a new separator for a fixed number of branching steps as finding one is both unlikely and costly.
 
 \subsection{Nested Dissection}
+Both of our previous strategies dynamically maintain a set of possible branching vertices.
+Even though this comes at the advantage that most of the computed vertices remain viable candidates for some branching steps, it introduces a noticeable overhead.
+To alleviate this, our last strategy uses a static ordering of possible branching vertices that is computed once at the beginning of the algorithm.
+For this purpose we make use of \emph{nested dissection ordering}.
+
+A nested dissection ordering of the vertices of a graph $G$ is obtained by recursively computinig balanced bipartitions $(A,B)$ and a vertex separator $S$.
+The actual ordering is then given by concatenating the orderings of $A$ and $B$ followed by the vertices of $S$.
+Thus, if we select branching vertices based on the reverse nested dissection ordering (while also skipping non-separator vertices), we continiously branch on vertices that disconnect the graph into balanced partitions. 
+We compute such an ordering once, after finishing the initial kernelization phase.
+
+There are two main optimizations that we use when considering the nested dissection ordering.
+First, we noticed that vertices at the end of the ordering seldomly lead to a decomposition of the graph. 
+This is due to vertices being removed by kernelization which can lead to separators becoming invalid.
+Thus, we limit the number of recursive calls during the nested dissection computation.
+Furthermore, similar to the edge cut based strategy, we limit the size of separators considered during branching using a threshold.
+Again, this is done to ensure that we do not require to many branching steps to decompose the graph.
+Finally, if this threshold is exceeded, the default branching strategy is used.
 
 \section{Reduction Branching}
 \label{sec:reduction_branching}
