@@ -183,6 +183,24 @@ average degree of the graph is above 4. Otherwise, if there is no vertex with de
 contained in 3- or 4-cycles. \textcolor{red}{TODO: @Christian weißt du auch, was
 passiert, wenn es Knoten mit höherem Grad gibt?}
 
+Chen et al.~\cite{ChenXiaKanj} \textcolor{red}{TODO: Die good pairs scheinen
+  hier relevant. Dazu steht aber nochts in der BA.}
+
+Most algorithms for MC (for example San Segundo and Tapia~\cite{Color}) compute a
+greedy coloring and branch on vertices with a high coloring number.
+More sophisticated MC algorithms use MaxSAT encodings to prune the set of
+branching vertices~\cite{LiFangXu,LiJiang,LiQuan}. Li et al.~\cite{LiMaxSat}
+combine greedy coloring and MaxSAT reasoning the further reduce the number of
+branching vertices.
+
+Another approach used for MC is using the \emph{degeneracy order} $v_1 < v_2 <
+\dots < v_n$ where $v_i$ is a vertex of smallest degree in $G - \{v_1, \dots
+v_{i-1}\}$. Carraghan and Pardalos~\cite{CarraghanPardalos} present an algorithm
+that branches in descending degeneracy order. Li et al.~\cite{LiFangXu}
+introduce another vertex ordering using iterative maximum independent set
+computations (which might be easier than MC on some graphs) and breaking ties
+according to the degeneracy order.
+
 \subsection{Branch and Reduce Algorithm by Akiba and Iwata~\cite{AkibaIwata}}
 
 \section{Decomposition Branching}
