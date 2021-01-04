@@ -216,7 +216,9 @@ from the graph, more reduction rules might be applicable afterwards. The
 reduction set used in their algorithm is relatively large and not covered
 completely here. However, some reduction rules are explained in
 Section~\ref{sec:reduction_branching} where we show how to target reduction
-rules when branching. In order to prune the search space, bounds on the largest
+rules when branching. The reduction rules are applied by iterating over all
+vertices in the graph once for each rule and checking whether the rule
+can be applied to each vertex. In order to prune the search space, bounds on the largest
 possible Independent Set of a branch are computed. They implement three different
 methods for determining upper bounds: clique cover, LP relaxation and cycle
 cover. Additionally, they employ special reduction rules that can be applied
@@ -227,7 +229,8 @@ that decompose the graph into connected components. Akiba and Iwata also
 compare three different strategies for
 selecting the branching vertex: Uniform random, minimum degree and maximum
 degree. They conclude that choosing a vertex of maximum degree that also
-minimizes the number of edges among $N(v)$ performs best.
+minimizes the number of edges among $N(v)$ performs best. We use this algorithm
+as the base implementation to test our new branching strategies.
 
 \section{Decomposition Branching}
 \label{sec:decomposition_branching}
