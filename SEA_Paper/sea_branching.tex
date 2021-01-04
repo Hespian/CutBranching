@@ -315,7 +315,6 @@ The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi
 \end{definition}
 
 \begin{theorem} (Twin Reduction) In a graph $G=(V,E)$ let vertices $u$ and $v$ be twins. If there is an edge among $N(u)$, then there is always a maximum independent set that includes $\{u,v\}$ and therefore excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be a \textit{maximum vertex cover} in $G'$. Then, 
-  
   \[I=\begin{cases}
       I'\cup \{u,v\} & \text{, if }w\notin I'\\
       (I'\setminus \{w\})\cup N(u) & \text{, else} %w\in I'
@@ -334,6 +333,56 @@ original algorithm checks for each vertex $v$ of degree $3$ whether there is a
 vertex $u \in N^2(v)$ which $d(u) = 3$ and $N(u) = N(v)$. We augment this
 algorithm by simultaneously also searching for $u \in N^2(v)$ with $d(u) = 4$
 and $N(v) \ subset N(u)$. 
+
+\subsection{Almost Funnels}
+
+Next we consider the \emph{funnel} reduction which is a special case of the
+\emph{alternative} reduction by Xiao and Nagamochi~\cite{XiaoUnconfined}:
+
+\begin{definition} (Alternative Sets)
+	In a graph $G=(V,E)$ two non empty, disjoint subsets $A,B\subseteq V$ are called alternatives, if $|A| = |B|$ and there is a maximum independent set $I$ in $G$ such that $I\cap(A\cup B)$ is either $A$ or $B$.
+\end{definition}
+
+\begin{theorem} (Alternative Reduction)
+	In a graph $G=(V,E)$ let $A$ and $B$ be alternative sets. Let $G'=(V', E')$ the graph with $V' = V\setminus(A\cup B\cup (N(A)\cap N(B)))$ and $E' = (E\setminus\binom{A\cup B\cup (N(A)\cap N(B))}{2} \cup \{ \{x,y\}\;|\; x\in N(A)\setminus N[B], y\in N[B]\setminus N(A) \}$ and let $I'$ be a maximum independent set in $G'$. Then,
+	\[I=\begin{cases}
+	I'\cup A & \text{, if } (N(A)\setminus N[B]) \cap I' = \emptyset% N(B)\setminus N[A]\subseteq I'\\
+	\\
+	I'\cup B & \text{, else if } (N(B)\setminus N[A])\cap I' = \emptyset
+	\end{cases}\]
+	is a maximum independent set in $G$.
+\end{theorem}
+
+Note that the alternative reduction adds new edges between existing
+vertices of the graph which might not be beneficial in every case. To counteract this, the algorithm
+by Akiba and Iwata~\cite{AkibaIwata} only uses special cases, one of which is
+the funnel reduction:
+
+\begin{definition} (Funnel)
+	In a graph $G=(V,E)$ two adjacent vertices $u$ and $v$ are called funnels, if $G_{N(v)\setminus\{u\}}$ is a complete graph, i.e, if $N(v)\setminus\{u\}$ is a clique.
+\end{definition}
+\begin{theorem} (Funnel Reduction) In a graph $G=(V,E)$ let $u$ and $v$ be funnels. Then, $\{u\}$ and $\{v\}$ are alternative sets.	
+\end{theorem}
+
+Again, we define a structure that is covered by the funnel reduction after
+removal of a single vertex:
+
+\begin{definition}(Almost Funnel)
+  In a graph $G=(V,E)$ two adjacent vertices $u$ and $v$ are called almost funnels if $u$ and $v$ are not funnels and there is a vertex $w$ such that $N(v)\setminus\{u,w\}$ induces a clique.
+\end{definition}
+
+By removing $w$, $u$ and $v$ become funnels. The original funnel algorithm
+checks whether $u$ and $v$ are funnels by iterating over the vertices in $N(v) \setminus \{u\}$
+and checking whether they are adjacent to \emph{all} previous vertices. Once a vertex
+is found that is not adjacent to all previous vertices, the algorithm concludes
+that $u$ and $v$ are not funnels and terminates. We augment this algorithm by
+not immediately terminating in this case. Instead we consider the following two
+cases: Either the current vertex $w$ is not adjacent two at least two of the
+previous vertices. In this case, we can check whether $N(v) \setminus \{u, w\}$
+induces a clique. In the second case, $w$ is adjacent to all but one previous
+vertex $w'$. In this case, both $w$ and $w'$ might be candidate branching
+vertices. Thus, we check whether $N(v) \setminus \{u, w\}$ or $N(v) \setminus
+\{u, w'\}$ induce a clique.
 
 
 \section{Experimental Evaluation}
