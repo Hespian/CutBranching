@@ -384,6 +384,38 @@ vertex $w'$. In this case, both $w$ and $w'$ might be candidate branching
 vertices. Thus, we check whether $N(v) \setminus \{u, w\}$ or $N(v) \setminus
 \{u, w'\}$ induce a clique.
 
+\subsection{Almost Dominance}
+
+The next branching strategy is based on the dominance reduction rule by Fomin et al. \cite{Fomin}:
+
+\begin{definition} (Dominance)
+  In a graph $G=(V,E)$ a vertex $u$ is called dominated by a neighbor $v$, if $N[u]\subseteq N[v]$.
+\end{definition}
+
+\begin{theorem} (Dominance Reduction) In a graph $G=(V,E)$, if a vertex $u$ is dominated by a neighbor $v$, then, there always exists a maximum independent set that does not include $v$, i.e.\[\alpha(G)=\alpha(G-v)\]
+\end{theorem}
+
+Again, we define a condition for being almost dominated:
+
+\begin{definition} (Almost Dominance)
+  In a graph $G=(V,E)$ a vertex $u$ is called almost dominated by a neighbor $v$ if $|N(u)\setminus N(v)| = 1$ and $N[v]\not\subseteq N(u)$.
+\end{definition}
+ The last condition ensures that $v$ is not dominated by $u$. The original
+ algorithm checks for each neighbor of $u$ is also a neighbor of $v$. Once it
+ finds a vertex in $N(u)$ that is not in $N(v)$, it terminates because $u$ can not
+ be dominated by $v$. We augment this algorithm by allowing a single vertex $w
+ \in N(u)$ that is not adjacent to $v$ and adding $w$ as a candidate branching
+ vertex if it exists.
+
+ Note that the dominance reduction is not directly used in the Algorithm by
+ Akiba and Iwata~\cite{AkibaIwata} because it is fully contained in the unconfined
+ reduction (see Section~\ref{sec:almost_unconfined}). This means that we cannot
+ simply search for almost dominated vertices during the reduction step. Instead,
+ we have to do an additional pass over all vertices.
+ 
+\subsection{Almost Unconfined}
+\label{sec:almost_unconfined}
+
 
 \section{Experimental Evaluation}
 
