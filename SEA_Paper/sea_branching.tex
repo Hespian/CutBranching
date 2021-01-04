@@ -296,7 +296,45 @@ Finally, if this threshold is exceeded, and we can not select a vertex from the 
 
 \section{Reduction Branching}
 \label{sec:reduction_branching}
-Demian
+Our second approach to selecting good branching vertices is to choose a vertex
+whose removal will enable application of new reduction rules. The following
+sections will demonstrate how we identify such vertices with little
+computational overhead. Out of the candidates found we then select the vertex of
+maximum degree. If the degree of all candidate vertices lies below a threshold
+(defined in Section~\ref{sec:algo_conf}) we fall back to branching on a vertex
+of maximum degree. The rational here is that a vertex of large degree changes
+the structure of the graph more than a vertex of small degree even if that
+vertex is guaranteed to enable application of a reduction rule.
+
+\subsection{Almost Twins}
+
+The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi~\cite{XiaoUnconfined}:
+
+\begin{definition}(Twins)
+  In a graph $G=(V,E)$ two vertices $u$ and $v$ are called twins, if $N(u) = N(v)$ and $d(u) = d(v) = 3$.
+\end{definition}
+
+\begin{theorem} (Twin Reduction) In a graph $G=(V,E)$ let vertices $u$ and $v$ be twins. If there is an edge among $N(u)$, then there is always a maximum independent set that includes $\{u,v\}$ and therefore excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be a \textit{maximum vertex cover} in $G'$. Then, 
+  
+  \[I=\begin{cases}
+      I'\cup \{u,v\} & \text{, if }w\notin I'\\
+      (I'\setminus \{w\})\cup N(u) & \text{, else} %w\in I'
+	\end{cases}\]
+  is a maximum independent set in $G$.
+\end{theorem}
+
+We define \emph{Almost Twins} as follows:
+\begin{definition} (Almost Twins)
+  In a graph $G=(V,E)$ two non adjacent vertices $u$ and $v$ are called almost twins if $d(u) = 4$, $d(v) = 3$ and $N(v)\subseteq N(u)$ (i.e. $N(u) = N(v) \cup \{w\}$). 
+\end{definition}
+
+Clearly, after removing $w$, $u$ and $v$ are twins so we can apply the twin
+reduction. Finding almost twins can be done while searching for twins: The
+original algorithm checks for each vertex $v$ of degree $3$ whether there is a
+vertex $u \in N^2(v)$ which $d(u) = 3$ and $N(u) = N(v)$. We augment this
+algorithm by simultaneously also searching for $u \in N^2(v)$ with $d(u) = 4$
+and $N(v) \ subset N(u)$. 
+
 
 \section{Experimental Evaluation}
 
