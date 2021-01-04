@@ -163,8 +163,8 @@ A \emph{clique} is a subset of vertices $K \subseteq V$ such that all vertices o
 Finally, a (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\bar{G} = (V, \bar{E})$, where $\bar{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
 
 \section{Related Work}
-Selecting branching vertices is a part of every branch and reduce or branch and
-bound algorithm. In this section we give an overview of the techniques used in
+Selecting branching vertices is a part of every branch-and-reduce or
+branch-and-bound algorithm. In this section we give an overview of the techniques used in
 algorithms for MIS, MVC and MC.
 
 The most commonly used branching strategy for MIS and MVC is to select a vertex
@@ -208,7 +208,29 @@ according to the degeneracy order.
 
 \subsection{Branch and Reduce Algorithm by Akiba and Iwata~\cite{AkibaIwata}}
 
+The algorithm by Akiba and Iwata~\cite{AkibaIwata} is a so called
+\emph{branch-and-reduce} algorithm: It repeatedly reduces the instance size by a
+set of polynomial time reduction rules and then branches on a vertex once no
+more reduction rules can be applied. Since branching removes at least one vertex
+from the graph, more reduction rules might be applicable afterwards. The
+reduction set used in their algorithm is relatively large and not covered
+completely here. However, some reduction rules are explained in
+Section~\ref{sec:reduction_branching} where we show how to target reduction
+rules when branching. In order to prune the search space, bounds on the largest
+possible Independent Set of a branch are computed. They implement three different
+methods for determining upper bounds: clique cover, LP relaxation and cycle
+cover. Additionally, they employ special reduction rules that can be applied
+during branching. Another easy optimization done by their algorithm is to solve
+connected components separately. We utilize this in
+Section~\ref{sec:decomposition_branching} where we introduce branching rules
+that decompose the graph into connected components. Akiba and Iwata also
+compare three different strategies for
+selecting the branching vertex: Uniform random, minimum degree and maximum
+degree. They conclude that choosing a vertex of maximum degree that also
+minimizes the number of edges among $N(v)$ performs best.
+
 \section{Decomposition Branching}
+\label{sec:decomposition_branching}
 Our first approach to improve the default branching strategy found in many state-of-the-art algorithms (including that of Akiba and Iwata~\cite{AkibaIwata}) is to decompose the graph into several connected components.
 Subsequently processing these components individually has been shown to improve the performance of branch-and-reduce in practice~\cite{alsahafy2020computing}.
 To this end, we now present three concrete strategies with varying computational complexity.
