@@ -114,7 +114,8 @@
 \newpage
 
 \section{Introduction}
-% Probably cite Schorr~\cite{schorr2020improved}.
+\textcolor{red}{TODO: Probably cite Schorr~\cite{schorr2020improved}}
+
 An \emph{independent set} of a graph $G = (V,E)$ is a set of vertices $I \subseteq V$ of $G$ such that no two vertices in this set are adjacent.
 The problem of finding such an independent set of maximum cardinality, the \emph{maximum independent set problem}, is a fundamental NP-hard problem~\cite{Garey1974}.
 Its applications cover a wide variety of fields including computer graphics \cite{CG}, network analysis \cite{NW}, route planning \cite{RP} and computational biology \cite{BIO1, BIO2}.
@@ -484,8 +485,8 @@ Again, we define a vertex to be almost unconfined:
 
 Here, we only present an augmentation that detects \emph{some} almost
 unconfined vertices. In particular, if at any point during the algorithm there
-is only \emph{one} extending child, i.e.a child $u$ of $S$ with $N(u)\setminus
-N[S] = \{w\}$, then removal $w$ makes $v$ unconfined. During
+is only \emph{one} extending child, i.e. a child $u$ of $S$ with $N(u)\setminus
+N[S] = \{w\}$, then removal of $w$ makes $v$ unconfined. During
 Algorithm~\ref{alg:unconf} we collect all these vertices $w$ and add them to the
 set of candidate branching vertices if the algorithm cannot already remove $v$.
 
@@ -512,7 +513,7 @@ cases of almost dominated vertices.
 %%
 
 %% Please use bibtex, 
-
+%TODO: Before submitting check for all references whether they are actually used in the text
 \bibliography{references}
 
 \appendix
