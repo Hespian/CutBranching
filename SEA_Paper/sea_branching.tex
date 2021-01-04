@@ -10,6 +10,13 @@
 %for enabling thm-restate support, use "thm-restate"
 %for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
 
+\usepackage[ruled,vlined,linesnumbered,norelsize]{algorithm2e}
+\DontPrintSemicolon
+\def\NlSty#1{\textnormal{\fontsize{8}{10}\selectfont{}#1}}
+\SetKwSty{texttt}
+\SetCommentSty{emph}
+\def\algorithmautorefname{Algorithm}
+
 \listfiles
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
@@ -301,8 +308,10 @@ Finally, if this threshold is exceeded, and we can not select a vertex from the 
 \label{sec:reduction_branching}
 Our second approach to selecting good branching vertices is to choose a vertex
 whose removal will enable application of new reduction rules. The following
-sections will demonstrate how we identify such vertices with little
-computational overhead. Out of the candidates found we then select the vertex of
+sections will demonstrate how we identify such branching candidate vertices with little
+computational overhead. To be self contained we will also repeat the reduction
+rules used here but omit any proofs that can be found in the original
+publications. Out of the candidates found we then select the vertex of
 maximum degree. If the degree of all candidate vertices lies below a threshold
 (defined in Section~\ref{sec:algo_conf}) we fall back to branching on a vertex
 of maximum degree. The rational here is that a vertex of large degree changes
@@ -388,6 +397,7 @@ vertices. Thus, we check whether $N(v) \setminus \{u, w\}$ or $N(v) \setminus
 \{u, w'\}$ induce a clique.
 
 \subsection{Almost Dominance}
+\label{sec:almost_dominance}
 
 The next branching strategy is based on the dominance reduction rule by Fomin et al. \cite{Fomin}:
 
@@ -419,6 +429,68 @@ Again, we define a condition for being almost dominated:
 \subsection{Almost Unconfined}
 \label{sec:almost_unconfined}
 
+The \emph{unconfined} reduction by Xiao and Nagamochi~\cite{XiaoNagamochi} is a generalization of the dominance reduction
+(see Section~\ref{sec:almost_dominance}).
+The core idea is to detect vertices not required for a maximum independent set
+that can therefore can be removed from the graph by algorithmically contradicting the assumption that every maximum independent set contains the vertex.
+
+\begin{definition} (Removable Vertex)
+	In a graph $G=(V,E)$ a vertex $v$ is called removable, if 
+	$\alpha(G) = \alpha(G-v)$.
+\end{definition}
+
+\begin{definition} (Child, Parent) In a graph $G=(V,E)$ with an \textit{independent set} $I$, a vertex $v$ is called a child of $I$, if $|N(v)\cap I| = 1$ and the unique neighbor of $v$ in $I$ is called the parent of $v$.
+\end{definition}
+
+\begin{theorem} \label{theorem:unconfined}
+	In a graph $G=(V,E)$ let $S$ be an independent set that is not maximal but is contained in every maximum independent set of $G$ and let $v$ be any child of $S$. Then, every maximum independent set includes at least one vertex from $N(v)\setminus N[S]$.
+\end{theorem}
+
+Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
+
+\begin{algorithm}
+	\caption{Unconfined -- Xiao and Nagamochi \cite{XiaoUnconfined}}\label{alg:unconf}
+	\SetKwFunction{U}{Unconfined}
+	\DontPrintSemicolon
+	
+	\KwIn{A graph $G$, a vertex $v$}
+	\U{G, v}	
+	\Begin{
+		$S \leftarrow \{v\}$\;
+		\While{$S\text{ has child }u\text{ with } |N(u)\setminus N[S]|\leq 1$}{
+			\eIf{$|N(u)\setminus N[S]| = 0$}{\Return true\tcp*{contradiction to Theorem \ref{theorem:unconfined}}}{
+				$\{w\}\leftarrow N(u)\setminus N[v]$\tcp*{by assumption $w$ also has to}
+				$S\leftarrow S\cup\{w\}$\tcp*{be contained in every MIS}
+			}
+		}
+		
+		\Return $\text{false}$
+		
+	}
+	
+	\KwOut{true if $v$ is unconfined, false otherwise}
+	
+\end{algorithm}
+
+
+\begin{theorem}(Unconfined Reduction) In a graph $G=(V,E)$, if Algorithm \ref{alg:unconf} returns true for an unconfined vertex $v$, then there is always a maximum independent set that does not contain~$v$.
+\end{theorem}
+
+Again, we define a vertex to be almost unconfined:
+
+\begin{definition} (Almost Unconfined)
+  In a graph $G=(V,E)$ a vertex $v$ is called almost unconfined if $v$ is not unconfined but there is a vertex $w$ such that $v$ is unconfined in $G-w$.
+\end{definition}
+
+Here, we only present an augmentation that detects \emph{some} almost
+unconfined vertices. In particular, if at any point during the algorithm there
+is only \emph{one} extending child, i.e.a child $u$ of $S$ with $N(u)\setminus
+N[S] = \{w\}$, then removal $w$ makes $v$ unconfined. During
+Algorithm~\ref{alg:unconf} we collect all these vertices $w$ and add them to the
+set of candidate branching vertices if the algorithm cannot already remove $v$.
+
+Note that this special case of almost unconfined vertices might not catch all
+cases of almost dominated vertices.
 
 \section{Experimental Evaluation}
 
