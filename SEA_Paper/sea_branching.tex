@@ -164,7 +164,8 @@ The \emph{degree} of a vertex $v \in V$ is the size of its neighborhood $d(v) = 
 For a vertex $v \in V$, we further define $N^2(v) = N(N(v))$.
 
 For a subset of vertices $V_S \subseteq V$, the \emph{(vertex-)induced subgraph} $G[V_S] = (V_S, E_S)$ is given by restricting the edges of $G$ to vertices of $V_S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in V_S\}$.
-Likewise, for a subset of edges $E_S \subseteq E$, the \emph{edge-induced subgraph} $G[E_S] = (V_S, E_S)$ is given by restricting the vertices of $G$ to the endpoints of edges in $E_S$, \ie $V_S = \{u \in V \mid \{u,v\} \in E_S\}$.
+Likewise, for a subset of edges $E_S \subseteq E$, the \emph{edge-induced
+  subgraph}\todo{do we use edge induced subgraphs?} $G[E_S] = (V_S, E_S)$ is given by restricting the vertices of $G$ to the endpoints of edges in $E_S$, \ie $V_S = \{u \in V \mid \{u,v\} \in E_S\}$.
 A \emph{path} $P=(v_1, \ldots, v_k)$ of length $k$ is a sequence of $k$ distinct vertices in $G$ such that $\{v_i, v_{i+1}\} \in E$ for all $i \in \{1, \ldots, k-1\}$.
 A subgraph of $G$ induced by a maximal subset of vertices that are connected by a path is called a \emph{connected component}.
 Furthermore, a graph that only contains one connected components is called \emph{connected}.
@@ -208,8 +209,8 @@ passiert, wenn es Knoten mit höherem Grad gibt?}
 Chen et al.~\cite{ChenXiaKanj} use a notion of \emph{good pairs} that are advantageous
 for branching. They chose these good pairs by a set of rules which are omitted
 here. They combine these with \emph{tuples} of a set of vertices and the
-number of vertices from this set that have to be included in a maximum
-independent set. This information can be used when branching on a vertex
+number of vertices from this set that have to be included in an MIS. This
+information can be used when branching on a vertex
 contained in that set to remove further vertices from the graph. Akiba and
 Iwata~\cite{AkibaIwata} use the same concept in their \emph{packing} rule. Chen
 et al. combine good pairs, tuples and high degree vertices for their branching strategy.
@@ -289,7 +290,7 @@ Finding these cuts can be done efficiently in practice, \eg using a preflow push
 However, selecting the vertices $s$ and $t$ to ensure reasonably balanced cuts can be tricky.
 Natural choices include random vertices, as well as vertices that are far apart in terms of their shortest path distance.
 However, our preliminary experiments indicate that selecting the highest degree vertices for $s$ and $t$ seems to produce the best results.
-Finally, to derive a vertex separator from a cut one can compute a minimum vertex cover on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm.
+Finally, to derive a vertex separator from a cut one can compute a MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm.
 This separator can then be used to select branching vertices.
 
 Overall, our second strategy works similar to the first one: We maintain a set of possible branching vertices that were selected by computing a minimum $s$-$t$-cut and turning it into a vertex separator.
@@ -342,12 +343,17 @@ The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi
   In a graph $G=(V,E)$ two vertices $u$ and $v$ are called twins, if $N(u) = N(v)$ and $d(u) = d(v) = 3$.
 \end{definition}
 
-\begin{theorem} (Twin Reduction~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ let vertices $u$ and $v$ be twins. If there is an edge among $N(u)$, then there is always a maximum independent set that includes $\{u,v\}$ and therefore excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be a \textit{maximum vertex cover} in $G'$. Then, 
+\begin{theorem} (Twin Reduction~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ let
+  vertices $u$ and $v$ be twins. If there is an edge among $N(u)$, then there is
+  always an MIS that includes $\{u,v\}$ and therefore
+  excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus
+  N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup
+  \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be an MIS in $G'$. Then, 
   \[I=\begin{cases}
       I'\cup \{u,v\} & \text{, if }w\notin I'\\
       (I'\setminus \{w\})\cup N(u) & \text{, else} %w\in I'
 	\end{cases}\]
-  is a maximum independent set in $G$.
+  is an MIS in $G$.
 \end{theorem}
 
 We define \emph{Almost Twins} as follows:
@@ -369,17 +375,21 @@ Next we consider the \emph{funnel} reduction which is a special case of the
 \emph{alternative} reduction by Xiao and Nagamochi~\cite{XiaoUnconfined}:
 
 \begin{definition} (Alternative Sets~\cite{XiaoUnconfined})
-	In a graph $G=(V,E)$ two non empty, disjoint subsets $A,B\subseteq V$ are called alternatives, if $|A| = |B|$ and there is a maximum independent set $I$ in $G$ such that $I\cap(A\cup B)$ is either $A$ or $B$.
+	In a graph $G=(V,E)$ two non empty, disjoint subsets $A,B\subseteq V$ are
+    called alternatives, if $|A| = |B|$ and there is an MIS $I$ in $G$ such that $I\cap(A\cup B)$ is either $A$ or $B$.
 \end{definition}
 
 \begin{theorem} (Alternative Reduction~\cite{XiaoUnconfined})
-	In a graph $G=(V,E)$ let $A$ and $B$ be alternative sets. Let $G'=(V', E')$ the graph with $V' = V\setminus(A\cup B\cup (N(A)\cap N(B)))$ and $E' = (E\setminus\binom{A\cup B\cup (N(A)\cap N(B))}{2} \cup \{ \{x,y\}\;|\; x\in N(A)\setminus N[B], y\in N[B]\setminus N(A) \}$ and let $I'$ be a maximum independent set in $G'$. Then,
+	In a graph $G=(V,E)$ let $A$ and $B$ be alternative sets. Let $G'=(V', E')$
+    the graph with $V' = V\setminus(A\cup B\cup (N(A)\cap N(B)))$ and $E' =
+    (E\setminus\binom{A\cup B\cup (N(A)\cap N(B))}{2} \cup \{ \{x,y\}\;|\; x\in
+    N(A)\setminus N[B], y\in N[B]\setminus N(A) \}$ and let $I'$ be an MIS set in $G'$. Then,
 	\[I=\begin{cases}
 	I'\cup A & \text{, if } (N(A)\setminus N[B]) \cap I' = \emptyset% N(B)\setminus N[A]\subseteq I'\\
 	\\
 	I'\cup B & \text{, else if } (N(B)\setminus N[A])\cap I' = \emptyset
 	\end{cases}\]
-	is a maximum independent set in $G$.
+	is an MIS in $G$.
 \end{theorem}
 
 Note that the alternative reduction adds new edges between existing
@@ -422,7 +432,8 @@ The next branching strategy is based on the dominance reduction rule by Fomin et
   In a graph $G=(V,E)$ a vertex $u$ is called dominated by a neighbor $v$, if $N[u]\subseteq N[v]$.
 \end{definition}
 
-\begin{theorem} (Dominance Reduction~\cite{Fomin}) In a graph $G=(V,E)$, if a vertex $u$ is dominated by a neighbor $v$, then, there always exists a maximum independent set that does not include $v$, i.e.\[\alpha(G)=\alpha(G-v)\]
+\begin{theorem} (Dominance Reduction~\cite{Fomin}) In a graph $G=(V,E)$, if a
+  vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.\[\alpha(G)=\alpha(G-v)\]
 \end{theorem}
 
 Again, we define a condition for being almost dominated:
@@ -448,8 +459,8 @@ Again, we define a condition for being almost dominated:
 
 The \emph{unconfined} reduction by Xiao and Nagamochi~\cite{XiaoNagamochi} is a generalization of the dominance reduction
 (see Section~\ref{sec:almost_dominance}).
-The core idea is to detect vertices not required for a maximum independent set
-that can therefore can be removed from the graph by algorithmically contradicting the assumption that every maximum independent set contains the vertex.
+The core idea is to detect vertices not required for an MIS
+that can therefore can be removed from the graph by algorithmically contradicting the assumption that every MIS contains the vertex.
 
 \begin{definition} (Removable Vertex~\cite{XiaoNagamochi}\todo{Was meint ihr? Macht es
     hier Sinn Xaio und Nagamochi zu zitieren oder ist das zu banal?})
@@ -461,7 +472,7 @@ that can therefore can be removed from the graph by algorithmically contradictin
 \end{definition}
 
 \begin{theorem} (\cite{XiaoNagamochi})\label{theorem:unconfined}
-	In a graph $G=(V,E)$ let $S$ be an independent set that is not maximal but is contained in every maximum independent set of $G$ and let $v$ be any child of $S$. Then, every maximum independent set includes at least one vertex from $N(v)\setminus N[S]$.
+	In a graph $G=(V,E)$ let $S$ be an independent set that is not maximal but is contained in every MIS of $G$ and let $v$ be any child of $S$. Then, every MIS includes at least one vertex from $N(v)\setminus N[S]$.
 \end{theorem}
 
 Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
@@ -491,7 +502,9 @@ Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so 
 \end{algorithm}
 
 
-\begin{theorem}(Unconfined Reduction~\cite{XiaoNagamochi}) In a graph $G=(V,E)$, if Algorithm \ref{alg:unconf} returns true for an unconfined vertex $v$, then there is always a maximum independent set that does not contain~$v$.
+\begin{theorem}(Unconfined Reduction~\cite{XiaoNagamochi}) In a graph $G=(V,E)$,
+  if Algorithm \ref{alg:unconf} returns true for an unconfined vertex $v$, then
+  there is always an MIS that does not contain~$v$.
 \end{theorem}
 
 Again, we define a vertex to be almost unconfined:
