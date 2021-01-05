@@ -159,11 +159,14 @@ Let $G=(V,E)$ be an undirected graph, where $V = \{0, \ldots, n-1\}$ is a set of
 We assume that $G$ is \emph{simple}, \ie it has no self loops or multi-edges.
 The \emph{(open) neighborhood} of a vertex $v \in V$ is denoted by $N(v) = \{u \mid \{v,u\} \in E\}$.
 Furthermore, we denote the \emph{closed neighborhood} of a vertex by $N[v]=N(v) \cup \{v\}$.
-We define the open and closed neighborhood of a set of vertices $U \subseteq V$ as $N(U) = \cup_{u \in U} N(v)$ and $N[U] = N(U) \cup U$, respectively.
+We define the open and closed neighborhood of a set of vertices $U \subseteq V$
+as $N(U) = \cup_{u \in U} N(v)$\todo{we should check whether we have to exclude
+  $U$ here} and $N[U] = N(U) \cup U$, respectively.
 The \emph{degree} of a vertex $v \in V$ is the size of its neighborhood $d(v) = |N(v)|$.
 For a vertex $v \in V$, we further define $N^2(v) = N(N(v))$.
 
-For a subset of vertices $V_S \subseteq V$, the \emph{(vertex-)induced subgraph} $G[V_S] = (V_S, E_S)$ is given by restricting the edges of $G$ to vertices of $V_S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in V_S\}$.
+For a subset of vertices $V_S \subseteq V$, the \emph{(vertex-)induced subgraph}
+$G[V_S] = (V_S, E_S)$\todo{is this notation ever used?} is given by restricting the edges of $G$ to vertices of $V_S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in V_S\}$.
 Likewise, for a subset of edges $E_S \subseteq E$, the \emph{edge-induced
   subgraph}\todo{do we use edge induced subgraphs?} $G[E_S] = (V_S, E_S)$ is given by restricting the vertices of $G$ to the endpoints of edges in $E_S$, \ie $V_S = \{u \in V \mid \{u,v\} \in E_S\}$.
 A \emph{path} $P=(v_1, \ldots, v_k)$ of length $k$ is a sequence of $k$ distinct vertices in $G$ such that $\{v_i, v_{i+1}\} \in E$ for all $i \in \{1, \ldots, k-1\}$.
@@ -267,21 +270,28 @@ To this end, we now present three concrete strategies with varying computational
 First, we are concerned with finding single vertices that are able to decompose a graph into at least two separated components.
 Such points are called \emph{articulation points} (or cut vertices).
 Articulation points can be computed in linear time $\mathcal{O}(n+m)$ using a simple depth-first search (DFS) algorithm.
-In particular, a vertex $v$ is an articulation point if it is either the root of the DFS tree or any non-root vertex that has a child $u$, such that no vertex in the subtree rooted at $u$ has a backwards edge to one of the ancestors of $v$.
+In particular, a vertex $v$ is an articulation point if it is either the root of
+the DFS tree or any non-root vertex that has a child $u$, such that no vertex in
+the subtree rooted at $u$ has a backwards edge to one of the ancestors of
+$v$.\todo{by this definition the root is always an articulation point}
 
 For our first branching strategy we maintain a set of articulation points $A \subseteq V$.
 When selecting a branching vertex, we first discard all invalid vertices from $A$, \ie vertices that were removed from the graph by a preceding kernelization step.
 If this results in $A$ becoming empty, a new set of articulation points is computed on the current graph in linear time.
 However, if no articulation points can be found, we select a vertex based on the default branching strategy.
-Otherwise, a random vertex from $A$ is selected as the branching vertex.
+Otherwise, a random vertex from $A$ is selected as the branching
+vertex.\todo{why not the one with the highest degree?}
 
 Even tough this strategy yields only a small (linear) overhead, finding articulation points can be rare depending on the type of graph.
-This results in the default branching strategy being selected rather frequently.
+This results in the default branching strategy being selected rather
+frequently.\todo{Parameter maximale Rekursionstiefe und Anzahl ausgelassene Rekursionen?}
 
 \subsection{Edge Cuts}
 To alleviate the restrictive nature of finding articulation points, we now propose a more flexible branching strategy based on \emph{(minimal) edge cuts}.
 In general, we still aim to find small vertex separators, \ie a set of vertices whose removal disconnects the graph.
-However, since computing an actual minimum vertex separator is computationally expensive, we opt to use minimum edge cuts instead.
+However, since computing an actual minimum vertex separator is computationally
+expensive, we opt to use minimum edge cuts instead.\todo{Is there a reference
+  that this is also done in graph partitioning?}
 
 A \emph{cut} $(S,T)$ is a partitioning of $V$ into two sets $S$ and $T=V\setminus S$.
 Furthermore, a cut is called minimum if its \emph{cut set} $C = \{\{u,v\} \in E \mid u \in S, v \in T\}$ has minimal cardinality.
@@ -290,8 +300,9 @@ Thus, we are interested in finding \emph{$s$-$t$-cuts}, \ie cuts where $S$ and $
 Finding these cuts can be done efficiently in practice, \eg using a preflow push algorithm~\cite{goldberg1988new}.
 However, selecting the vertices $s$ and $t$ to ensure reasonably balanced cuts can be tricky.
 Natural choices include random vertices, as well as vertices that are far apart in terms of their shortest path distance.
-However, our preliminary experiments indicate that selecting the highest degree vertices for $s$ and $t$ seems to produce the best results.
-Finally, to derive a vertex separator from a cut one can compute an MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm.
+However, our preliminary experiments indicate that selecting the highest degree
+vertices\todo{more precisely? Random vertices of maximum degree?} for $s$ and $t$ seems to produce the best results.
+Finally, to derive a vertex separator from a cut one can compute an MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm.\todo{citation?}
 This separator can then be used to select branching vertices.
 
 Overall, our second strategy works similar to the first one: We maintain a set of possible branching vertices that were selected by computing a minimum $s$-$t$-cut and turning it into a vertex separator.
@@ -310,15 +321,20 @@ For this purpose we make use of a \emph{nested dissection ordering}~\cite{george
 
 A nested dissection ordering of the vertices of a graph $G$ is obtained by recursively computing balanced bipartitions $(A,B)$ and a vertex separator $S$, that separates $A$ and $B$.
 The actual ordering is then given by concatenating the orderings of $A$ and $B$ followed by the vertices of $S$.
-Thus, if we select branching vertices based on the reverse nested dissection ordering (while also skipping non-separator vertices), we continuously branch on vertices that disconnect the graph into balanced partitions. 
+Thus, if we select branching vertices based on the reverse nested dissection
+ordering (while also skipping non-separator vertices\todo{I'm confused. Where do
+non-separator vertices come from?}), we continuously branch on vertices that disconnect the graph into balanced partitions. 
 We compute such an ordering once, after finishing the initial kernelization phase.
 
 There are two main optimizations that we use when considering the nested dissection ordering.
 First, we noticed that vertices at the end of the ordering seldom lead to a decomposition of the graph. 
 This is due to vertices being removed by kernelization which can lead to separators becoming invalid.
 Thus, we limit the number of recursive calls during the nested dissection computation.
-Furthermore, similar to the edge cut based strategy, we limit the size of separators considered during branching using a threshold.
-Again, this is done to ensure that we do not require to many branching steps to decompose the graph.
+Furthermore, similar to the edge cut based strategy, we limit the size of
+separators considered during branching using a threshold.\todo{aren't all
+  separators on deeper levels invalid after this? So do we stop using nd
+  immediately after exceeding the threshold once?}
+Again, this is done to ensure that we do not require too many branching steps to decompose the graph.
 The specific value for this size threshold is given in Section~\ref{sec:algo_conf}.
 Finally, if this threshold is exceeded, and we can not select a vertex from the nested dissection ordering, the default branching strategy is used.
 
