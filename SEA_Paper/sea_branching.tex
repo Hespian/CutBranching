@@ -179,6 +179,7 @@ A \emph{vertex cover} is a set of vertices $C \subseteq V$ such that for each ed
 The complement of a (maximum) independent set of a graph $G$ is a \emph{(minimum) vertex cover} (MVC) of $G$.
 A \emph{clique} is a subset of vertices $K \subseteq V$ such that all vertices of $K$ are adjacent to each other, \ie $\forall u,v \in K: \{u,v\} \in E$.
 Finally, a (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\bar{G} = (V, \bar{E})$, where $\bar{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
+\todo{In Reduktionen benutzen wir noch $G - \{\text{Knoten}\}$}
 
 \section{Related Work}
 Selecting branching vertices is a part of every branch-and-reduce or
@@ -349,10 +350,12 @@ The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi
   excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus
   N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup
   \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be an MIS in $G'$. Then, 
+  $
   I=\begin{cases}
-      I'\cup \{u,v\} & \text{, if }w\notin I'\\
-      (I'\setminus \{w\})\cup N(u) & \text{, else} %w\in I'
-	\end{cases}
+    I'\cup \{u,v\} & \text{, if }w\notin I'\\
+    (I'\setminus \{w\})\cup N(u) & \text{, else} %w\in I'
+  \end{cases}
+  $
   is an MIS in $G$.
 \end{theorem}
 
@@ -384,11 +387,13 @@ Next we consider the \emph{funnel} reduction which is a special case of the
     the graph with $V' = V\setminus(A\cup B\cup (N(A)\cap N(B)))$ and $E' =
     (E\setminus\binom{A\cup B\cup (N(A)\cap N(B))}{2} \cup \{ \{x,y\}\;|\; x\in
     N(A)\setminus N[B], y\in N[B]\setminus N(A) \}$ and let $I'$ be an MIS in $G'$. Then,
-	I=\begin{cases}
-	I'\cup A & \text{, if } (N(A)\setminus N[B]) \cap I' = \emptyset% N(B)\setminus N[A]\subseteq I'\\
-	\\
-	I'\cup B & \text{, else if } (N(B)\setminus N[A])\cap I' = \emptyset
+	$
+    I=\begin{cases}
+      I'\cup A & \text{, if } (N(A)\setminus N[B]) \cap I' = \emptyset% N(B)\setminus N[A]\subseteq I'\\
+      \\
+      I'\cup B & \text{, else if } (N(B)\setminus N[A])\cap I' = \emptyset
 	\end{cases}
+    $
 	is an MIS in $G$.
 \end{theorem}
 
@@ -433,7 +438,7 @@ The next branching strategy is based on the dominance reduction rule by Fomin et
 \end{definition}
 
 \begin{theorem} (Dominance Reduction~\cite{Fomin}) In a graph $G=(V,E)$, if a
-  vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.$\alpha(G)=\alpha(G-v)$
+  vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.$\alpha(G)=\alpha(G-\{v\})$
 \end{theorem}
 
 Again, we define a condition for being almost dominated:
@@ -465,7 +470,7 @@ that can therefore can be removed from the graph by algorithmically contradictin
 \begin{definition} (Removable Vertex~\cite{XiaoNagamochi}\todo{Was meint ihr? Macht es
     hier Sinn Xaio und Nagamochi zu zitieren oder ist das zu banal?})
 	In a graph $G=(V,E)$ a vertex $v$ is called removable, if 
-	$\alpha(G) = \alpha(G-v)$.
+	$\alpha(G) = \alpha(G-\{v\})$.
 \end{definition}
 
 \begin{definition} (Child, Parent~\cite{XiaoNagamochi}) In a graph $G=(V,E)$ with an \textit{independent set} $I$, a vertex $v$ is called a child of $I$, if $|N(v)\cap I| = 1$ and the unique neighbor of $v$ in $I$ is called the parent of $v$.
@@ -510,7 +515,7 @@ Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so 
 Again, we define a vertex to be almost unconfined:
 
 \begin{definition} (Almost Unconfined)
-  In a graph $G=(V,E)$ a vertex $v$ is called almost unconfined if $v$ is not unconfined but there is a vertex $w$ such that $v$ is unconfined in $G-w$.
+  In a graph $G=(V,E)$ a vertex $v$ is called almost unconfined if $v$ is not unconfined but there is a vertex $w$ such that $v$ is unconfined in $G-\{w\}$.
 \end{definition}
 
 Here, we only present an augmentation that detects \emph{some} almost
