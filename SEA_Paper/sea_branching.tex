@@ -349,10 +349,10 @@ The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi
   excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus
   N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup
   \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be an MIS in $G'$. Then, 
-  \[I=\begin{cases}
+  I=\begin{cases}
       I'\cup \{u,v\} & \text{, if }w\notin I'\\
       (I'\setminus \{w\})\cup N(u) & \text{, else} %w\in I'
-	\end{cases}\]
+	\end{cases}
   is an MIS in $G$.
 \end{theorem}
 
@@ -384,11 +384,11 @@ Next we consider the \emph{funnel} reduction which is a special case of the
     the graph with $V' = V\setminus(A\cup B\cup (N(A)\cap N(B)))$ and $E' =
     (E\setminus\binom{A\cup B\cup (N(A)\cap N(B))}{2} \cup \{ \{x,y\}\;|\; x\in
     N(A)\setminus N[B], y\in N[B]\setminus N(A) \}$ and let $I'$ be an MIS set in $G'$. Then,
-	\[I=\begin{cases}
+	I=\begin{cases}
 	I'\cup A & \text{, if } (N(A)\setminus N[B]) \cap I' = \emptyset% N(B)\setminus N[A]\subseteq I'\\
 	\\
 	I'\cup B & \text{, else if } (N(B)\setminus N[A])\cap I' = \emptyset
-	\end{cases}\]
+	\end{cases}
 	is an MIS in $G$.
 \end{theorem}
 
@@ -433,7 +433,7 @@ The next branching strategy is based on the dominance reduction rule by Fomin et
 \end{definition}
 
 \begin{theorem} (Dominance Reduction~\cite{Fomin}) In a graph $G=(V,E)$, if a
-  vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.\[\alpha(G)=\alpha(G-v)\]
+  vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.$\alpha(G)=\alpha(G-v)$
 \end{theorem}
 
 Again, we define a condition for being almost dominated:
