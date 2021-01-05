@@ -290,7 +290,7 @@ Finding these cuts can be done efficiently in practice, \eg using a preflow push
 However, selecting the vertices $s$ and $t$ to ensure reasonably balanced cuts can be tricky.
 Natural choices include random vertices, as well as vertices that are far apart in terms of their shortest path distance.
 However, our preliminary experiments indicate that selecting the highest degree vertices for $s$ and $t$ seems to produce the best results.
-Finally, to derive a vertex separator from a cut one can compute a MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm.
+Finally, to derive a vertex separator from a cut one can compute an MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm.
 This separator can then be used to select branching vertices.
 
 Overall, our second strategy works similar to the first one: We maintain a set of possible branching vertices that were selected by computing a minimum $s$-$t$-cut and turning it into a vertex separator.
