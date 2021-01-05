@@ -114,7 +114,6 @@
 \newpage
 
 \section{Introduction}
-\textcolor{red}{TODO: Probably cite Schorr~\cite{schorr2020improved}}
 
 An \emph{independent set} of a graph $G = (V,E)$ is a set of vertices $I \subseteq V$ of $G$ such that no two vertices in this set are adjacent.
 The problem of finding such an independent set of maximum cardinality, the \emph{maximum independent set problem}, is a fundamental NP-hard problem~\cite{Garey1974}.
@@ -137,13 +136,15 @@ Other factors, such as the actual reduction rules used during the algorithm are 
 \subsection{Contribution}
 In this paper, we propose and examine several novel strategies for selecting branching vertices.
 These strategies follow two main approaches that are motivated by existing research: (1) Branching on vertices that decompose the graph into several connected components that can be solved independently.
-This has been shown to significantly improve the performance of branch-and-reduce in practice, especially when the side of the largest component is kept small~\cite{alsahafy2020computing}.
+This has been shown to significantly improve the performance of branch-and-reduce in practice, especially when the size of the largest component is kept small~\cite{alsahafy2020computing}.
 (2) Branching on vertices whose removal leads to reduction rules becoming applicable again.
 In turn, this leads to a smaller reduced graph and thus improved performance.
 For each approach we present several concrete strategies that vary in their complexity.
 Finally, we evaluate their performance by comparing them to the aforementioned default strategy used in the state-of-the-art solver by Akiba and Iwata~\cite{AkibaIwata}.
 For this purpose we make of a wide spectrum of instances from different graph classes and applications.
-Our experiments indicate \ldots.
+Our experiments indicate \ldots \textcolor{red}{TODO}.
+A more detailed explanation of a previous version of this work
+can be found in Schorr's Bachelor Thesis~\cite{schorr2020improved}.
 
 \section{Preliminaries}
 Let $G=(V,E)$ be an undirected graph, where $V = \{0, \ldots, n-1\}$ is a set of $n$ vertices and $E \subseteq  \{\{u,v\} \mid u,v \in V\}$ is a set of $m$ edges. 
