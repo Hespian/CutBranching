@@ -497,10 +497,12 @@ that can therefore can be removed from the graph by algorithmically contradictin
 	In a graph $G=(V,E)$ let $S$ be an independent set that is not maximal but is contained in every MIS of $G$ and let $v$ be any child of $S$. Then, every MIS includes at least one vertex from $N(v)\setminus N[S]$.
 \end{theorem}
 
-Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
+Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.\todo{@Christian: Du hattest hier eine andere citation
+  als für den Rest von unconfined. Hatte das einen Grund?}
 
 \begin{algorithm}
-	\caption{Unconfined -- Xiao and Nagamochi \cite{XiaoNagamochi}}\label{alg:unconf}
+	\caption{Unconfined -- Xiao and Nagamochi
+      \cite{XiaoNagamochi}}\label{alg:unconf}
 	\SetKwFunction{U}{Unconfined}
 	\DontPrintSemicolon
 	
@@ -527,7 +529,8 @@ Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so 
 \begin{theorem}(Unconfined Reduction~\cite{XiaoNagamochi}) In a graph $G=(V,E)$,
   if Algorithm \ref{alg:unconf} returns true for an unconfined vertex $v$, then
   there is always an MIS that does not contain~$v$.
-\end{theorem}
+\end{theorem}\todo{Wenn wir Platzprobleme haben, können wir auch nur den Algo
+  und dieses Theorem behalten}
 
 Again, we define a vertex to be almost unconfined:
 
