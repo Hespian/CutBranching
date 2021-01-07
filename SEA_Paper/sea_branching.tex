@@ -344,7 +344,7 @@ Finally, if this threshold is exceeded, and we can not select a vertex from the 
 Our second approach to selecting good branching vertices is to choose a vertex
 whose removal will enable the application of new reduction rules. The following
 sections will demonstrate how we identify such branching candidate vertices with little
-computational overhead.\todo{@Christian: Are the candidates dynamically updated similar to the previous strategies?} To be self contained we will also repeat the reduction
+computational overhead in practice.\todo{@Christian: Are the candidates dynamically updated similar to the previous strategies?} To be self contained we will also repeat the reduction
 rules used here but omit any proofs that can be found in the original
 publications. Out of the candidates found we then select a vertex of
 maximum degree. If the degree of all candidate vertices lies below a threshold
@@ -386,11 +386,14 @@ We now define \emph{Almost Twins} as follows:
 \end{definition}
 
 Clearly, after removing $w$, $u$ and $v$ are twins so we can apply the twin
-reduction. Finding almost twins can be done while searching for twins:\todo{explicitly mention that this only has constant overhead?} The
+reduction. Finding almost twins can be done while searching for twins: The
 original algorithm checks for each vertex $v$ of degree $3$ whether there is a
 vertex $u \in N^2(v)$ which $d(u) = 3$ and $N(u) = N(v)$. We augment this
 algorithm by simultaneously also searching for $u \in N^2(v)$ with $d(u) = 4$
-and $N(v) \subset N(u)$. 
+and $N(v) \subset N(u)$. This induces about the same computational cost for
+degree $4$ vertices in $N^2(v)$ as for degree $3$ vertices. While there might be
+instances where this causes high overhead, we expect the practical slowdown to
+be small.
 
 \subsection{Almost Funnels}
 \label{sec:almost_funnels}
@@ -448,7 +451,8 @@ previous vertices. In this case, we can check whether $N(v) \setminus \{u, w\}$
 induces a clique. In the second case, $w$ is adjacent to all but one previous
 vertex $w'$. In this case, both $w$ and $w'$ might be candidate branching
 vertices. Thus, we check whether $N(v) \setminus \{u, w\}$ or $N(v) \setminus
-\{u, w'\}$ induce a clique.\todo{Mention overhead? Same goes for the following reduction rules}
+\{u, w'\}$ induce a clique. This adds up to two additional clique checks (of
+slightly smaller size) to the one clique check in the original algorithm.
 
 \subsection{Almost Dominance}
 \label{sec:almost_dominance}
@@ -473,7 +477,10 @@ A vertex is almost dominated by one of it has only one surplus neighbor:
  finds a vertex in $N(u)$ that is not in $N(v)$, it terminates because $u$ can not
  be dominated by $v$. We augment this algorithm by allowing a single vertex $w
  \in N(u)$ that is not adjacent to $v$ and adding $w$ as a candidate branching
- vertex if it exists.
+ vertex if it exists. If $w$ is found early in the algorithm, this might induce
+ some overhead to the algorithm but assuming the position of $w$ in $u$'s
+ adjacency list to be uniformly randomly distributed, the expected number of
+ vertices to check only doubles.
 
  Note that the dominance reduction is not directly used in the Algorithm by
  Akiba and Iwata~\cite{AkibaIwata} because it is fully contained in the unconfined
@@ -548,6 +555,8 @@ is only \emph{one} extending child, i.e. a child $u$ of $S$ with $N(u)\setminus
 N[S] = \{w\}$, then removal of $w$ makes $v$ unconfined. During
 Algorithm~\ref{alg:unconf} we collect all these vertices $w$ and add them to the
 set of candidate branching vertices if the algorithm cannot already remove $v$.
+This only adds the overhead of temporarily storing the potential candidates and
+adding them to the actual candidate list if $v$ is not removed.
 
 Note that this special case of almost unconfined vertices might not catch all
 cases of almost dominated vertices.
