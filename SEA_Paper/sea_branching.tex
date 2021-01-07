@@ -190,7 +190,7 @@ algorithms for MIS, MVC and MC.
 
 The most commonly used branching strategy for MIS and MVC is to select a vertex
 of maximum degree. Fomin et al.~\cite{Fomin} show that using a vertex of maximum
-degree that also minimizes the number of edges in its neighborhood\todo{Does this mean between its neighbors or in the 2-neighborhood?} is optimal
+degree that also minimizes the number of edges between its neighbors is optimal
 with respect to their complexity measure. The Algorithm by Akiba and Iwata~\cite{AkibaIwata}
 (which we use for our experiments) also uses this strategy. Akiba and Iwata also
 compare this strategy to branching on a vertex of minimum degree and a random
@@ -200,7 +200,7 @@ on a maximum degree vertex.
 Xiao and Nagamochi~\cite{XiaoNagamochi} also use
 this strategy in most cases. For dense subgraphs, however, they use an edge
 branching strategy: They branch on an edge $\{u, v\}$ where $|N(u) \cap N(v)|$
-is large enough\todo{sounds strange to me. sufficiently large?} (depending on the maximum degree of the graph) by
+is sufficiently large (depending on the maximum degree of the graph) by
 excluding both $u$ and $v$ in one branch and applying the alternative reduction
 (see Section~\ref{sec:almost_funnels}) to $\{u\}$ and $\{v\}$ in the other branch.
 
