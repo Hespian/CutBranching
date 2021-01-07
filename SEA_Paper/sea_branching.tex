@@ -135,10 +135,11 @@ If no further rule can be applied, the algorithm branches into (at least) two su
 To make them more efficient in practice, these algorithms also make use of problem specific upper and lower bounds to quickly prune the search space.
 
 Due to the practical impact of kernelization, most of the research aimed at improving the performance of branch-and-reduce algorithms so far has been focused on either proposing more practically efficient special cases of already existing rules~\cite{ChangKern,dahlum2016accelerating}, or maintaining dependencies between reduction rules to reduce unnecessary checks~\cite{alsahafy2020computing,hespe2019scalable}.
-In comparison, efforts to improve other aspects of branch-and-reduce, in particular the branching strategy are still lacking.
+In comparison, efforts to improve other aspects of branch-and-reduce are still lacking.
 However, the branching strategy in particular has been shown to have a significant impact on the running time~\cite{AkibaIwata}.
 Up to now, the most frequently used branching strategy employed in many state-of-the-art solvers selects branching vertices solely based on their degree.
 Other factors, such as the actual reduction rules used during the algorithm are rarely taken into account.
+However, recently there have been some attempts to incorporate such branching strategies for other problems such as $k$-plexes~\cite{gao2018exact}.
 
 \subsection{Contribution}
 In this paper, we propose and examine several novel strategies for selecting branching vertices.
