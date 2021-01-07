@@ -1,4 +1,3 @@
-
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
 %See lipics-v2021-authors-guidelines.pdf for further information.
 %for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
@@ -160,15 +159,16 @@ We assume that $G$ is \emph{simple}, \ie it has no self loops or multi-edges.
 The \emph{(open) neighborhood} of a vertex $v \in V$ is denoted by $N(v) = \{u \mid \{v,u\} \in E\}$.
 Furthermore, we denote the \emph{closed neighborhood} of a vertex by $N[v]=N(v) \cup \{v\}$.
 We define the open and closed neighborhood of a set of vertices $U \subseteq V$
-as $N(U) = \cup_{u \in U} N(v)$\todo{we should check whether we have to exclude
-  $U$ here} and $N[U] = N(U) \cup U$, respectively.
+as $N(U) = \cup_{u \in U} N(v) \setminus U$ and $N[U] = N(U) \cup U$, respectively.
 The \emph{degree} of a vertex $v \in V$ is the size of its neighborhood $d(v) = |N(v)|$.
 For a vertex $v \in V$, we further define $N^2(v) = N(N(v))$.
 
 For a subset of vertices $V_S \subseteq V$, the \emph{(vertex-)induced subgraph}
-$G[V_S] = (V_S, E_S)$\todo{is this notation ever used?} is given by restricting the edges of $G$ to vertices of $V_S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in V_S\}$.
+$G[V_S] = (V_S, E_S)$ is given by restricting the edges of $G$ to vertices of $V_S$, \ie $E_S = \{\{u,v\} \in E \mid u,v \in V_S\}$.
 Likewise, for a subset of edges $E_S \subseteq E$, the \emph{edge-induced
-  subgraph}\todo{do we use edge induced subgraphs?} $G[E_S] = (V_S, E_S)$ is given by restricting the vertices of $G$ to the endpoints of edges in $E_S$, \ie $V_S = \{u \in V \mid \{u,v\} \in E_S\}$.
+  subgraph} $G[E_S] = (V_S, E_S)$ is given by restricting the vertices of $G$ to the endpoints of edges in $E_S$, \ie $V_S = \{u \in V \mid \{u,v\} \in E_S\}$.
+  For a subset of vertices $U \subset V$, we further define $G - U$ as the induced subgraph $G[V \setminus U]$.
+
 A \emph{path} $P=(v_1, \ldots, v_k)$ of length $k$ is a sequence of $k$ distinct vertices in $G$ such that $\{v_i, v_{i+1}\} \in E$ for all $i \in \{1, \ldots, k-1\}$.
 A subgraph of $G$ induced by a maximal subset of vertices that are connected by a path is called a \emph{connected component}.
 Furthermore, a graph that only contains one connected components is called \emph{connected}.
@@ -182,7 +182,6 @@ A \emph{vertex cover} is a set of vertices $C \subseteq V$ such that for each ed
 The complement of a (maximum) independent set of a graph $G$ is a \emph{(minimum) vertex cover} (MVC) of $G$.
 A \emph{clique} is a subset of vertices $K \subseteq V$ such that all vertices of $K$ are adjacent to each other, \ie $\forall u,v \in K: \{u,v\} \in E$.
 Finally, a (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\bar{G} = (V, \bar{E})$, where $\bar{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
-\todo{In Reduktionen benutzen wir noch $G - \{\text{Knoten}\}$}
 
 \section{Related Work}
 Selecting branching vertices is a part of every branch-and-reduce or
@@ -271,20 +270,23 @@ First, we are concerned with finding single vertices that are able to decompose 
 Such points are called \emph{articulation points} (or cut vertices).
 Articulation points can be computed in linear time $\mathcal{O}(n+m)$ using a simple depth-first search (DFS) algorithm.
 In particular, a vertex $v$ is an articulation point if it is either the root of
-the DFS tree or any non-root vertex that has a child $u$, such that no vertex in
+the DFS tree and has at least two children or any non-root vertex that has a child $u$, such that no vertex in
 the subtree rooted at $u$ has a backwards edge to one of the ancestors of
-$v$.\todo{by this definition the root is always an articulation point}
+$v$.
 
 For our first branching strategy we maintain a set of articulation points $A \subseteq V$.
 When selecting a branching vertex, we first discard all invalid vertices from $A$, \ie vertices that were removed from the graph by a preceding kernelization step.
 If this results in $A$ becoming empty, a new set of articulation points is computed on the current graph in linear time.
 However, if no articulation points can be found, we select a vertex based on the default branching strategy.
-Otherwise, a random vertex from $A$ is selected as the branching
-vertex.\todo{why not the one with the highest degree?}
+In this case, we skip computing new articulation points for a fixed number of branching steps, since it is seems unlikely that new ones are found in the following iterations.
+Otherwise, if $A$ contains at least one vertex, a random one from $A$ selected as the branching
+vertex.\todo{@Christian why not the one with the highest degree?}
 
 Even tough this strategy yields only a small (linear) overhead, finding articulation points can be rare depending on the type of graph.
 This results in the default branching strategy being selected rather
-frequently.\todo{Parameter maximale Rekursionstiefe und Anzahl ausgelassene Rekursionen?}
+frequently.
+Furthermore, our preliminary experiments indicated that articulation points are rarely found at higher depth.
+Thus, we limit the maximum depth at which we search for articulation points.
 
 \subsection{Edge Cuts}
 To alleviate the restrictive nature of finding articulation points, we now propose a more flexible branching strategy based on \emph{(minimal) edge cuts}.
@@ -300,9 +302,9 @@ Thus, we are interested in finding \emph{$s$-$t$-cuts}, \ie cuts where $S$ and $
 Finding these cuts can be done efficiently in practice, \eg using a preflow push algorithm~\cite{goldberg1988new}.
 However, selecting the vertices $s$ and $t$ to ensure reasonably balanced cuts can be tricky.
 Natural choices include random vertices, as well as vertices that are far apart in terms of their shortest path distance.
-However, our preliminary experiments indicate that selecting the highest degree
-vertices\todo{more precisely? Random vertices of maximum degree?} for $s$ and $t$ seems to produce the best results.
-Finally, to derive a vertex separator from a cut one can compute an MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm.\todo{citation?}
+However, our preliminary experiments indicate that selecting random vertices of maximum degree
+ for $s$ and $t$ seems to produce the best results.
+Finally, to derive a vertex separator from a cut one can compute an MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm~\cite{hopcroft1973n}.
 This separator can then be used to select branching vertices.
 
 Overall, our second strategy works similar to the first one: We maintain a set of possible branching vertices that were selected by computing a minimum $s$-$t$-cut and turning it into a vertex separator.
@@ -322,8 +324,7 @@ For this purpose we make use of a \emph{nested dissection ordering}~\cite{george
 A nested dissection ordering of the vertices of a graph $G$ is obtained by recursively computing balanced bipartitions $(A,B)$ and a vertex separator $S$, that separates $A$ and $B$.
 The actual ordering is then given by concatenating the orderings of $A$ and $B$ followed by the vertices of $S$.
 Thus, if we select branching vertices based on the reverse nested dissection
-ordering (while also skipping non-separator vertices\todo{I'm confused. Where do
-non-separator vertices come from?}), we continuously branch on vertices that disconnect the graph into balanced partitions. 
+ordering, we continuously branch on vertices that disconnect the graph into balanced partitions. 
 We compute such an ordering once, after finishing the initial kernelization phase.
 
 There are two main optimizations that we use when considering the nested dissection ordering.
@@ -331,7 +332,7 @@ First, we noticed that vertices at the end of the ordering seldom lead to a deco
 This is due to vertices being removed by kernelization which can lead to separators becoming invalid.
 Thus, we limit the number of recursive calls during the nested dissection computation.
 Furthermore, similar to the edge cut based strategy, we limit the size of
-separators considered during branching using a threshold.\todo{aren't all
+separators considered during branching using a threshold.\todo{@Christian aren't all
   separators on deeper levels invalid after this? So do we stop using nd
   immediately after exceeding the threshold once?}
 Again, this is done to ensure that we do not require too many branching steps to decompose the graph.
@@ -484,8 +485,7 @@ The \emph{unconfined} reduction by Xiao and Nagamochi~\cite{XiaoNagamochi} is a 
 The core idea is to detect vertices not required for an MIS
 that can therefore can be removed from the graph by algorithmically contradicting the assumption that every MIS contains the vertex.
 
-\begin{definition} (Removable Vertex~\cite{XiaoNagamochi}\todo{Was meint ihr? Macht es
-    hier Sinn Xaio und Nagamochi zu zitieren oder ist das zu banal?})
+\begin{definition} (Removable Vertex~\cite{XiaoNagamochi})
 	In a graph $G=(V,E)$ a vertex $v$ is called removable, if 
 	$\alpha(G) = \alpha(G-\{v\})$.
 \end{definition}
@@ -500,7 +500,7 @@ that can therefore can be removed from the graph by algorithmically contradictin
 Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
 
 \begin{algorithm}
-	\caption{Unconfined -- Xiao and Nagamochi \cite{XiaoUnconfined}}\label{alg:unconf}
+	\caption{Unconfined -- Xiao and Nagamochi \cite{XiaoNagamochi}}\label{alg:unconf}
 	\SetKwFunction{U}{Unconfined}
 	\DontPrintSemicolon
 	
