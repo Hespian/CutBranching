@@ -190,7 +190,7 @@ algorithms for MIS, MVC and MC.
 
 The most commonly used branching strategy for MIS and MVC is to select a vertex
 of maximum degree. Fomin et al.~\cite{Fomin} show that using a vertex of maximum
-degree that also minimizes the number of edges in its neighborhood is optimal
+degree that also minimizes the number of edges in its neighborhood\todo{Does this mean between its neighbors or in the 2-neighborhood?} is optimal
 with respect to their complexity measure. The Algorithm by Akiba and Iwata~\cite{AkibaIwata}
 (which we use for our experiments) also uses this strategy. Akiba and Iwata also
 compare this strategy to branching on a vertex of minimum degree and a random
@@ -198,9 +198,9 @@ vertex. They show that both of these perform significantly worse than branching
 on a maximum degree vertex.
 
 Xiao and Nagamochi~\cite{XiaoNagamochi} also use
-this strategy in most cases. For dense subgraphs, however, they use as edge
+this strategy in most cases. For dense subgraphs, however, they use an edge
 branching strategy: They branch on an edge $\{u, v\}$ where $|N(u) \cap N(v)|$
-is large enough (depending on the maximum degree of the graph) by
+is large enough\todo{sounds strange to me. sufficiently large?} (depending on the maximum degree of the graph) by
 excluding both $u$ and $v$ in one branch and applying the alternative reduction
 (see Section~\ref{sec:almost_funnels}) to $\{u\}$ and $\{v\}$ in the other branch.
 
@@ -211,7 +211,7 @@ passiert, wenn es Knoten mit höherem Grad gibt?}
 
 Chen et al.~\cite{ChenXiaKanj} use a notion of \emph{good pairs} that are advantageous
 for branching. They chose these good pairs by a set of rules which are omitted
-here. They combine these with \emph{tuples} of a set of vertices and the
+here. They combine these with so-called \emph{tuples} of a set of vertices and the
 number of vertices from this set that have to be included in an MIS. This
 information can be used when branching on a vertex
 contained in that set to remove further vertices from the graph. Akiba and
@@ -232,6 +232,7 @@ that branches in descending degeneracy order. Li et al.~\cite{LiFangXu}
 introduce another vertex ordering using iterative maximum independent set
 computations (which might be easier than MC on some graphs) and breaking ties
 according to the degeneracy order.
+\todo{Mention the results of Gao et al. (https://www.ijcai.org/Proceedings/2018/0201.pdf). However its for k-plexes.}
 
 \subsection{Branch and Reduce Algorithm by Akiba and Iwata~\cite{AkibaIwata}}
 
@@ -242,14 +243,14 @@ more reduction rules can be applied. Since branching removes at least one vertex
 from the graph, more reduction rules might be applicable afterwards. The
 reduction set used in their algorithm is relatively large and not covered
 completely here. However, some reduction rules are explained in
-Section~\ref{sec:reduction_branching} where we show how to target reduction
+Section~\ref{sec:reduction_branching} where we show how to target a particular reduction
 rules when branching. The reduction rules are applied by iterating over all
 vertices in the graph once for each rule and checking whether the rule
 can be applied to each vertex. In order to prune the search space, bounds on the largest
-possible Independent Set of a branch are computed. They implement three different
+possible independent set of a branch are computed. They implement three different
 methods for determining upper bounds: clique cover, LP relaxation and cycle
 cover. Additionally, they employ special reduction rules that can be applied
-during branching. Another easy optimization done by their algorithm is to solve
+during branching. Another optimization done by their algorithm is to solve
 connected components separately. We utilize this in
 Section~\ref{sec:decomposition_branching} where we introduce branching rules
 that decompose the graph into connected components. Akiba and Iwata also
@@ -258,6 +259,7 @@ selecting the branching vertex: Uniform random, minimum degree and maximum
 degree. They conclude that choosing a vertex of maximum degree that also
 minimizes the number of edges among $N(v)$ performs best. We use this algorithm
 as the base implementation to test our new branching strategies.
+\todo{Maybe give outline with pseudocode? }
 
 \section{Decomposition Branching}
 \label{sec:decomposition_branching}

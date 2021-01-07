@@ -28,6 +28,7 @@
 
 #include "max_flow.h"
 #include "id_queue.h"
+#include "../InertialFlowCutter/include/inertial_flow_cutter.h"
 
 // system includes
 #include <vector>
@@ -41,6 +42,10 @@
 #include <regex.h>
 #include <memory>
 #include "../Metis/include/metis.h"
+
+//void get_nd_separators_cutter(std::vector<std::vector<int>> &adj, double balance, std::vector<std::pair<int, std::vector<int>>> &separators);
+
+
 class branch_and_reduce_algorithm
 {
 	friend class modified;
@@ -233,6 +238,7 @@ public:
 
 	// articulation points
     std::vector<int> articulation_points;
+	std::vector<int> artics;
 	std::vector<int> visited;
     std::vector<int> minNr;      
     int current_dfs_num = 0;
@@ -266,7 +272,9 @@ public:
 	std::vector<int> nd_order;
 
 	void compute_nd_order();
-	std::vector<std::vector<int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
+	void compute_nd_order_cutter();
+	std::vector<std::vector<int>> get_nd_separators_a(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
+
 
 	// almost dominated
 	RoutingKit::MinIDQueue pq;
