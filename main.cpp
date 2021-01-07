@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     branch_and_reduce_algorithm::EXTRA_DECOMP = atoi(argv[2]);
     branch_and_reduce_algorithm::TUNING_PARAM1 = atoi(argv[3]);
     branch_and_reduce_algorithm::TUNING_PARAM2 = atof(argv[4]);
-    branch_and_reduce_algorithm::TUNING_PARAM3 = atoi(argv[5]);
+    branch_and_reduce_algorithm::TUNING_PARAM3 = atoi(argv[5]);    
 
     std::string of = "../Benchmarks/" + to_string(branch_and_reduce_algorithm::BRANCHING) + "_" + to_string(branch_and_reduce_algorithm::EXTRA_DECOMP) + "_" + "tuning" + "_" + to_string(branch_and_reduce_algorithm::TUNING_PARAM1) + "::" + to_string(branch_and_reduce_algorithm::TUNING_PARAM2) + "::" + to_string(branch_and_reduce_algorithm::TUNING_PARAM3) + ".txt";
 
@@ -62,6 +62,7 @@ int main(int argc, char **argv)
         res.nDefaultPicks = branch_and_reduce_algorithm::defaultPicks;
         res.nStratPicks = branch_and_reduce_algorithm::stratPicks;
         res.nDecomps = branch_and_reduce_algorithm::nDecomps;
+        res.max_depth = algo.max_depth;
 
         if (sol == -1)
         {
