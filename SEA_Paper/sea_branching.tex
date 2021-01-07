@@ -342,16 +342,16 @@ Finally, if this threshold is exceeded, and we can not select a vertex from the 
 \section{Reduction Branching}
 \label{sec:reduction_branching}
 Our second approach to selecting good branching vertices is to choose a vertex
-whose removal will enable application of new reduction rules. The following
+whose removal will enable the application of new reduction rules. The following
 sections will demonstrate how we identify such branching candidate vertices with little
-computational overhead. To be self contained we will also repeat the reduction
+computational overhead.\todo{Are the candidates dynamically updated similar to the previous strategies?} To be self contained we will also repeat the reduction
 rules used here but omit any proofs that can be found in the original
 publications. Out of the candidates found we then select a vertex of
 maximum degree. If the degree of all candidate vertices lies below a threshold
 (defined in Section~\ref{sec:algo_conf}) we fall back to branching on a vertex
-of maximum degree. The rational here is that a vertex of large degree changes
+of maximum degree.\todo{What if no candidates were found?} The rational here is that a vertex of large degree changes
 the structure of the graph more than a vertex of small degree even if that
-vertex is guaranteed to enable application of a reduction rule.
+vertex is guaranteed to enable the application of a reduction rule.\todo{Mention somewhere that these rules really only make sense in the excluding branch?}
 
 \subsection{Almost Twins}
 
@@ -376,17 +376,17 @@ The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi
   is an MIS in $G$.
 \end{theorem}
 
-We define \emph{Almost Twins} as follows:
+We now define \emph{Almost Twins} as follows:
 \begin{definition} (Almost Twins)
   In a graph $G=(V,E)$ two non adjacent vertices $u$ and $v$ are called almost twins if $d(u) = 4$, $d(v) = 3$ and $N(v)\subseteq N(u)$ (\ie $N(u) = N(v) \cup \{w\}$). 
 \end{definition}
 
 Clearly, after removing $w$, $u$ and $v$ are twins so we can apply the twin
-reduction. Finding almost twins can be done while searching for twins: The
+reduction. Finding almost twins can be done while searching for twins:\todo{explicitly mention that this only has constant overhead?} The
 original algorithm checks for each vertex $v$ of degree $3$ whether there is a
 vertex $u \in N^2(v)$ which $d(u) = 3$ and $N(u) = N(v)$. We augment this
 algorithm by simultaneously also searching for $u \in N^2(v)$ with $d(u) = 4$
-and $N(v) \ subset N(u)$. 
+and $N(v) \subset N(u)$. 
 
 \subsection{Almost Funnels}
 \label{sec:almost_funnels}
@@ -438,13 +438,13 @@ checks whether $u$ and $v$ are funnels by iterating over the vertices in $N(v) \
 and checking whether they are adjacent to \emph{all} previous vertices. Once a vertex
 is found that is not adjacent to all previous vertices, the algorithm concludes
 that $u$ and $v$ are not funnels and terminates. We augment this algorithm by
-not immediately terminating in this case. Instead we consider the following two
-cases: Either the current vertex $w$ is not adjacent two at least two of the
+not immediately terminating in this case. Instead, we consider the following two
+cases: Either the current vertex $w$ is not adjacent to at least two of the
 previous vertices. In this case, we can check whether $N(v) \setminus \{u, w\}$
 induces a clique. In the second case, $w$ is adjacent to all but one previous
 vertex $w'$. In this case, both $w$ and $w'$ might be candidate branching
 vertices. Thus, we check whether $N(v) \setminus \{u, w\}$ or $N(v) \setminus
-\{u, w'\}$ induce a clique.
+\{u, w'\}$ induce a clique.\todo{Mention overhead? Same goes for the following reduction rules}
 
 \subsection{Almost Dominance}
 \label{sec:almost_dominance}
@@ -456,10 +456,10 @@ The next branching strategy is based on the dominance reduction rule by Fomin et
 \end{definition}
 
 \begin{theorem} (Dominance Reduction~\cite{Fomin}) In a graph $G=(V,E)$, if a
-  vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.$\alpha(G)=\alpha(G-\{v\})$
+  vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.~$\alpha(G)=\alpha(G-\{v\})$
 \end{theorem}
 
-Again, we define a condition for being almost dominated:
+Again, we define a condition for being almost dominated:\todo{Maybe use different wording? Sounds repetitive}
 
 \begin{definition} (Almost Dominance)
   In a graph $G=(V,E)$ a vertex $u$ is called almost dominated by a neighbor $v$ if $|N(u)\setminus N(v)| = 1$ and $N[v]\not\subseteq N(u)$.
