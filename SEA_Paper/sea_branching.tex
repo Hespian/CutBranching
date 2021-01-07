@@ -344,14 +344,18 @@ Finally, if this threshold is exceeded, and we can not select a vertex from the 
 Our second approach to selecting good branching vertices is to choose a vertex
 whose removal will enable the application of new reduction rules. The following
 sections will demonstrate how we identify such branching candidate vertices with little
-computational overhead.\todo{Are the candidates dynamically updated similar to the previous strategies?} To be self contained we will also repeat the reduction
+computational overhead.\todo{@Christian: Are the candidates dynamically updated similar to the previous strategies?} To be self contained we will also repeat the reduction
 rules used here but omit any proofs that can be found in the original
 publications. Out of the candidates found we then select a vertex of
 maximum degree. If the degree of all candidate vertices lies below a threshold
-(defined in Section~\ref{sec:algo_conf}) we fall back to branching on a vertex
-of maximum degree.\todo{What if no candidates were found?} The rational here is that a vertex of large degree changes
+(defined in Section~\ref{sec:algo_conf}) or no candidate vertices were found we fall back to branching on a vertex
+of maximum degree. The rational here is that a vertex of large degree changes
 the structure of the graph more than a vertex of small degree even if that
-vertex is guaranteed to enable the application of a reduction rule.\todo{Mention somewhere that these rules really only make sense in the excluding branch?}
+vertex is guaranteed to enable the application of a reduction rule. Also, our
+current strategies only enable the application of the targeted reduction rule in
+the branch that excludes the vertex from the independent set. However, in the
+case that includes it into the independent set all neighbors are removed from
+the graph as well because they already have an adjacent vertex in the solution.
 
 \subsection{Almost Twins}
 
@@ -459,7 +463,7 @@ The next branching strategy is based on the dominance reduction rule by Fomin et
   vertex $u$ is dominated by a neighbor $v$, then, there always exists an MIS that does not include $v$, i.e.~$\alpha(G)=\alpha(G-\{v\})$
 \end{theorem}
 
-Again, we define a condition for being almost dominated:\todo{Maybe use different wording? Sounds repetitive}
+A vertex is almost dominated by one of it has only one surplus neighbor:
 
 \begin{definition} (Almost Dominance)
   In a graph $G=(V,E)$ a vertex $u$ is called almost dominated by a neighbor $v$ if $|N(u)\setminus N(v)| = 1$ and $N[v]\not\subseteq N(u)$.
