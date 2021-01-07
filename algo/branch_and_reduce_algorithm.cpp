@@ -37,7 +37,6 @@
 #include <set>
 
 #include <cstring>
-#include "../Metis/include/metis.h"
 
 using namespace std;
 
@@ -107,8 +106,8 @@ branch_and_reduce_algorithm::branch_and_reduce_algorithm(std::vector<std::vector
     // MODIFICATIONS
     s = t = -1;
 
-    if (BRANCHING >= 14)
-        uses_pq = true;
+    //if (BRANCHING >= 14)
+    //    uses_pq = true;
 }
 
 int branch_and_reduce_algorithm::deg(int v)
@@ -818,7 +817,7 @@ bool branch_and_reduce_algorithm::almost_dominated()
                     {
                         b_vtcs.push_back(vtx);
                     }
-                    
+
                 loop:;
                 }
         }
@@ -912,16 +911,16 @@ bool branch_and_reduce_algorithm::twinReduction()
                                     {
                                         if (x[z] < 0 && vUsed[z] == 0)
                                         {
-                                            if (uses_pq) {
-                                            if (!pq.contains_id(z))
-                                                pq.push(RoutingKit::IDKeyPair(z, n - deg(z)));
-                                            twin_map[z] = w;
+                                            if (uses_pq)
+                                            {
+                                                if (!pq.contains_id(z))
+                                                    pq.push(RoutingKit::IDKeyPair(z, n - deg(z)));
+                                                twin_map[z] = w;
                                             }
                                             else
                                             {
                                                 b_vtcs.push_back(z);
                                             }
-                                            
                                         }
                                     }
                                 }
@@ -937,7 +936,8 @@ bool branch_and_reduce_algorithm::twinReduction()
 
 bool branch_and_reduce_algorithm::is_twin(int v)
 {
-    if (x[v] != -1) return false;
+    if (x[v] != -1)
+        return false;
     if (deg(v) == 3)
     {
         std::vector<int> NS(3, 0);
@@ -969,7 +969,8 @@ bool branch_and_reduce_algorithm::is_twin(int v)
 
 bool branch_and_reduce_algorithm::is_almost_twin(int v)
 {
-    if (twin_map[v] == -1) return false;
+    if (twin_map[v] == -1)
+        return false;
     x[v] = 2;
     bool res = is_twin(twin_map[v]);
     x[v] = -1;
@@ -1071,7 +1072,8 @@ bool branch_and_reduce_algorithm::funnelReduction()
 
 bool branch_and_reduce_algorithm::checkFunnel(int v)
 {
-    if (x[v] != -1) return false;
+    if (x[v] != -1)
+        return false;
     used.clear();
     std::vector<int> &tmp = level;
     int p = 0;
@@ -1252,14 +1254,15 @@ bool branch_and_reduce_algorithm::funnelReduction_a()
                             {
                                 x[i] = -1;
                                 // funnel_vtcs.push_back(i);
-                                if (uses_pq) {
+                                if (uses_pq)
+                                {
                                     if (!pq.contains_id(i))
                                         pq.push(RoutingKit::IDKeyPair(i, n - deg(i)));
                                     funnel_map[i] = v;
                                 }
                                 else
                                 {
-                                   b_vtcs.push_back(i); 
+                                    b_vtcs.push_back(i);
                                 }
                             }
                             x[i] = -1;
@@ -1276,7 +1279,8 @@ bool branch_and_reduce_algorithm::funnelReduction_a()
 
 bool branch_and_reduce_algorithm::is_almost_funnel(int v)
 {
-    if (funnel_map[v] == -1) return false;
+    if (funnel_map[v] == -1)
+        return false;
     x[v] = 2;
     bool res = checkFunnel(funnel_map[v]);
     x[v] = -1;
@@ -1591,7 +1595,8 @@ bool branch_and_reduce_algorithm::unconfinedReduction_a()
                     {
                         // unconf_vtcs.push_back(extends[0]);
                         int vtx = extends[0];
-                        if (uses_pq) {
+                        if (uses_pq)
+                        {
                             if (!pq.contains_id(vtx))
                                 pq.push(RoutingKit::IDKeyPair(vtx, n - this->deg(vtx)));
                             unconf_map[vtx] = v;
@@ -1693,7 +1698,8 @@ bool branch_and_reduce_algorithm::unconfinedReduction_a()
 
 bool branch_and_reduce_algorithm::is_unconfined(int v)
 {
-    if (x[v] != -1) return false;
+    if (x[v] != -1)
+        return false;
     std::vector<int> &NS = level;
     std::vector<int> &deg = iter;
 
@@ -1773,7 +1779,8 @@ bool branch_and_reduce_algorithm::is_unconfined(int v)
 
 bool branch_and_reduce_algorithm::is_almost_unconfined(int v)
 {
-    if (unconf_map[v] == -1) return false;
+    if (unconf_map[v] == -1)
+        return false;
     x[v] = 2;
     bool res = is_unconfined(unconf_map[v]);
     x[v] = -1;
@@ -1937,7 +1944,37 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
     }
     else if (BRANCHING == 3) // articulation points
     {
-        int cv = get_articulation_point();
+        while (!artics.empty() && x[artics.back()] != -1)
+            artics.pop_back();
+
+        if (artics.empty())
+        {
+            get_articulation_points_iteratively();
+            for (int i = 0; i < n; i++)
+                if (articulation_points[i] == 1 && x[i] < 0)
+                    artics.push_back(i);
+                
+            if (artics.empty())
+            {
+                artics.push_back(get_max_deg_vtx());
+                defaultPicks++;
+                defaultBranch = true;
+            }
+            else
+            {
+                stratPicks++;
+            }
+        }
+        else
+        {
+            stratPicks++;
+        }
+
+        v = artics.back();
+        artics.pop_back();
+        dv = deg(v);
+
+        /*int cv = get_articulation_point();
 
         if (cv == -1)
         {
@@ -1951,6 +1988,44 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
             v = cv;
         }
 
+        dv = deg(v);*/
+    }
+    else if (BRANCHING == 33)
+    {
+        while (!artics.empty() && x[artics.back()] != -1)
+            artics.pop_back();
+
+        if (artics.empty())
+        {
+            if (depth >= branch_t)
+            {
+                get_articulation_points_iteratively();
+                for (int i = 0; i < n; i++)
+                    if (articulation_points[i] == 1 && x[i] < 0)
+                        artics.push_back(i);
+                if (artics.empty())
+                {
+                    branch_t = depth + TUNING_PARAM3;
+                }
+            }
+            if (artics.empty())
+            {
+                artics.push_back(get_max_deg_vtx());
+                defaultPicks++;
+                defaultBranch = true;
+            }
+            else
+            {
+                stratPicks++;
+            }
+        }
+        else
+        {
+            stratPicks++;
+        }
+
+        v = artics.back();
+        artics.pop_back();
         dv = deg(v);
     }
     else if (BRANCHING == 4) // global mincut
@@ -1969,19 +2044,28 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
 
         if (cut.empty())
         {
-            if (branch_t == 0)
+            if (depth >= branch_t)
             {
                 get_stcut_vertices();
-                branch_t = TUNING_PARAM3;
+                if (cut.empty())
+                {
+                    branch_t = depth + TUNING_PARAM3;
+                }
             }
-            else
+            if (cut.empty())
             {
                 cut.push_back(get_max_deg_vtx());
-                branch_t--;
-
                 defaultPicks++;
                 defaultBranch = true;
             }
+            else
+            {
+                stratPicks++;
+            }
+        }
+        else
+        {
+            stratPicks++;
         }
 
         v = cut.back();
@@ -1999,7 +2083,14 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
             {
                 get_stcut_vertices();
                 branch_t = TUNING_PARAM3;
-            }
+                if (cut.empty())
+                {
+                    cut.push_back(get_max_deg_vtx());
+
+                defaultPicks++;
+                defaultBranch = true;
+                }
+            }            
             else
             {
                 cut.push_back(get_max_deg_vtx());
@@ -2071,6 +2162,68 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         nd_order.pop_back();
         dv = deg(v);
     }
+    else if (BRANCHING == 7)
+    {
+        if (nd_computed == false)
+        {
+            nd_computed = true;
+            compute_nd_order_cutter();
+        }
+
+        while (!nd_order.empty() && x[nd_order.back()] != -1)
+            nd_order.pop_back();
+
+        if (nd_order.empty())
+        {
+            //cout << "nd is empty!" << endl;
+            nd_order.push_back(get_max_deg_vtx());
+            defaultPicks++;
+            defaultBranch = true;
+        }
+        else
+            stratPicks++;
+
+        v = nd_order.back();
+        nd_order.pop_back();
+        dv = deg(v);
+    }
+    else if (BRANCHING == 77)
+    {
+        if (nd_computed == false)
+        {
+            nd_computed = true;
+            compute_nd_order_cutter();
+        }
+
+        if (nd_order.empty())
+        {
+            //cout << "nd is empty!" << endl;
+            v = get_max_deg_vtx();
+            defaultPicks++;
+            defaultBranch = true;
+        }
+        else
+        {
+            v = -1;
+            for (int i = nd_order.size() -1; i >= 0; i--)
+            {
+                if (x[nd_order[i]] < 0)
+                {
+                    v = nd_order[i];
+                    stratPicks++;
+                    break;
+                }
+            } 
+            if (v == -1)
+            {
+                v = get_max_deg_vtx();
+                defaultPicks++;
+                defaultBranch = true;
+            }
+        }
+
+        dv = deg(v);
+    }
 
     else if (BRANCHING == 12) // max N2
     {
@@ -2099,7 +2252,8 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         else
         {
             int vvv = get_max_deg_vtx();
-            if (deg(vv) >= deg(vvv) - TUNING_PARAM1)
+            int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * deg(vvv));
+            if (deg(vv) >= deg(vvv) - min_deg)
             {
                 v = vv;
                 stratPicks++;
@@ -2153,15 +2307,16 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
     }
     else if (BRANCHING == 15) // almost twin
     {
-        v = get_max_deg_vtx();
+        /*v = get_max_deg_vtx();
         dv = deg(v);
         bool strat_pick = false;
+        int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * dv);
 
         while (!pq.empty())
         {
             RoutingKit::IDKeyPair u = pq.peek();
             int d = n - u.key;
-            if (d < dv - TUNING_PARAM1)
+            if (d < dv - min_deg)
                 break;
 
             if (x[u.id] != -1)
@@ -2192,19 +2347,53 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         if (strat_pick)
             stratPicks++;
         else
-            defaultPicks++;            
+            defaultPicks++;*/
+
+        int vv = -1;
+        int dvv = -1;
+
+        for (int i = 0; i < b_vtcs.size(); i++)
+        {
+            if (x[b_vtcs[i]] < 0 && deg(b_vtcs[i]) > dvv)
+            {
+                dvv = deg(b_vtcs[i]);
+                vv = b_vtcs[i];
+            }
+        }
+
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * deg(vvv));
+            if (deg(vv) >= deg(vvv) - min_deg)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
+
+        b_vtcs.clear();
+        dv = deg(v);
     }
     else if (BRANCHING == 16) // funnel
     {
-        v = get_max_deg_vtx();
+        /*v = get_max_deg_vtx();
         dv = deg(v);
         bool strat_pick = false;
+        int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * dv);
 
         while (!pq.empty())
         {
             RoutingKit::IDKeyPair u = pq.peek();
             int d = n - u.key;
-            if (d < dv - TUNING_PARAM1)
+            if (d < dv - min_deg)
                 break;
 
             if (x[u.id] != -1)
@@ -2235,19 +2424,53 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         if (strat_pick)
             stratPicks++;
         else
-            defaultPicks++;   
-        
+            defaultPicks++;*/
+
+        int vv = -1;
+        int dvv = -1;
+
+        for (int i = 0; i < b_vtcs.size(); i++)
+        {
+            if (x[b_vtcs[i]] < 0 && deg(b_vtcs[i]) > dvv)
+            {
+                dvv = deg(b_vtcs[i]);
+                vv = b_vtcs[i];
+            }
+        }
+
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * deg(vvv));
+            if (deg(vv) >= deg(vvv) - min_deg)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
+
+        b_vtcs.clear();
+        dv = deg(v);
     }
     else if (BRANCHING == 17) // unconfined
     {
-        v = get_max_deg_vtx();
+        /*v = get_max_deg_vtx();
         dv = deg(v);
         bool strat_pick = false;
+        int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * dv);
+
         while (!pq.empty())
         {
             RoutingKit::IDKeyPair u = pq.peek();
             int d = n - u.key;
-            if (d < dv - TUNING_PARAM1)
+            if (d < dv - min_deg)
                 break;
 
             if (x[u.id] != -1)
@@ -2278,7 +2501,40 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         if (strat_pick)
             stratPicks++;
         else
-            defaultPicks++;   
+            defaultPicks++;*/
+
+        int vv = -1;
+        int dvv = -1;
+
+        for (int i = 0; i < b_vtcs.size(); i++)
+        {
+            if (x[b_vtcs[i]] < 0 && deg(b_vtcs[i]) > dvv)
+            {
+                dvv = deg(b_vtcs[i]);
+                vv = b_vtcs[i];
+            }
+        }
+
+        if (vv == -1)
+        {
+            v = get_max_deg_vtx();
+            defaultPicks++;
+        }
+        else
+        {
+            int vvv = get_max_deg_vtx();
+            int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * deg(vvv));
+            if (deg(vv) >= deg(vvv) - min_deg)
+            {
+                v = vv;
+                stratPicks++;
+            }
+            else
+                v = vvv;
+        }
+
+        b_vtcs.clear();
+        dv = deg(v);
     }
 
     else if (BRANCHING == 20)
@@ -2286,12 +2542,13 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         v = get_max_deg_vtx();
         dv = deg(v);
         bool strat_pick = false;
+        int min_deg = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * dv);
 
         while (!pq.empty())
         {
             RoutingKit::IDKeyPair u = pq.peek();
             int d = n - u.key;
-            if (d < dv - TUNING_PARAM1)
+            if (d < dv - min_deg)
                 break;
 
             if (x[u.id] != -1)
@@ -2327,7 +2584,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         if (strat_pick)
             stratPicks++;
         else
-            defaultPicks++;   
+            defaultPicks++;
     }
 
     int crntBest = opt;
@@ -2707,6 +2964,7 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
 
             vcs[i]->nd_computed = this->nd_computed;
             vcs[i]->nd_order.swap(sub_nd_order);
+            vcs[i]->depth = this->depth;
 
             /*if (BRANCHING == 8 && bc_index_built)
             {
@@ -2896,6 +3154,8 @@ bool branch_and_reduce_algorithm::decompose(timer &t, double time_limit)
 
         vc->solve(t, time_limit);
         sum += vc->opt;
+        if (this->max_depth < vc->max_depth)
+            this->max_depth = vc->max_depth;
 
         // if(vc->opt != optForMapping) {
         //     optChanged[i] = true;
@@ -3976,7 +4236,7 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     std::vector<int> res = {};
     std::vector<std::pair<int, int>> edges;
 
-    push_relabel flow_algo(adj, x);
+    max_flow_algo flow_algo(adj, x);
     int s2 = flow_algo.solve_max_flow_min_cut(rn, s, t, true, res, true, edges);
 
     std::vector<int> mapping(n, -1);
@@ -4019,16 +4279,12 @@ void branch_and_reduce_algorithm::get_stcut_vertices()
     cut.swap(vc);
 
     double perc = (double)res.size() / (double)number_of_nodes_remaining();
-    if (cut.size() > TUNING_PARAM1 || perc < TUNING_PARAM2 || perc > (1.0 - TUNING_PARAM2))
+    unsigned int max_size = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)((((double)(-TUNING_PARAM1)) / 100) * (double)rn);
+    if (cut.size() > max_size || perc < TUNING_PARAM2 || perc > (1.0 - TUNING_PARAM2))
     {
         // to big, use max. deg. vertex instead
         cut.clear();
-        cut.emplace_back(get_max_deg_vtx());
-        defaultBranch = true;
-        defaultPicks++;
     }
-    else
-        stratPicks += cut.size();
 }
 
 int inline branch_and_reduce_algorithm::get_max_deg_vtx()
@@ -4064,7 +4320,7 @@ int inline branch_and_reduce_algorithm::get_max_deg_vtx()
     return v;
 }
 
-std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int32_t *perm, int32_t *part_sizes, int32_t *sep_sizes, int n, int p, int32_t *weights)
+std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators_a(int32_t *perm, int32_t *part_sizes, int32_t *sep_sizes, int n, int p, int32_t *weights)
 {
     int level = log2(p);
 
@@ -4130,8 +4386,8 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
         rsize += part_sizes[i + p / 2];
     }
 
-    std::vector<std::vector<int>> seps_l = get_nd_separators(perm, part_sizes, lsize_arr, lsize, p / 2, weights);
-    std::vector<std::vector<int>> seps_r = get_nd_separators(perm + lsize, part_sizes + p / 2, rsize_arr, rsize, p / 2, weights);
+    std::vector<std::vector<int>> seps_l = get_nd_separators_a(perm, part_sizes, lsize_arr, lsize, p / 2, weights);
+    std::vector<std::vector<int>> seps_r = get_nd_separators_a(perm + lsize, part_sizes + p / 2, rsize_arr, rsize, p / 2, weights);
 
     for (int i = 0; i < seps_l.size(); i++)
     {
@@ -4143,6 +4399,42 @@ std::vector<std::vector<int>> branch_and_reduce_algorithm::get_nd_separators(int
     free(rsize_arr);
 
     return seps;
+}
+
+void branch_and_reduce_algorithm::compute_nd_order_cutter()
+{
+    double balance = TUNING_PARAM2;
+    nd_threshold = TUNING_PARAM1 >= 0 ? TUNING_PARAM1 : (int)(((double)TUNING_PARAM1 / 100.0) * rn);
+    int max_level = (TUNING_PARAM3 > 0) ? TUNING_PARAM3 : floor(log2(n)) + TUNING_PARAM3;
+
+    std::vector<std::vector<int>> new_adj;
+    std::vector<int> map;
+    std::vector<int> rev_map;
+    convert_to_adj(new_adj, rev_map, map);
+
+    std::vector<std::pair<int, std::vector<int>>> separators;
+    get_nd_separators_cutter(new_adj, balance, separators);
+    std::vector<std::vector<int>> separators_level(max_level);
+    for (auto sep : separators)
+    {
+        int index = sep.first - 1;
+        if (index < max_level)
+        {
+            if (sep.second.size() > nd_threshold)
+                return;
+
+            for (auto vtc : sep.second)
+            {
+                separators_level[index].push_back(rev_map[vtc]);
+            }
+        }
+    }
+
+    for (int i = separators_level.size() - 1; i >= 0; i--)
+    {
+        auto sep = separators_level[i];
+        nd_order.insert(nd_order.end(), sep.begin(), sep.end());
+    }
 }
 
 void branch_and_reduce_algorithm::compute_nd_order()
@@ -4220,7 +4512,7 @@ void branch_and_reduce_algorithm::compute_nd_order()
             }
         }
     }
-    std::vector<std::vector<int>> seps = get_nd_separators(perm, sizes, sizes + p, n, p, NULL);
+    std::vector<std::vector<int>> seps = get_nd_separators_a(perm, sizes, sizes + p, n, p, NULL);
     for (int i = seps.size() - 1; i >= 0; i--)
     {
         for (int j = 0; j < seps[i].size(); j++)

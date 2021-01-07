@@ -7,7 +7,7 @@ using namespace std;
 typedef int NodeID;
 typedef int FlowType;
 
-class push_relabel
+class max_flow_algo
 {
 
     const int WORK_OP_RELABEL = 9;
@@ -15,7 +15,7 @@ class push_relabel
     const int WORK_NODE_TO_EDGES = 4;
 
 public:
-    push_relabel(std::vector<std::vector<int>> &adjj, std::vector<int> &x)
+    max_flow_algo(std::vector<std::vector<int>> &adjj, std::vector<int> &x)
         : adj(adjj), active(x)
     {
         flow.resize(adj.size());
@@ -393,6 +393,8 @@ private:
         for (int i = 0; i < adj[source].size(); i++)
             if (adj[source][i] == target)
                 return i;
+
+        return -1;
     }
 
     inline int getEdgeCapacity(NodeID v, NodeID u)
