@@ -293,9 +293,7 @@ Thus, we limit the maximum depth at which we search for articulation points.
 \subsection{Edge Cuts}
 To alleviate the restrictive nature of finding articulation points, we now propose a more flexible branching strategy based on \emph{(minimal) edge cuts}.
 In general, we still aim to find small vertex separators, \ie a set of vertices whose removal disconnects the graph.
-However, since computing an actual minimum vertex separator is computationally
-expensive, we opt to use minimum edge cuts instead.\todo{Is there a reference
-  that this is also done in graph partitioning?}
+We do so by making use of minimum edge cuts.
 
 A \emph{cut} $(S,T)$ is a partitioning of $V$ into two sets $S$ and $T=V\setminus S$.
 Furthermore, a cut is called minimum if its \emph{cut set} $C = \{\{u,v\} \in E \mid u \in S, v \in T\}$ has minimal cardinality.
