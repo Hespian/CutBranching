@@ -282,7 +282,7 @@ If this results in $A$ becoming empty, a new set of articulation points is compu
 However, if no articulation points can be found, we select a vertex based on the default branching strategy.
 In this case, we skip computing new articulation points for a fixed number of branching steps, since it is seems unlikely that new ones are found in the following iterations.
 Otherwise, if $A$ contains at least one vertex, a random one from $A$ selected as the branching
-vertex.\todo{@Christian why not the one with the highest degree?}
+vertex.
 
 Even tough this strategy yields only a small (linear) overhead, finding articulation points can be rare depending on the type of graph.
 This results in the default branching strategy being selected rather
@@ -332,12 +332,10 @@ First, we noticed that vertices at the end of the ordering seldom lead to a deco
 This is due to vertices being removed by kernelization which can lead to separators becoming invalid.
 Thus, we limit the number of recursive calls during the nested dissection computation.
 Furthermore, similar to the edge cut based strategy, we limit the size of
-separators considered during branching using a threshold.\todo{@Christian aren't all
-  separators on deeper levels invalid after this? So do we stop using nd
-  immediately after exceeding the threshold once?}
+separators considered during branching using a threshold.
 Again, this is done to ensure that we do not require too many branching steps to decompose the graph.
 The specific value for this size threshold is given in Section~\ref{sec:algo_conf}.
-Finally, if this threshold is exceeded, and we can not select a vertex from the nested dissection ordering, the default branching strategy is used.
+If any separator in the nested dissection exceeds this threshold, we use the default branching strategy.
 
 \section{Reduction Branching}
 \label{sec:reduction_branching}
