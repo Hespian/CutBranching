@@ -666,29 +666,9 @@ decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary
 times are only slightly slower than the default strategy. This is mainly because
 the number of branches required to solve the instances does not change in most
 casesa (see Figure~\ref{fig:all_decomp_branch}) and most of the running time difference is caused by the overhead caused by
-searching for branching vertices.\todo{write
+searching for branching vertices. Table~\ref{tab:summary_decomp} \dots\todo{write
   something about the table}
 
-\begin{table}[ht]
-  \caption{Speedup of our decomposition based techniques over the default
-    strategy (max. degree). ``all'' are geometric means of the speedup over all
-  instances of that type (timeouts are assigned a running time of
-  \textcolor{red}{timeouttime} hours), ``solved'' are geometric means of the
-  speedup over all instances that have been solved by all techniques.}
-\label{tab:summary_decomp}
-
-  \centering
-  \begin{tabular}{|l|rr|rr|rr|rr|}
-    \hline
-    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                    \\
-       technique $\downarrow$   & all                       & solved                      & all                       & solved                & all                   & solved                & all                   & solved                \\
-    \hline
-    articulation points         & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
-    st-cuts                     & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
-    nested dissections          & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
-    \hline
-    \end{tabular}
-\end{table}
 
 \begin{figure}[ht]
 \includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
@@ -701,6 +681,27 @@ searching for branching vertices.\todo{write
   \caption{Performance plot comparing branches of decomposition based branching strategies.}
   \label{fig:all_decomp_branch}
 \end{figure}
+
+\begin{table}[ht]
+  \caption{Speedup of our decomposition based techniques over the default
+    strategy (max. degree). ``all'' are geometric means of the speedup over all
+  instances of that type (timeouts are assigned a running time of
+  \textcolor{red}{timeouttime} hours), ``solved'' are geometric means of the
+  speedup over all instances that have been solved by all techniques.}
+\label{tab:summary_decomp}
+
+  \centering
+  \begin{tabular}{|l|rr|rr|rr|rr|}
+    \hline
+    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
+    technique $\downarrow$      & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} \\
+    \hline
+    articulation points         & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       \\
+    st-cuts                     & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       \\
+    nested dissections          & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       \\
+    \hline
+    \end{tabular}
+\end{table}
 
 \subsection{Reduction Branching}
 Figure~\ref{fig:all_reduction_time} shows the performance plot (see
@@ -745,13 +746,13 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
     \hline
-    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                    \\
-       reduction rule $\downarrow$   & all                       & solved                      & all                       & solved                & all                   & solved                & all                   & solved                \\
+    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
+    reduction rule $\downarrow$ & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} \\
     \hline
-    Twin                        & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
-    Funnel                      & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
-    Unconfined                  & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
-    Combined                    & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
+    Twin                        & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       \\
+    Funnel                      & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       \\
+    Unconfined                  & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       \\
+    Combined                    & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       \\
     \hline
     \end{tabular}
 \end{table}
