@@ -666,24 +666,26 @@ decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary
 times are only slightly slower than the default strategy. This is mainly because
 the number of branches required to solve the instances does not change in most
 casesa (see Figure~\ref{fig:all_decomp_branch}) and most of the running time difference is caused by the overhead caused by
-searching for branching vertices.
+searching for branching vertices.\todo{write
+  something about the table}
 
 \begin{table}[ht]
-  \caption{Summary of the performance on decomposition based branching
-    techniques. $t_{\mbox{avg}}$: Average running time in seconds. $s_{\mbox{geom}}$:
-    Geometric mean of speedups. All: All Instances (of the respective category).
-  Finished: All instances that have been solved by all algorithms.}
+  \caption{Speedup of our decomposition based techniques over the default
+    strategy (max. degree). ``all'' are geometric means of the speedup over all
+  instances of that type (timeouts are assigned a running time of
+  \textcolor{red}{timeouttime} hours), ``solved'' are geometric means of the
+  speedup over all instances that have been solved by all techniques.}
 \label{tab:summary_decomp}
 
   \centering
-  \begin{tabular}{|l|r|r|r|r|}
+  \begin{tabular}{|l|rr|rr|rr|rr|}
     \hline
-    technique           & $t_{\mbox{avg}}$ (all) & $s_{\mbox{geom}}$ (all) & $t_{\mbox{avg}}$ (finished) & $s_{\mbox{geom}}$ (finished) \\
+    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                    \\
+       technique $\downarrow$   & all                       & solved                      & all                       & solved                & all                   & solved                & all                   & solved                \\
     \hline
-    max. degree         & \textcolor{red}{TODO}  & \numprint{1.0}          & \textcolor{red}{TODO}       & \numprint{1.0}               \\
-    articulation points & \textcolor{red}{TODO}  & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}        \\
-    st-cuts             & \textcolor{red}{TODO}  & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}        \\
-    nested dissections  & \textcolor{red}{TODO}  & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}        \\
+    articulation points         & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
+    st-cuts                     & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
+    nested dissections          & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
     \hline
     \end{tabular}
 \end{table}
@@ -716,7 +718,9 @@ described in Section~\ref{sec:reduction_branching}. Even though this approach
 leads to the lowest number of branches for most instances (see Figure~\ref{fig:all_reduction_branch}), the time required to
 identify candidate vertices for all reduction rules causes too big of an
 overhead to be competitive. Optimizing the algorithms to identify candidate
-vertices could lead to making this combined strategy dominant.
+vertices could lead to making this combined strategy
+dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
+  something about the table}
 
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
@@ -729,6 +733,28 @@ vertices could lead to making this combined strategy dominant.
   \caption{Performance plot comparing branches of reduction based branching strategies.}
   \label{fig:all_reduction_branch}
 \end{figure}
+
+\begin{table}[ht]
+  \caption{Speedup of our reduction based techniques over the default
+    strategy (max. degree). ``all'' are geometric means of the speedup over all
+  instances of that type (timeouts are assigned a running time of
+  \textcolor{red}{timeouttime} hours), ``solved'' are geometric means of the
+  speedup over all instances that have been solved by all techniques.}
+\label{tab:summary_reduction}
+
+  \centering
+  \begin{tabular}{|l|rr|rr|rr|rr|}
+    \hline
+    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                    \\
+       reduction rule $\downarrow$   & all                       & solved                      & all                       & solved                & all                   & solved                & all                   & solved                \\
+    \hline
+    Twin                        & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
+    Funnel                      & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
+    Unconfined                  & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
+    Combined                    & \textcolor{red}{TODO}     & \textcolor{red}{TODO}       & \textcolor{red}{TODO}     & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} & \textcolor{red}{TODO} \\
+    \hline
+    \end{tabular}
+\end{table}
 
 \section{Conclusion and Future Work}
 
