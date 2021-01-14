@@ -620,6 +620,8 @@ be found in Appendix~\ref{app:instances}.\todo{@Christian: Add table of
   instances with num. vertices and edges.}
 
 \subsection{Decomposition Branching}
+\label{sec:experiments_decomp}
+
 Figure~\ref{fig:all_decomp_time} shows a perfomance plot of the running time of
 our decomposition based branching strategies: For each instance, the best
 algorithm is determined. The plot shows for each algorithm $1$ minus the time of the best algorithm
@@ -641,10 +643,10 @@ decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary
   Interpretiere ich diese Zahl richtig?} Overall, most running
 times are only slightly slower than the default strategy. This is mainly because
 the number of branches required to solve the instances does not change in most
-cases and the running time difference is mainly caused by the overhead caused by
+casesa (see Figure~\ref{fig:all_decomp_branch}) and most of the running time difference is caused by the overhead caused by
 searching for branching vertices.
 
-\begin{table}
+\begin{table}[ht]
   \caption{Summary of the performance on decomposition based branching
     techniques. $t_{\mbox{avg}}$: Average running time in seconds. $s_{\mbox{geom}}$:
     Geometric mean of speedups. All: All Instances (of the respective category).
@@ -664,19 +666,48 @@ searching for branching vertices.
     \end{tabular}
 \end{table}
 
-\begin{figure}
+\begin{figure}[ht]
 \includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
 \caption{Performance plot comparing running times of decomposition based branching strategies.}
 \label{fig:all_decomp_time}
 \end{figure}
 
-\subsection{Reduction Branching}
+\begin{figure}[ht]
+  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
+  \caption{Performance plot comparing branches of decomposition based branching strategies.}
+  \label{fig:all_decomp_branch}
+\end{figure}
 
-\begin{figure}
+\subsection{Reduction Branching}
+Figure~\ref{fig:all_reduction_time} shows the performance plot (see
+Section~\ref{sec:experiments_decomp}) for our reduction
+based branching strategies. Here we see that targeting the funnel reduction
+results in the fastest time for the most number of instances. In fact, the
+funnel based technique is the fastest for all but 9 of the PACE instances. The
+default strategy is only fastest for 4 of these instances. However, all
+reduction based strategies fail to solve instance 40 of the PACE dataset which
+the default strategy solves in about 7 hours\todo{update with final number}.
+Interestingly, when targeting the funnel reduction, PACE instance 36 times out
+but can be solved in 10 to 83 seconds\todo{update numbers} with all other
+strategies. We also show results for a strategy that targets all reduction rules
+described in Section~\ref{sec:reduction_branching}. Even though this approach
+leads to the lowest number of branches for most instances (see Figure~\ref{fig:all_reduction_branch}), the time required to
+identify candidate vertices for all reduction rules causes too big of an
+overhead to be competitive. Optimizing the algorithms to identify candidate
+vertices could lead to making this combined strategy dominant.
+
+\begin{figure}[ht]
   \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
   \caption{Performance plot comparing running time of reduction based branching strategies.}
   \label{fig:all_reduction_time}
 \end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=\textwidth]{plots/all_reduction_based_branch}
+  \caption{Performance plot comparing branches of reduction based branching strategies.}
+  \label{fig:all_reduction_branch}
+\end{figure}
+
 \section{Conclusion and Future Work}
 
 %%
