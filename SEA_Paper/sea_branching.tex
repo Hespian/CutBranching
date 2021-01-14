@@ -285,7 +285,18 @@ If this results in $A$ becoming empty, a new set of articulation points is compu
 However, if no articulation points can be found, we select a vertex based on the default branching strategy.
 In this case, we skip computing new articulation points for a fixed number of branching steps, since it is seems unlikely that new ones are found in the following iterations.
 Otherwise, if $A$ contains at least one vertex, a random one from $A$ selected as the branching
-vertex.
+vertex. Figure~\ref{fig:articulation_points} illustrates branching on an
+articulation point.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=1]{figures/articulation_points}
+  \caption{Branching on an articulation point (circled vertex) the
+    graph decomposes into two connected components (gray boxes) that can be
+    solved independently. The graphic show the branch on which the vertex is
+    excluded from the independent set.}
+  \label{fig:articulation_points}
+\end{figure}
 
 Even tough this strategy yields only a small (linear) overhead, finding articulation points can be rare depending on the type of graph.
 This results in the default branching strategy being selected rather
@@ -401,7 +412,16 @@ algorithm by simultaneously also searching for $u \in N^2(v)$ with $d(u) = 4$
 and $N(v) \subset N(u)$. This induces about the same computational cost for
 degree $4$ vertices in $N^2(v)$ as for degree $3$ vertices. While there might be
 instances where this causes high overhead, we expect the practical slowdown to
-be small.
+be small. Figure~\ref{fig:twin} illustrates branching for almost twins. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=1]{figures/twin}
+  \caption{The two solidly circled vertices are almost twins. After branching on
+  the dashed circled vertex they become twins (in the excluding branch) and can
+  be reduced.}
+  \label{fig:twin}
+\end{figure}
 
 \subsection{Almost Funnels}
 \label{sec:almost_funnels}
