@@ -423,8 +423,7 @@ Next we consider the \emph{funnel} reduction which is a special case of the
       I'\cup B & \text{, else}
 	\end{cases}
     $
-	is an MIS in $G$.\todo{@Christian: I changed a few things in this theorem. Could you double check if I
-      messed something up?}
+	is an MIS in $G$.
 \end{theorem}
 
 Note that the alternative reduction adds new edges between existing
@@ -570,11 +569,47 @@ adding them to the actual candidate list if $v$ is not removed.
 \section{Experimental Evaluation}
 
 \subsection{Experimental Environment}
+We execute all our experiments on a machine with 4 8-core Intel Xeon E5-4640 CPUs
+(2.4~GHz) and 512 GiB DDR3-PC1600 RAM. To speed up our experiments we use two
+identical machines and run \textcolor{red}{X}\todo{@Christian: How many} instances at once on the
+same machine (using the same machine for all algorithms on a specific instance).
+All numbers reported are averages \todo{@Christian or means?} of three runs with
+a timeout of \textcolor{red}{X}\todo{@Christian: fill in} hours.
 
 \subsection{Algorithm Configuration}
 \label{sec:algo_conf}
+We use a C++ adaptation of the implementation by Akiba and
+Iwata~\cite{AkibaIwata} in its default configuration\todo{@Christian: Is this
+  true?} as a basis for our algorithm. During preliminary experiments we found
+suitable values for the parameters of
+our techniques. These experiments were run on a subset of our total instance
+set. We use the geometric mean over all instances of the speedup over the
+default branching strategy as a basis for our decision: The number of branching
+steps skipped after an unsuccessful search for articulation points is set
+to \textcolor{red}{X}\todo{@Christian: fill in}. For the technique based on
+s-t-cuts, we only use cuts that contain at most
+\textcolor{red}{X}\todo{@Christian: fill in} vertices and where the smaller side of
+the cut contains at least \textcolor{red}{X}\todo{@Christian: fill in} vertices.
+If no suitable separator is found, we skip \textcolor{red}{X}\todo{@Christian:
+  fill in} branching steps. For computing nested dissections, we use 
+InertialFlowCutter\footnote{\url{https://github.com/kit-algo/InertialFlowCutter}}
+with the KaHIP\footnote{\url{https://kahip.github.io/}}
+backend.\todo{@Christian: Add parameters for this.} For branching we use
+\textcolor{red}{X}\todo{@Christian: fill in} levels of nested dissections and
+only use the nested dissection if separators contain at most
+\textcolor{red}{X}\todo{@Christian: fill in} vertices. For the reduction based
+branching rules, we fall back to the default branching strategy if all
+candidates have a degree of less than \textcolor{red}{X}\todo{@Christian: fill in}.
 
 \subsection{Instances}
+We use instances from several sources: A sample of the instances used for the
+PACE 2019 Challenge on Minimum Vertex Cover~\cite{dzulfikar_et_al:LIPIcs:2019:11486}. Maximum Clique instances from the second
+DIMACS Implementation Challenge~\cite{johnson1993cliques}, sparse instances from
+the Stanford Large Network Dataset Collection~\cite{snapnets}\todo{@Christian:
+  Ich kann hier nicht alle Graphen aus der Liste finden. Außerdem: Muss man für
+  die Instanzen noch andere Sachen zitieren?}. Detailed instance information can
+be found in Appendix~\ref{app:instances}.\todo{@Christian: Add table of
+  instances with num. vertices and edges.}
 
 \subsection{Decomposition Branching}
 
@@ -593,7 +628,12 @@ adding them to the actual candidate list if $v$ is not removed.
 \appendix
 
 \section{Detailed Instance Information}
+\label{app:instances}
+\todo{@Christian: Add table}
 
+\newpage
+\section{Detailed Experimental Results}
+\todo{@Christian: Kriegen wir die Tabelle auf die gleiche Seite, wie die überschrift?}
 \begin{table}
 	\begin{center}
 		\begin{tabular}{|l|c|c|c|c|}
