@@ -631,7 +631,7 @@ candidates have a degree of less than \textcolor{red}{X}\todo{@Christian: fill i
 \subsection{Instances}
 We use instances from several sources: A sample of the instances used for the
 PACE 2019 Challenge on Minimum Vertex Cover~\cite{dzulfikar_et_al:LIPIcs:2019:11486}. Maximum Clique instances from the second
-DIMACS Implementation Challenge~\cite{johnson1993cliques}, sparse instances from
+DIMACS Implementation Challenge~\cite{johnson1993cliques} and sparse instances from
 the Stanford Network Analysis Project (SNAP)~\cite{snapnets}\todo{@Christian:
   Ich kann hier nicht alle Graphen aus der Liste finden. Außerdem: Muss man für
   die Instanzen noch andere Sachen zitieren?}.\todo{road networks mit Quelle?} Detailed instance information can
@@ -656,7 +656,7 @@ vertical line do not correspond to the same instance.
 The plot shows that for most instances, the default strategy of branching on a
 vertex of maximum degree outperforms our decomposition based approaches.
 However, there is one instance\todo{Update after full results are in} (web-stanford) that causes a timeout with the
-default strategy but can be solved in $48$\todo{Update after full results are in} (articualtion points) to $176$\todo{Update after full results are in} (nested
+default strategy but can be solved in $48$\todo{Update after full results are in} (articulation points) to $176$\todo{Update after full results are in} (nested
 dissections) seconds using a decomposition based approach. Accounting a time of
 \textcolor{red}{timeouttime}\todo{insert timeout} for the default strategy on
 this instance, this results in a geometric mean speedup of about two for all
@@ -664,24 +664,12 @@ decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary
   Interpretiere ich diese Zahl richtig?} Overall, most running
 times are only slightly slower than the default strategy. This is mainly because
 the number of branches required to solve the instances does not change in most
-casesa (see Figure~\ref{fig:all_decomp_branch}) and most of the running time difference is caused by the overhead caused by
+cases (see Figure~\ref{fig:all_decomp_branch}) and most of the running time
+difference is caused by the overhead from
 searching for branching vertices. Table~\ref{tab:summary_decomp} \dots\todo{write
   something about the table}
 
-
-\begin{figure}[ht]
-\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
-\caption{Performance plot comparing running times of decomposition based branching strategies.}
-\label{fig:all_decomp_time}
-\end{figure}
-
-\begin{figure}[ht]
-  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
-  \caption{Performance plot comparing branches of decomposition based branching strategies.}
-  \label{fig:all_decomp_branch}
-\end{figure}
-
-\begin{table}[ht]
+\begin{table}[h]
   \caption{Speedup of our decomposition based techniques over the default
     strategy (max. degree). ``all'' are geometric means of the speedup over all
   instances of that type (timeouts are assigned a running time of
@@ -701,6 +689,19 @@ searching for branching vertices. Table~\ref{tab:summary_decomp} \dots\todo{writ
     \hline
     \end{tabular}
 \end{table}
+
+\begin{figure}[T]
+\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
+\caption{Performance plot comparing running times of decomposition based branching strategies.}
+\label{fig:all_decomp_time}
+\end{figure}
+
+\begin{figure}[T]
+  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
+  \caption{Performance plot comparing branches of decomposition based branching strategies.}
+  \label{fig:all_decomp_branch}
+\end{figure}
+
 
 \subsection{Reduction Branching}
 Figure~\ref{fig:all_reduction_time} shows the performance plot (see
@@ -722,19 +723,7 @@ vertices could lead to making this combined strategy
 dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
   something about the table}
 
-\begin{figure}[ht]
-  \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
-  \caption{Performance plot comparing running time of reduction based branching strategies.}
-  \label{fig:all_reduction_time}
-\end{figure}
-
-\begin{figure}[ht]
-  \includegraphics[width=\textwidth]{plots/all_reduction_based_branch}
-  \caption{Performance plot comparing branches of reduction based branching strategies.}
-  \label{fig:all_reduction_branch}
-\end{figure}
-
-\begin{table}[ht]
+\begin{table}[h]
   \caption{Speedup of our reduction based techniques over the default
     strategy (max. degree). ``all'' are geometric means of the speedup over all
   instances of that type (timeouts are assigned a running time of
@@ -755,6 +744,19 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
     \hline
     \end{tabular}
 \end{table}
+
+\begin{figure}[T]
+  \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
+  \caption{Performance plot comparing running time of reduction based branching strategies.}
+  \label{fig:all_reduction_time}
+\end{figure}
+
+\begin{figure}[T]
+  \includegraphics[width=\textwidth]{plots/all_reduction_based_branch}
+  \caption{Performance plot comparing branches of reduction based branching strategies.}
+  \label{fig:all_reduction_branch}
+\end{figure}
+
 
 \section{Conclusion and Future Work}
 
