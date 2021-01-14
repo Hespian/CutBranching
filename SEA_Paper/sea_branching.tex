@@ -288,7 +288,7 @@ Otherwise, if $A$ contains at least one vertex, a random one from $A$ selected a
 vertex. Figure~\ref{fig:articulation_points} illustrates branching on an
 articulation point.
 
-\begin{figure}[ht]
+\begin{figure}[t]
   \centering
   \includegraphics[scale=1]{figures/articulation_points}
   \caption{Branching on an articulation point (circled vertex) the
@@ -414,7 +414,7 @@ degree $4$ vertices in $N^2(v)$ as for degree $3$ vertices. While there might be
 instances where this causes high overhead, we expect the practical slowdown to
 be small. Figure~\ref{fig:twin} illustrates branching for almost twins. 
 
-\begin{figure}[ht]
+\begin{figure}[t]
   \centering
   \includegraphics[scale=1]{figures/twin}
   \caption{The two solidly circled vertices are almost twins. After branching on
@@ -539,7 +539,7 @@ contradicting the assumption that every MIS contains the vertex.
 
 Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
 
-\begin{algorithm}
+\begin{algorithm}[t]
 	\caption{Unconfined -- Xiao and Nagamochi
       \cite{XiaoUnconfined}}\label{alg:unconf}
 	\SetKwFunction{U}{Unconfined}
@@ -669,7 +669,7 @@ difference is caused by the overhead from
 searching for branching vertices. Table~\ref{tab:summary_decomp} \dots\todo{write
   something about the table}
 
-\begin{table}[h]
+\begin{table}[t]
   \caption{Speedup of our decomposition based techniques over the default
     strategy (max. degree). ``all'' are geometric means of the speedup over all
   instances of that type (timeouts are assigned a running time of
@@ -690,13 +690,13 @@ searching for branching vertices. Table~\ref{tab:summary_decomp} \dots\todo{writ
     \end{tabular}
 \end{table}
 
-\begin{figure}[T]
+\begin{figure}[t]
 \includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
 \caption{Performance plot comparing running times of decomposition based branching strategies.}
 \label{fig:all_decomp_time}
 \end{figure}
 
-\begin{figure}[T]
+\begin{figure}[t]
   \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
   \caption{Performance plot comparing branches of decomposition based branching strategies.}
   \label{fig:all_decomp_branch}
@@ -723,7 +723,7 @@ vertices could lead to making this combined strategy
 dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
   something about the table}
 
-\begin{table}[h]
+\begin{table}[t]
   \caption{Speedup of our reduction based techniques over the default
     strategy (max. degree). ``all'' are geometric means of the speedup over all
   instances of that type (timeouts are assigned a running time of
@@ -745,13 +745,13 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
     \end{tabular}
 \end{table}
 
-\begin{figure}[T]
+\begin{figure}[t]
   \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
   \caption{Performance plot comparing running time of reduction based branching strategies.}
   \label{fig:all_reduction_time}
 \end{figure}
 
-\begin{figure}[T]
+\begin{figure}[t]
   \includegraphics[width=\textwidth]{plots/all_reduction_based_branch}
   \caption{Performance plot comparing branches of reduction based branching strategies.}
   \label{fig:all_reduction_branch}
