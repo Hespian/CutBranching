@@ -10,6 +10,9 @@
 %for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
 
 \usepackage{todonotes}
+\usepackage{numprint}
+\npstyleenglish
+\usepackage{placeins}
 
 \usepackage[ruled,vlined,linesnumbered,norelsize]{algorithm2e}
 \DontPrintSemicolon
@@ -568,6 +571,11 @@ adding them to the actual candidate list if $v$ is not removed.
 
 \section{Experimental Evaluation}
 
+In this section we present the results of our experimental evaluation. Tables
+and figures\todo{change if we don't use figures that don't show all results}
+here show aggregated results. For
+detailed results for all of our algorithms across all instances, see Appendix~\ref{app:detailed_results}.
+
 \subsection{Experimental Environment}
 We execute all our experiments on a machine with 4 8-core Intel Xeon E5-4640 CPUs
 (2.4~GHz) and 512 GiB DDR3-PC1600 RAM. To speed up our experiments we use two
@@ -605,25 +613,82 @@ candidates have a degree of less than \textcolor{red}{X}\todo{@Christian: fill i
 We use instances from several sources: A sample of the instances used for the
 PACE 2019 Challenge on Minimum Vertex Cover~\cite{dzulfikar_et_al:LIPIcs:2019:11486}. Maximum Clique instances from the second
 DIMACS Implementation Challenge~\cite{johnson1993cliques}, sparse instances from
-the Stanford Large Network Dataset Collection~\cite{snapnets}\todo{@Christian:
+the Stanford Network Analysis Project (SNAP)~\cite{snapnets}\todo{@Christian:
   Ich kann hier nicht alle Graphen aus der Liste finden. Außerdem: Muss man für
   die Instanzen noch andere Sachen zitieren?}. Detailed instance information can
 be found in Appendix~\ref{app:instances}.\todo{@Christian: Add table of
   instances with num. vertices and edges.}
 
 \subsection{Decomposition Branching}
+Figure~\ref{fig:all_decomp_time} shows a perfomance plot of the running time of
+our decomposition based branching strategies: For each instance, the best
+algorithm is determined. The plot shows for each algorithm $1$ minus the time of the best algorithm
+divided by the time the respective algorithm took. So a value of $0$ means that
+the algorithm was the fastest algorithm on that instance and a value of
+$\numprint{0.5}$ means that the algorithm took twice as long as the fastest
+algorithm. Timeouts are shown as a value $> 1$. For each algorithm, instances
+are then sorted by their value. Note that this means that the points on a
+vertical line do not correspond to the same instance.
+
+The plot shows that for most instances, the default strategy of branching on a
+vertex of maximum degree outperforms our decomposition based approaches.
+However, there is one instance\todo{Update after full results are in} (web-stanford) that causes a timeout with the
+default strategy but can be solved in $48$\todo{Update after full results are in} (articualtion points) to $176$\todo{Update after full results are in} (nested
+dissections) seconds using a decomposition based approach. Accounting a time of
+\textcolor{red}{timeouttime}\todo{insert timeout} for the default strategy on
+this instance, this results in a geometric mean speedup of about two for all
+decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary_decomp}).\todo{@christian:
+  Interpretiere ich diese Zahl richtig?} Overall, most running
+times are only slightly slower than the default strategy. This is mainly because
+the number of branches required to solve the instances does not change in most
+cases and the running time difference is mainly caused by the overhead caused by
+searching for branching vertices.
+
+\begin{table}
+  \caption{Summary of the performance on decomposition based branching
+    techniques. $t_{\mbox{avg}}$: Average running time in seconds. $s_{\mbox{geom}}$:
+    Geometric mean of speedups. All: All Instances (of the respective category).
+  Finished: All instances that have been solved by all algorithms.}
+\label{tab:summary_decomp}
+
+  \centering
+  \begin{tabular}{|l|r|r|r|r|}
+    \hline
+    technique           & $t_{\mbox{avg}}$ (all) & $s_{\mbox{geom}}$ (all) & $t_{\mbox{avg}}$ (finished) & $s_{\mbox{geom}}$ (finished) \\
+    \hline
+    max. degree         & \textcolor{red}{TODO}  & \numprint{1.0}          & \textcolor{red}{TODO}       & \numprint{1.0}               \\
+    articulation points & \textcolor{red}{TODO}  & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}        \\
+    st-cuts             & \textcolor{red}{TODO}  & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}        \\
+    nested dissections  & \textcolor{red}{TODO}  & \textcolor{red}{TODO}   & \textcolor{red}{TODO}       & \textcolor{red}{TODO}        \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
+\caption{Performance plot comparing running times of decomposition based branching strategies.}
+\label{fig:all_decomp_time}
+\end{figure}
 
 \subsection{Reduction Branching}
 
+\begin{figure}
+  \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
+  \caption{Performance plot comparing running time of reduction based branching strategies.}
+  \label{fig:all_reduction_time}
+\end{figure}
 \section{Conclusion and Future Work}
 
 %%
 %% Bibliography
 %%
 
+\FloatBarrier
 %% Please use bibtex, 
 \todo{TODO: Before submitting check for all references whether they are actually used in the text}
 \bibliography{references}
+
+\newpage
 
 \appendix
 
@@ -633,6 +698,7 @@ be found in Appendix~\ref{app:instances}.\todo{@Christian: Add table of
 
 \newpage
 \section{Detailed Experimental Results}
+\label{app:detailed_results}
 \todo{@Christian: Kriegen wir die Tabelle auf die gleiche Seite, wie die überschrift?}
 \begin{table}
 	\begin{center}
