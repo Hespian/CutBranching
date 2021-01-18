@@ -792,16 +792,15 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 
 \section{Detailed Instance Information}
 \label{app:instances}
-\todo{@Christian: Add table}
-\begin{table}
-	
+\begin{table}[htb!]	
 	\footnotesize
+	\caption{Another table.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|}
 			\hline
-			Graph & $|V|$ & $|E|$ \\
-			\hline
 			\multicolumn{3}{|l|}{PACE instances:}\\
+			\hline
+			Graph & $|V|$ & $|E|$ \\
 			\hline
 			37 & \numprint{198} & \numprint{808} \\
 			38 & \numprint{786} & \numprint{14024} \\
@@ -844,76 +843,94 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 			75 & \numprint{26300} & \numprint{41500} \\
 			\hline
 		\end{tabular}
-	\begin{tabular}{|l|r|r|}
-		\hline
-		Graph & $|V|$ & $|E|$ \\
-		\hline
-		\multicolumn{3}{|l|}{DIMACS instances:}\\
-		\hline
-		C125 & \numprint{125} & \numprint{787} \\
-		C250 & \numprint{250} & \numprint{3141} \\
-		MANN\_a27 & \numprint{378} & \numprint{702} \\
-		MANN\_a45 & \numprint{1035} & \numprint{1980} \\
-		brock200\_1 & \numprint{200} & \numprint{5066} \\
-		brock200\_2 & \numprint{200} & \numprint{10024} \\
-		brock200\_3 & \numprint{200} & \numprint{7852} \\
-		brock200\_4 & \numprint{200} & \numprint{6811} \\
-		c-fat200-1 & \numprint{200} & \numprint{18366} \\
-		gen200\_p0 & \numprint{200} & \numprint{1990} \\
-		hamming6-4 & \numprint{64} & \numprint{1312} \\
-		hamming8-4 & \numprint{256} & \numprint{11776} \\
-		johnson16-2-4 & \numprint{120} & \numprint{1680} \\
-		johnson8-4-4 & \numprint{70} & \numprint{560} \\
-		keller4 & \numprint{171} & \numprint{5100} \\
-		p\_hat1000-1 & \numprint{1000} & \numprint{377247} \\
-		p\_hat1000-2 & \numprint{1000} & \numprint{254701} \\
-		p\_hat1500-1 & \numprint{1500} & \numprint{839327} \\
-		p\_hat300-1 & \numprint{300} & \numprint{33917} \\
-		p\_hat300-2 & \numprint{300} & \numprint{22922} \\
-		p\_hat300-3 & \numprint{300} & \numprint{11460} \\
-		p\_hat500-1 & \numprint{500} & \numprint{93181} \\
-		p\_hat500-2 & \numprint{500} & \numprint{61804} \\
-		p\_hat500-3 & \numprint{500} & \numprint{30950} \\
-		p\_hat700-1 & \numprint{700} & \numprint{183651} \\
-		p\_hat700-2 & \numprint{700} & \numprint{122922} \\
-		san1000 & \numprint{1000} & \numprint{249000} \\
-		san200\_0 & \numprint{200} & \numprint{1990} \\
-		san400\_0 & \numprint{400} & \numprint{23940} \\
-		sanr200\_0 & \numprint{200} & \numprint{6032} \\
-		\hline
-	\end{tabular}
-\begin{tabular}{|l|r|r|}
-	\hline
-	Graph & $|V|$ & $|E|$ \\
-	
-	\hline
-	\multicolumn{3}{|l|}{DIMACS instances:}\\
-	\hline
-	as-skitter & \numprint{1696415} & \numprint{11095298} \\
-	bay-sorted & \numprint{321270} & \numprint{397415} \\
-	col-sorted & \numprint{435666} & \numprint{521200} \\
-	deezer\_europe & \numprint{28281} & \numprint{92752} \\
-	fla-sorted & \numprint{1070376} & \numprint{1343951} \\
-	libimseti & \numprint{220970} & \numprint{17233144} \\
-	musae\_DE & \numprint{9498} & \numprint{153138} \\
-	musae\_FR & \numprint{6549} & \numprint{112666} \\
-	ny-sorted & \numprint{264346} & \numprint{365050} \\
-	web-BerkStan & \numprint{685230} & \numprint{6649470} \\
-	web-Google & \numprint{875713} & \numprint{4322051} \\
-	web-NotreDame & \numprint{325730} & \numprint{1090108} \\
-	web-Stanford & \numprint{281903} & \numprint{1992636} \\
-	\hline
-\end{tabular}
-
+		\begin{tabular}{|l|r|r|}
+			\hline
+			\multicolumn{3}{|l|}{DIMACS instances:}\\
+			\hline
+			Graph & $|V|$ & $|E|$ \\
+			\hline
+			C125 & \numprint{125} & \numprint{787} \\
+			C250 & \numprint{250} & \numprint{3141} \\
+			MANN\_a27 & \numprint{378} & \numprint{702} \\
+			MANN\_a45 & \numprint{1035} & \numprint{1980} \\
+			brock200\_1 & \numprint{200} & \numprint{5066} \\
+			brock200\_2 & \numprint{200} & \numprint{10024} \\
+			brock200\_3 & \numprint{200} & \numprint{7852} \\
+			brock200\_4 & \numprint{200} & \numprint{6811} \\
+			c-fat200-1 & \numprint{200} & \numprint{18366} \\
+			gen200\_p0 & \numprint{200} & \numprint{1990} \\
+			hamming6-4 & \numprint{64} & \numprint{1312} \\
+			hamming8-4 & \numprint{256} & \numprint{11776} \\
+			johnson16-2-4 & \numprint{120} & \numprint{1680} \\
+			johnson8-4-4 & \numprint{70} & \numprint{560} \\
+			keller4 & \numprint{171} & \numprint{5100} \\
+			p\_hat1000-1 & \numprint{1000} & \numprint{377247} \\
+			p\_hat1000-2 & \numprint{1000} & \numprint{254701} \\
+			p\_hat1500-1 & \numprint{1500} & \numprint{839327} \\
+			p\_hat300-1 & \numprint{300} & \numprint{33917} \\
+			p\_hat300-2 & \numprint{300} & \numprint{22922} \\
+			p\_hat300-3 & \numprint{300} & \numprint{11460} \\
+			p\_hat500-1 & \numprint{500} & \numprint{93181} \\
+			p\_hat500-2 & \numprint{500} & \numprint{61804} \\
+			p\_hat500-3 & \numprint{500} & \numprint{30950} \\
+			p\_hat700-1 & \numprint{700} & \numprint{183651} \\
+			p\_hat700-2 & \numprint{700} & \numprint{122922} \\
+			san1000 & \numprint{1000} & \numprint{249000} \\
+			san200\_0 & \numprint{200} & \numprint{1990} \\
+			san400\_0 & \numprint{400} & \numprint{23940} \\
+			sanr200\_0 & \numprint{200} & \numprint{6032} \\
+			\hline
+		\end{tabular}
+		\begin{tabular}{|l|r|r|r|}
+			\hline			
+			\multicolumn{4}{|l|}{Sparse networks:}\\
+			\hline
+			Graph & $|V|$ & $|E|$ & source \\			
+			\hline
+			as-skitter & \numprint{1696415} & \numprint{11095298} & \cite{snapnets} \\
+			bay & \numprint{321270} & \numprint{397415} & \cite{_}\\
+			col & \numprint{435666} & \numprint{521200} & \cite{_}\\
+			feather-deezer-social & \numprint{28281} & \numprint{92752} & \cite{snapnets} \\
+			fla & \numprint{1070376} & \numprint{1343951} & \cite{_}\\
+			libimseti & \numprint{220970} & \numprint{17233144} & \cite{nr} \\
+			musae-twitch\_DE & \numprint{9498} & \numprint{153138} & \cite{snapnets} \\
+			musae-twitch\_FR & \numprint{6549} & \numprint{112666} & \cite{snapnets} \\
+			ny & \numprint{264346} & \numprint{365050} & \cite{_}\\
+			web-BerkStan & \numprint{685230} & \numprint{6649470} & \cite{snapnets} \\
+			web-Google & \numprint{875713} & \numprint{4322051} & \cite{snapnets} \\
+			web-NotreDame & \numprint{325730} & \numprint{1090108} & \cite{snapnets} \\
+			web-Stanford & \numprint{281903} & \numprint{1992636} & \cite{snapnets} \\
+			\hline
+		\end{tabular}
+		
 	\end{center}
-	\caption{Another table.}
 	\label{table:instance}
 \end{table}
-
+\FloatBarrier
 \newpage
 \section{Detailed Experimental Results}
 \label{app:detailed_results}
-\begin{table}[ht]
+
+\begin{table}[htb!]	
+	\footnotesize
+	\begin{center}
+		\begin{tabular}{|l|r|r|r|r|}\hline
+			Graph & max. deg. & Artik. &  st-cuts &  ND  \\
+			\hline
+			All & & & & \\
+			\hline
+			$t_{avg}$ (all) & \numprint{5518.22} & \numprint{5086.61} & \textbf{\numprint{5003.92}} & \numprint{5126.23}  \\
+			$s_{geom}$ (all) & \numprint{1.00} & \numprint{1.07}  & \textbf{\numprint{1.08}}  & \numprint{0.95}  \\
+			$t_{avg}$ (fin.) & \textbf{\numprint{1364.76}} & \numprint{1395.90} & \numprint{1376.49} & \numprint{1388.56} \\
+			$s_{geom}$ (fin.) & \numprint{1.00} & \numprint{0.97} & \textbf{\numprint{1.01}}  & \numprint{0.88}  \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Decomposition based strategies - All instances}
+	\label{table:another_table}
+\end{table}
+
+\begin{table}[htb!]	
 	\footnotesize
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
@@ -1022,24 +1039,23 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 	\label{table:another_table}
 \end{table}
 
-
 \begin{table}
 	\footnotesize
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Artik.} & \multicolumn{2}{c|}{st-cuts} & \multicolumn{2}{c|}{ND} \\
 			\hline
-			Sparse nets. & t (s) & t (s) & s & t (s) & s & t (s) & s \\
+			Sparse networks & t (s) & t (s) & s & t (s) & s & t (s) & s \\
 			\hline
 			as-skitter & \numprint{11977.45} & \numprint{12088.82} & \numprint{0.99} & \numprint{11931.14} & \numprint{1.00} & \textbf{\numprint{11795.50}} & \textbf{\numprint{1.02}} \\
-			bay-sorted & \numprint{10.82} & \numprint{12.13} & \numprint{0.89} & \textbf{\numprint{7.90}} & \textbf{\numprint{1.37}} & \numprint{25.25} & \numprint{0.43} \\
-			col-sorted & \numprint{34384.77} & \numprint{32240.53} & \numprint{1.07} & \textbf{\numprint{26677.97}} & \textbf{\numprint{1.29}} & - & - \\
-			deezer\_europe & - & - & - & - & - & - & - \\
-			fla-sorted & \numprint{157.50} & \numprint{139.68} & \numprint{1.13} & \numprint{144.67} & \numprint{1.09} & \textbf{\numprint{137.02}} & \textbf{\numprint{1.15}} \\
+			bay & \numprint{10.82} & \numprint{12.13} & \numprint{0.89} & \textbf{\numprint{7.90}} & \textbf{\numprint{1.37}} & \numprint{25.25} & \numprint{0.43} \\
+			col & \numprint{34384.77} & \numprint{32240.53} & \numprint{1.07} & \textbf{\numprint{26677.97}} & \textbf{\numprint{1.29}} & - & - \\
+			feather-deezer-social & - & - & - & - & - & - & - \\
+			fla & \numprint{157.50} & \numprint{139.68} & \numprint{1.13} & \numprint{144.67} & \numprint{1.09} & \textbf{\numprint{137.02}} & \textbf{\numprint{1.15}} \\
 			libimseti & \numprint{8579.32} & \numprint{8428.66} & \numprint{1.02} & \textbf{\numprint{8427.01}} & \textbf{\numprint{1.02}} & \numprint{8510.58} & \numprint{1.01} \\
-			musae\_DE & - & - & - & - & - & - & - \\
-			musae\_FR & \textbf{\numprint{211.72}} & \numprint{219.32} & \numprint{0.97} & \numprint{217.71} & \numprint{0.97} & \numprint{212.38} & \numprint{1.00} \\
-			ny-sorted & - & - & - & - & - & - & - \\
+			musae-twitch\_DE & - & - & - & - & - & - & - \\
+			musae-twitch\_FR & \textbf{\numprint{211.72}} & \numprint{219.32} & \numprint{0.97} & \numprint{217.71} & \numprint{0.97} & \numprint{212.38} & \numprint{1.00} \\
+			ny & - & - & - & - & - & - & - \\
 			web-BerkStan & \textbf{\numprint{793.05}} & \numprint{2023.01} & \numprint{0.39} & \numprint{802.19} & \numprint{0.99} & \numprint{840.56} & \numprint{0.94} \\
 			web-Google & \numprint{2.91} & \numprint{2.85} & \numprint{1.02} & \textbf{\numprint{2.68}} & \textbf{\numprint{1.09}} & \numprint{3.66} & \numprint{0.80} \\
 			web-NotreDame & \numprint{122.57} & \textbf{\numprint{94.59}} & \textbf{\numprint{1.30}} & \numprint{122.09} & \numprint{1.00} & \numprint{159.76} & \numprint{0.77} \\
@@ -1055,22 +1071,23 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 	\caption{Decomposition based strategies - Sparse networks}
 	\label{table:another_table}
 \end{table}
+
 \begin{table}
 	\footnotesize
 	\begin{center}
-		\begin{tabular}{|l|r|r|r|r|}\hline
-			Graph & max. deg. & Artik. &  st-cuts &  ND  \\
+		\begin{tabular}{|l|r|r|r|r|r|}\hline
+			Graph & max. deg. & Twin & Funnel & Unconfined & Combined  \\
+			\hline		
+			All & & & & & \\
 			\hline
-			All & & & & \\
-			\hline
-			$t_{avg}$ (all) & \numprint{5518.22} & \numprint{5086.61} & \textbf{\numprint{5003.92}} & \numprint{5126.23}  \\
-			$s_{geom}$ (all) & \numprint{1.00} & \numprint{0.94} & \textbf{\numprint{0.92}} & \numprint{1.05}  \\
-			$t_{avg}$ (fin.) & \textbf{\numprint{1364.76}} & \numprint{1395.90} & \numprint{1376.49} & \numprint{1388.56}  \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \numprint{1.03} & \textbf{\numprint{0.99}} & \numprint{1.14}  \\
+			$t_{avg}$ (all) & \textbf{\numprint{5518.22}} & \numprint{5525.69} & \numprint{5525.30} & \numprint{5559.67} & \numprint{5565.53} \\
+			$s_{geom}$ (all) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
+			$t_{avg}$ (fin.) & \numprint{1364.76} & \numprint{1351.12} & \textbf{\numprint{1350.69}} & \numprint{1389.76} & \numprint{1396.43} \\
+			$s_{geom}$ (fin.) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{Decomposition based strategies - All instances}
+	\caption{Reduction based strategies - All instances}
 	\label{table:another_table}
 \end{table}
 
@@ -1190,17 +1207,17 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 		\begin{tabular}{|l|r|rr|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Twin} & \multicolumn{2}{c|}{Funnel} & \multicolumn{2}{c|}{Unconfined} & \multicolumn{2}{c|}{Combined}  \\
 			\hline
-			Sparse nets. & t (s) & t (s) & s & t (s) & s & t (s) & s & t (s) & s \\
+			Sparse networks & t (s) & t (s) & s & t (s) & s & t (s) & s & t (s) & s \\
 			\hline
 			as-skitter & \numprint{11977.45} & \numprint{11936.70} & \numprint{1.00} & \textbf{\numprint{11128.03}} & \textbf{\numprint{1.08}} & \numprint{11795.90} & \numprint{1.02} & \numprint{11403.20} & \numprint{1.05} \\
-			bay-sorted & \textbf{\numprint{10.82}} & \numprint{10.95} & \numprint{0.99} & \numprint{61.14} & \numprint{0.18} & \numprint{33.21} & \numprint{0.33} & \numprint{58.21} & \numprint{0.19} \\
-			col-sorted & \numprint{34384.77} & - & - & - & - & - & - & - & - \\
-			deezer\_europe & - & - & - & - & - & - & - & - & - \\
-			fla-sorted & \textbf{\numprint{157.50}} & \numprint{159.10} & \numprint{0.99} & \numprint{303.30} & \numprint{0.52} & \numprint{511.19} & \numprint{0.31} & \numprint{292.22} & \numprint{0.54} \\
+			bay & \textbf{\numprint{10.82}} & \numprint{10.95} & \numprint{0.99} & \numprint{61.14} & \numprint{0.18} & \numprint{33.21} & \numprint{0.33} & \numprint{58.21} & \numprint{0.19} \\
+			col & \textbf{\numprint{34384.77}} & - & - & - & - & - & - & - & - \\
+			feather-deezer-social & - & - & - & - & - & - & - & - & - \\
+			fla & \textbf{\numprint{157.50}} & \numprint{159.10} & \numprint{0.99} & \numprint{303.30} & \numprint{0.52} & \numprint{511.19} & \numprint{0.31} & \numprint{292.22} & \numprint{0.54} \\
 			libimseti & \numprint{8579.32} & \textbf{\numprint{8537.78}} & \textbf{\numprint{1.00}} & \numprint{9715.24} & \numprint{0.88} & \numprint{8541.15} & \numprint{1.00} & \numprint{9772.28} & \numprint{0.88} \\
-			musae\_DE & - & - & - & - & - & - & - & - & - \\
-			musae\_FR & \textbf{\numprint{211.72}} & \numprint{215.57} & \numprint{0.98} & \numprint{235.97} & \numprint{0.90} & \numprint{247.27} & \numprint{0.86} & \numprint{268.42} & \numprint{0.79} \\
-			ny-sorted & - & - & - & - & - & - & - & - & - \\
+			musae-twitch\_DE & - & - & - & - & - & - & - & - & - \\
+			musae-twitch\_FR & \textbf{\numprint{211.72}} & \numprint{215.57} & \numprint{0.98} & \numprint{235.97} & \numprint{0.90} & \numprint{247.27} & \numprint{0.86} & \numprint{268.42} & \numprint{0.79} \\
+			ny & - & - & - & - & - & - & - & - & - \\
 			web-BerkStan & \numprint{793.05} & \numprint{785.55} & \numprint{1.01} & \textbf{\numprint{741.49}} & \textbf{\numprint{1.07}} & \numprint{939.90} & \numprint{0.84} & \numprint{963.78} & \numprint{0.82} \\
 			web-Google & \numprint{2.91} & \textbf{\numprint{2.87}} & \textbf{\numprint{1.01}} & \numprint{2.92} & \numprint{1.00} & \numprint{3.07} & \numprint{0.95} & \numprint{3.03} & \numprint{0.96} \\
 			web-NotreDame & \textbf{\numprint{122.57}} & \numprint{126.49} & \numprint{0.97} & \numprint{152.53} & \numprint{0.80} & \numprint{127.48} & \numprint{0.96} & \numprint{155.77} & \numprint{0.79} \\
@@ -1214,25 +1231,6 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 		\end{tabular}
 	\end{center}
 	\caption{Reduction based strategies - Sparse networks}
-	\label{table:another_table}
-\end{table}
-
-\begin{table}
-	\footnotesize
-	\begin{center}
-		\begin{tabular}{|l|r|r|r|r|r|}\hline
-			Graph & max. deg. & Twin & Funnel & Unconfined & Combined  \\
-			\hline		
-			All & & & & & \\
-			\hline
-			$t_{avg}$ (all) & \textbf{\numprint{5518.22}} & \numprint{5525.69} & \numprint{5525.30} & \numprint{5559.67} & \numprint{5565.53} \\
-			$s_{geom}$ (all) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
-			$t_{avg}$ (fin.) & \numprint{1364.76} & \numprint{1351.12} & \textbf{\numprint{1350.69}} & \numprint{1389.76} & \numprint{1396.43} \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
-			\hline
-		\end{tabular}
-	\end{center}
-	\caption{Reduction based strategies - All instances}
 	\label{table:another_table}
 \end{table}
 
