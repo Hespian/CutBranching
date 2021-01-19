@@ -656,8 +656,6 @@ undirected graphs by ignoring the direction of edges and removing duplicates.
 \subsection{Decomposition Branching}
 \label{sec:experiments_decomp}
 
-\todo{@Sebastian: Da decomposition based so schlecht funktioniert, sollten wir
-  vielleicht im Hauptteil und hier die beiden Ansätze tauschen?}
 Figure~\ref{fig:all_decomp_time} shows a perfomance plot of the running time of
 our decomposition based branching strategies: For each instance, the best
 algorithm is determined. The plot shows for each algorithm $1$ minus the time of the best algorithm
@@ -670,18 +668,22 @@ vertical line do not correspond to the same instance.
 
 The plot shows that for most instances, the default strategy of branching on a
 vertex of maximum degree outperforms our decomposition based approaches.
-However, there is one instance\todo{Update after full results are in} (web-stanford) that causes a timeout with the
-default strategy but can be solved in $48$\todo{Update after full results are in} (articulation points) to $176$\todo{Update after full results are in} (nested
+However, there is one instance (web-stanford) that causes a timeout with the
+default strategy but can be solved in $48$ (articulation points) to $164$ (nested
 dissections) seconds using a decomposition based approach. Accounting a time of
-ten hours for the default strategy on this instance, this results in a geometric mean speedup of about two for all
-decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary_decomp}).\todo{@christian:
-  Interpretiere ich diese Zahl richtig?} Overall, most running
-times are only slightly slower than the default strategy. This is mainly because
+ten hours for the default strategy on this instance, this results in a geometric
+mean speedup of $\numprint{1.65}$ to $\numprint{1.84}$ for our
+decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary_decomp}). Overall, most running
+times are only slightly slower than the default strategy with a few instances
+showing a speedup. This is mainly because
 the number of branches required to solve the instances does not change in most
 cases (see Figure~\ref{fig:all_decomp_branch}) and most of the running time
 difference is caused by the overhead from
-searching for branching vertices. Table~\ref{tab:summary_decomp} \dots\todo{write
-  something about the table}
+searching for branching vertices. Table~\ref{tab:summary_decomp} shows that our
+technique using edge cuts achieves an overall speedup of $8\%$ over max. degree when accounting a
+time of 10 hours for instances that did not finish within 10 hours and $1\%$
+when only considering instances that were solved by all decomposition based
+techniques and max. degree branching.
 
 \begin{table}[t]
   \caption{Speedup of our decomposition based techniques over the default
@@ -694,12 +696,12 @@ searching for branching vertices. Table~\ref{tab:summary_decomp} \dots\todo{writ
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
     \hline
-    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
-    technique $\downarrow$      & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} \\
+    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                                            \\
+    technique $\downarrow$      & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} \\
     \hline
-    articulation points         & \numprint{0.98}     & \numprint{0.98}       & \numprint{0.98}     & \numprint{0.98}       & \numprint{1.82}   & \numprint{0.92}       & \numprint{1.07}   & \numprint{0.97}       \\
-    st-cuts                     & \textbf{\numprint{1.02}}     & \textbf{\numprint{1.02}} & \numprint{0.97} & \numprint{0.97} & \textbf{\numprint{1.84}} & \textbf{\numprint{1.06}} & \textbf{\numprint{1.08}} & \textbf{\numprint{1.01}} \\
-    nested dissections          & \numprint{0.96} & \numprint{0.96} & \numprint{0.78} & \numprint{0.78} & \numprint{1.65} & \numprint{0.86} & \numprint{0.95} & \numprint{0.88} \\
+    articulation points         & \numprint{0.98}           & \numprint{0.98}             & \numprint{0.98}           & \numprint{0.98}             & \numprint{1.82}          & \numprint{0.92}             & \numprint{1.07}          & \numprint{0.97}             \\
+    edge cuts                   & \textbf{\numprint{1.02}}  & \textbf{\numprint{1.02}}    & \numprint{0.97}           & \numprint{0.97}             & \textbf{\numprint{1.84}} & \textbf{\numprint{1.06}}    & \textbf{\numprint{1.08}} & \textbf{\numprint{1.01}}    \\
+    nested dissections          & \numprint{0.96}           & \numprint{0.96}             & \numprint{0.78}           & \numprint{0.78}             & \numprint{1.65}          & \numprint{0.86}             & \numprint{0.95}          & \numprint{0.88}             \\
     \hline
     \end{tabular}
 \end{table}
