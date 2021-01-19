@@ -673,7 +673,7 @@ default strategy but can be solved in $48$ (articulation points) to $164$ (neste
 dissections) seconds using a decomposition based approach. Accounting a time of
 ten hours for the default strategy on this instance, this results in a geometric
 mean speedup of $\numprint{1.65}$ to $\numprint{1.84}$ for our
-decomposition based techniques on the SNAP instances (see Table~\ref{tab:summary_decomp}). Overall, most running
+decomposition based techniques on the sparse networks (see Table~\ref{tab:summary_decomp}). Overall, most running
 times are only slightly slower than the default strategy with a few instances
 showing a speedup. This is mainly because
 the number of branches required to solve the instances does not change in most
@@ -696,7 +696,7 @@ techniques and max. degree branching.
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
     \hline
-    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                                            \\
+    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{sparse nets.} & \multicolumn{2}{c|}{All Instances}                                                                                                            \\
     technique $\downarrow$      & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} \\
     \hline
     articulation points         & \numprint{0.98}           & \numprint{0.98}             & \numprint{0.98}           & \numprint{0.98}             & \numprint{1.82}          & \numprint{0.92}             & \numprint{1.07}          & \numprint{0.97}             \\
@@ -724,21 +724,21 @@ techniques and max. degree branching.
 Figure~\ref{fig:all_reduction_time} shows the performance plot (see
 Section~\ref{sec:experiments_decomp}) for our reduction
 based branching strategies. Here we see that targeting the funnel reduction
-results in the fastest time for the most number of instances. In fact, the
-funnel based technique is the fastest for all but 9 of the PACE instances. The
-default strategy is only fastest for 4 of these instances. However, all
-reduction based strategies fail to solve instance 40 of the PACE dataset which
-the default strategy solves in about 7 hours\todo{update with final number}.
-Interestingly, when targeting the funnel reduction, PACE instance 36 times out
-but can be solved in 10 to 83 seconds\todo{update numbers} with all other
-strategies. We also show results for a strategy that targets all reduction rules
+results in the fastest time for the most number of instances, followed by almost
+twins. In fact, the
+funnel based technique is the fastest for all but 5 of the PACE instances (plus
+one which was not solved by any algorithm). Branching on almost
+twins is faster than max. degree branching on all DIMACS Clique instances that
+were solved by any of the techniques. We also show results for a strategy that targets all reduction rules
 described in Section~\ref{sec:reduction_branching}. Even though this approach
 leads to the lowest number of branches for most instances (see Figure~\ref{fig:all_reduction_branch}), the time required to
 identify candidate vertices for all reduction rules causes too big of an
 overhead to be competitive. Optimizing the algorithms to identify candidate
 vertices could lead to making this combined strategy
-dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
-  something about the table}
+dominant. Table~\ref{tab:summary_reduction} shows that while all reduction based
+techniques combined solve $88\%$ of solved instances faster that the default
+strategy max. degree (see Appendix~\ref{app:detailed_results}), only the twin
+based technique results in a small speedup of $1\%$ over all instances.
 
 \begin{table}[t]
   \caption{Speedup of our reduction based techniques over the default
@@ -750,7 +750,7 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
     \hline
-    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{SNAP} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
+    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{sparse nets.} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
     reduction rule $\downarrow$ & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} \\
     \hline
     Twin                        & \numprint{1.00}     & \numprint{1.00}      & \textbf{\numprint{1.02}}     & \textbf{\numprint{1.02}}     & \numprint{0.99}  & \numprint{0.99}      & \textbf{\numprint{1.01}}   & \textbf{\numprint{1.01}}       \\
@@ -797,7 +797,7 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 	\begin{center}
 		\begin{tabular}{|l|r|r|}
 			\hline
-			\multicolumn{3}{|l|}{PACE instances:}                                                            \\
+          \multicolumn{3}{|l|}{PACE \cite{dzulfikar_et_al:LIPIcs:2019:11486} instances:}                                                            \\
 			\hline
 			Graph                 & $|V|$              & $|E|$                                               \\
 			\hline
@@ -844,7 +844,7 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 		\end{tabular}
 		\begin{tabular}{|l|r|r|}
 			\hline
-			\multicolumn{3}{|l|}{DIMACS instances:}                                                          \\
+          \multicolumn{3}{|l|}{DIMACS \cite{johnson1993cliques} instances:}                                                          \\
 			\hline
 			Graph                 & $|V|$              & $|E|$                                               \\
 			\hline
