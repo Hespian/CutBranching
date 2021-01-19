@@ -650,7 +650,8 @@ candidates have a degree of less than $\Delta - 2$.
 We use instances from several sources: A sample of the instances used for the
 PACE 2019 Challenge on Minimum Vertex Cover~\cite{dzulfikar_et_al:LIPIcs:2019:11486}. Maximum Clique instances from the second
 DIMACS Implementation Challenge~\cite{johnson1993cliques} and sparse instances from
-the Stanford Network Analysis Project (SNAP)~\cite{snapnets}.\todo{weitere quellen} Detailed instance information can
+the Stanford Network Analysis Project (SNAP)~\cite{snapnets} and the 9th DIMACS
+Implementation Challenge on Shortest Paths~\cite{demetrescu2009shortest}. Detailed instance information can
 be found in Table~\ref{table:instance} in Appendix~\ref{app:instances}. Directed instances were converted into
 undirected graphs by ignoring the direction of edges and removing duplicates.
 
@@ -796,108 +797,108 @@ dominant. Table~\ref{tab:summary_reduction} \dots\todo{write
 	\begin{center}
 		\begin{tabular}{|l|r|r|}
 			\hline
-			\multicolumn{3}{|l|}{PACE instances:}\\
+			\multicolumn{3}{|l|}{PACE instances:}                                                            \\
 			\hline
-			Graph & $|V|$ & $|E|$ \\
+			Graph                 & $|V|$              & $|E|$                                               \\
 			\hline
-			37 & \numprint{198} & \numprint{808} \\
-			38 & \numprint{786} & \numprint{14024} \\
-			39 & \numprint{6795} & \numprint{10620} \\
-			40 & \numprint{210} & \numprint{625} \\
-			41 & \numprint{200} & \numprint{1023} \\
-			42 & \numprint{200} & \numprint{952} \\
-			43 & \numprint{200} & \numprint{841} \\
-			44 & \numprint{200} & \numprint{1147} \\
-			45 & \numprint{200} & \numprint{1020} \\
-			46 & \numprint{200} & \numprint{812} \\
-			47 & \numprint{200} & \numprint{1093} \\
-			48 & \numprint{200} & \numprint{1025} \\
-			49 & \numprint{200} & \numprint{933} \\
-			50 & \numprint{200} & \numprint{1025} \\
-			51 & \numprint{200} & \numprint{1098} \\
-			52 & \numprint{200} & \numprint{992} \\
-			53 & \numprint{200} & \numprint{1026} \\
-			54 & \numprint{200} & \numprint{961} \\
-			55 & \numprint{200} & \numprint{938} \\
-			56 & \numprint{200} & \numprint{1089} \\
-			57 & \numprint{200} & \numprint{1160} \\
-			58 & \numprint{200} & \numprint{1171} \\
-			59 & \numprint{200} & \numprint{961} \\
-			60 & \numprint{200} & \numprint{1118} \\
-			61 & \numprint{200} & \numprint{931} \\
-			62 & \numprint{199} & \numprint{1128} \\
-			63 & \numprint{200} & \numprint{1011} \\
-			64 & \numprint{200} & \numprint{1042} \\
-			65 & \numprint{200} & \numprint{1011} \\
-			66 & \numprint{200} & \numprint{866} \\
-			67 & \numprint{200} & \numprint{1174} \\
-			68 & \numprint{200} & \numprint{961} \\
-			69 & \numprint{200} & \numprint{1083} \\
-			70 & \numprint{200} & \numprint{860} \\
-			71 & \numprint{200} & \numprint{952} \\
-			72 & \numprint{200} & \numprint{1167} \\
-			73 & \numprint{200} & \numprint{1078} \\
-			74 & \numprint{200} & \numprint{805} \\
-			75 & \numprint{26300} & \numprint{41500} \\
+			37                    & \numprint{198}     & \numprint{808}                                      \\
+			38                    & \numprint{786}     & \numprint{14024}                                    \\
+			39                    & \numprint{6795}    & \numprint{10620}                                    \\
+			40                    & \numprint{210}     & \numprint{625}                                      \\
+			41                    & \numprint{200}     & \numprint{1023}                                     \\
+			42                    & \numprint{200}     & \numprint{952}                                      \\
+			43                    & \numprint{200}     & \numprint{841}                                      \\
+			44                    & \numprint{200}     & \numprint{1147}                                     \\
+			45                    & \numprint{200}     & \numprint{1020}                                     \\
+			46                    & \numprint{200}     & \numprint{812}                                      \\
+			47                    & \numprint{200}     & \numprint{1093}                                     \\
+			48                    & \numprint{200}     & \numprint{1025}                                     \\
+			49                    & \numprint{200}     & \numprint{933}                                      \\
+			50                    & \numprint{200}     & \numprint{1025}                                     \\
+			51                    & \numprint{200}     & \numprint{1098}                                     \\
+			52                    & \numprint{200}     & \numprint{992}                                      \\
+			53                    & \numprint{200}     & \numprint{1026}                                     \\
+			54                    & \numprint{200}     & \numprint{961}                                      \\
+			55                    & \numprint{200}     & \numprint{938}                                      \\
+			56                    & \numprint{200}     & \numprint{1089}                                     \\
+			57                    & \numprint{200}     & \numprint{1160}                                     \\
+			58                    & \numprint{200}     & \numprint{1171}                                     \\
+			59                    & \numprint{200}     & \numprint{961}                                      \\
+			60                    & \numprint{200}     & \numprint{1118}                                     \\
+			61                    & \numprint{200}     & \numprint{931}                                      \\
+			62                    & \numprint{199}     & \numprint{1128}                                     \\
+			63                    & \numprint{200}     & \numprint{1011}                                     \\
+			64                    & \numprint{200}     & \numprint{1042}                                     \\
+			65                    & \numprint{200}     & \numprint{1011}                                     \\
+			66                    & \numprint{200}     & \numprint{866}                                      \\
+			67                    & \numprint{200}     & \numprint{1174}                                     \\
+			68                    & \numprint{200}     & \numprint{961}                                      \\
+			69                    & \numprint{200}     & \numprint{1083}                                     \\
+			70                    & \numprint{200}     & \numprint{860}                                      \\
+			71                    & \numprint{200}     & \numprint{952}                                      \\
+			72                    & \numprint{200}     & \numprint{1167}                                     \\
+			73                    & \numprint{200}     & \numprint{1078}                                     \\
+			74                    & \numprint{200}     & \numprint{805}                                      \\
+			75                    & \numprint{26300}   & \numprint{41500}                                    \\
 			\hline
 		\end{tabular}
 		\begin{tabular}{|l|r|r|}
 			\hline
-			\multicolumn{3}{|l|}{DIMACS instances:}\\
+			\multicolumn{3}{|l|}{DIMACS instances:}                                                          \\
 			\hline
-			Graph & $|V|$ & $|E|$ \\
+			Graph                 & $|V|$              & $|E|$                                               \\
 			\hline
-			C125 & \numprint{125} & \numprint{787} \\
-			C250 & \numprint{250} & \numprint{3141} \\
-			MANN\_a27 & \numprint{378} & \numprint{702} \\
-			MANN\_a45 & \numprint{1035} & \numprint{1980} \\
-			brock200\_1 & \numprint{200} & \numprint{5066} \\
-			brock200\_2 & \numprint{200} & \numprint{10024} \\
-			brock200\_3 & \numprint{200} & \numprint{7852} \\
-			brock200\_4 & \numprint{200} & \numprint{6811} \\
-			c-fat200-1 & \numprint{200} & \numprint{18366} \\
-			gen200\_p0 & \numprint{200} & \numprint{1990} \\
-			hamming6-4 & \numprint{64} & \numprint{1312} \\
-			hamming8-4 & \numprint{256} & \numprint{11776} \\
-			johnson16-2-4 & \numprint{120} & \numprint{1680} \\
-			johnson8-4-4 & \numprint{70} & \numprint{560} \\
-			keller4 & \numprint{171} & \numprint{5100} \\
-			p\_hat1000-1 & \numprint{1000} & \numprint{377247} \\
-			p\_hat1000-2 & \numprint{1000} & \numprint{254701} \\
-			p\_hat1500-1 & \numprint{1500} & \numprint{839327} \\
-			p\_hat300-1 & \numprint{300} & \numprint{33917} \\
-			p\_hat300-2 & \numprint{300} & \numprint{22922} \\
-			p\_hat300-3 & \numprint{300} & \numprint{11460} \\
-			p\_hat500-1 & \numprint{500} & \numprint{93181} \\
-			p\_hat500-2 & \numprint{500} & \numprint{61804} \\
-			p\_hat500-3 & \numprint{500} & \numprint{30950} \\
-			p\_hat700-1 & \numprint{700} & \numprint{183651} \\
-			p\_hat700-2 & \numprint{700} & \numprint{122922} \\
-			san1000 & \numprint{1000} & \numprint{249000} \\
-			san200\_0 & \numprint{200} & \numprint{1990} \\
-			san400\_0 & \numprint{400} & \numprint{23940} \\
-			sanr200\_0 & \numprint{200} & \numprint{6032} \\
+			C125                  & \numprint{125}     & \numprint{787}                                      \\
+			C250                  & \numprint{250}     & \numprint{3141}                                     \\
+			MANN\_a27             & \numprint{378}     & \numprint{702}                                      \\
+			MANN\_a45             & \numprint{1035}    & \numprint{1980}                                     \\
+			brock200\_1           & \numprint{200}     & \numprint{5066}                                     \\
+			brock200\_2           & \numprint{200}     & \numprint{10024}                                    \\
+			brock200\_3           & \numprint{200}     & \numprint{7852}                                     \\
+			brock200\_4           & \numprint{200}     & \numprint{6811}                                     \\
+			c-fat200-1            & \numprint{200}     & \numprint{18366}                                    \\
+			gen200\_p0            & \numprint{200}     & \numprint{1990}                                     \\
+			hamming6-4            & \numprint{64}      & \numprint{1312}                                     \\
+			hamming8-4            & \numprint{256}     & \numprint{11776}                                    \\
+			johnson16-2-4         & \numprint{120}     & \numprint{1680}                                     \\
+			johnson8-4-4          & \numprint{70}      & \numprint{560}                                      \\
+			keller4               & \numprint{171}     & \numprint{5100}                                     \\
+			p\_hat1000-1          & \numprint{1000}    & \numprint{377247}                                   \\
+			p\_hat1000-2          & \numprint{1000}    & \numprint{254701}                                   \\
+			p\_hat1500-1          & \numprint{1500}    & \numprint{839327}                                   \\
+			p\_hat300-1           & \numprint{300}     & \numprint{33917}                                    \\
+			p\_hat300-2           & \numprint{300}     & \numprint{22922}                                    \\
+			p\_hat300-3           & \numprint{300}     & \numprint{11460}                                    \\
+			p\_hat500-1           & \numprint{500}     & \numprint{93181}                                    \\
+			p\_hat500-2           & \numprint{500}     & \numprint{61804}                                    \\
+			p\_hat500-3           & \numprint{500}     & \numprint{30950}                                    \\
+			p\_hat700-1           & \numprint{700}     & \numprint{183651}                                   \\
+			p\_hat700-2           & \numprint{700}     & \numprint{122922}                                   \\
+			san1000               & \numprint{1000}    & \numprint{249000}                                   \\
+			san200\_0             & \numprint{200}     & \numprint{1990}                                     \\
+			san400\_0             & \numprint{400}     & \numprint{23940}                                    \\
+			sanr200\_0            & \numprint{200}     & \numprint{6032}                                     \\
 			\hline
 		\end{tabular}
 		\begin{tabular}{|l|r|r|r|}
 			\hline			
-			\multicolumn{4}{|l|}{Sparse networks:}\\
+			\multicolumn{4}{|l|}{Sparse networks:}                                                           \\
 			\hline
-			Graph & $|V|$ & $|E|$ & source \\			
+			Graph                 & $|V|$              & $|E|$               & source                        \\			
 			\hline
-			as-skitter & \numprint{1696415} & \numprint{11095298} & \cite{snapnets} \\
-			bay & \numprint{321270} & \numprint{397415} & \cite{_}\\
-			col & \numprint{435666} & \numprint{521200} & \cite{_}\\
-			feather-deezer-social & \numprint{28281} & \numprint{92752} & \cite{snapnets} \\
-			fla & \numprint{1070376} & \numprint{1343951} & \cite{_}\\
-			libimseti & \numprint{220970} & \numprint{17233144} & \cite{nr} \\
-			musae-twitch\_DE & \numprint{9498} & \numprint{153138} & \cite{snapnets} \\
-			musae-twitch\_FR & \numprint{6549} & \numprint{112666} & \cite{snapnets} \\
-			ny & \numprint{264346} & \numprint{365050} & \cite{_}\\
-			web-BerkStan & \numprint{685230} & \numprint{6649470} & \cite{snapnets} \\
-			web-Google & \numprint{875713} & \numprint{4322051} & \cite{snapnets} \\
-			web-NotreDame & \numprint{325730} & \numprint{1090108} & \cite{snapnets} \\
-			web-Stanford & \numprint{281903} & \numprint{1992636} & \cite{snapnets} \\
+			as-skitter            & \numprint{1696415} & \numprint{11095298} & \cite{snapnets}               \\
+          bay                     & \numprint{321270}  & \numprint{397415}   & \cite{demetrescu2009shortest} \\
+			col                   & \numprint{435666}  & \numprint{521200}   & \cite{demetrescu2009shortest} \\
+			feather-deezer-social & \numprint{28281}   & \numprint{92752}    & \cite{snapnets}               \\
+			fla                   & \numprint{1070376} & \numprint{1343951}  & \cite{demetrescu2009shortest} \\
+			libimseti             & \numprint{220970}  & \numprint{17233144} & \cite{nr}                     \\
+			musae-twitch\_DE      & \numprint{9498}    & \numprint{153138}   & \cite{snapnets}               \\
+			musae-twitch\_FR      & \numprint{6549}    & \numprint{112666}   & \cite{snapnets}               \\
+			ny                    & \numprint{264346}  & \numprint{365050}   & \cite{demetrescu2009shortest} \\
+			web-BerkStan          & \numprint{685230}  & \numprint{6649470}  & \cite{snapnets}               \\
+			web-Google            & \numprint{875713}  & \numprint{4322051}  & \cite{snapnets}               \\
+			web-NotreDame         & \numprint{325730}  & \numprint{1090108}  & \cite{snapnets}               \\
+			web-Stanford          & \numprint{281903}  & \numprint{1992636}  & \cite{snapnets}               \\
 			\hline
 		\end{tabular}
 		
