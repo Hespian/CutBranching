@@ -13,6 +13,7 @@
 \usepackage{numprint}
 \npstyleenglish
 \usepackage{placeins}
+\usepackage{pgf}
 
 \usepackage[ruled,vlined,linesnumbered,norelsize]{algorithm2e}
 \DontPrintSemicolon
@@ -712,16 +713,30 @@ searching for branching vertices.
     \end{tabular}
 \end{table}
 
+%\begin{figure}[t]
+%\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
+%\caption{Performance plot comparing running times of decomposition based branching strategies.}
+%\label{fig:all_decomp_time}
+%\end{figure}
+
+%\begin{figure}[t]
+%  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
+%  \caption{Performance plot comparing branches of decomposition based branching strategies.}
+%  \label{fig:all_decomp_branch}
+%\end{figure}
+
 \begin{figure}[t]
-\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
-\caption{Performance plot comparing running times of decomposition based branching strategies.}
-\label{fig:all_decomp_time}
+	\centering
+	\input{plots/all_decomposition_based_time.pgf}
+	\caption{Performance plot comparing running times of decomposition based branching strategies.}
+	\label{fig:all_decomp_time}
 \end{figure}
 
 \begin{figure}[t]
-  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
-  \caption{Performance plot comparing branches of decomposition based branching strategies.}
-  \label{fig:all_decomp_branch}
+	\centering
+	\input{plots/all_decomposition_based_branch.pgf}
+	\caption{Performance plot comparing branches of decomposition based branching strategies.}
+	\label{fig:all_decomp_branch}
 \end{figure}
 
 
@@ -768,16 +783,30 @@ based technique results in a small speedup of $1\%$ over all instances.
     \end{tabular}
 \end{table}
 
+%\begin{figure}[t]
+%  \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
+%  \caption{Performance plot comparing running time of reduction based branching strategies.}
+%  \label{fig:all_reduction_time}
+%\end{figure}
+
+%\begin{figure}[t]
+%  \includegraphics[width=\textwidth]{plots/all_reduction_based_branch}
+%  \caption{Performance plot comparing branches of reduction based branching strategies.}
+%  \label{fig:all_reduction_branch}
+%\end{figure}
+
 \begin{figure}[t]
-  \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
-  \caption{Performance plot comparing running time of reduction based branching strategies.}
-  \label{fig:all_reduction_time}
+	\centering
+	\input{plots/all_reduction_based_time.pgf}
+	\caption{Performance plot comparing running time of reduction based branching strategies.}
+	\label{fig:all_reduction_time}
 \end{figure}
 
 \begin{figure}[t]
-  \includegraphics[width=\textwidth]{plots/all_reduction_based_branch}
-  \caption{Performance plot comparing branches of reduction based branching strategies.}
-  \label{fig:all_reduction_branch}
+	\centering
+	\input{plots/all_reduction_based_branch.pgf}
+	\caption{Performance plot comparing branches of reduction based branching strategies.}
+	\label{fig:all_reduction_branch}
 \end{figure}
 
 
