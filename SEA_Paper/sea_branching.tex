@@ -233,10 +233,7 @@ is sufficiently large (depending on the maximum degree of the graph) by
 excluding both $u$ and $v$ in one branch and applying the alternative reduction
 (see Section~\ref{sec:almost_funnels}) to $\{u\}$ and $\{v\}$ in the other branch.
 
-Buurgeois et al.~\cite{Bourgeois} use maximum degree branching as long as the
-average degree of the graph is above 4. Otherwise, if there is no vertex with degree of at least 5, their algorithm branches on vertices
-contained in 3- or 4-cycles. \todo{@Christian weißt du auch, was
-passiert, wenn es Knoten mit höherem Grad gibt?}
+Bourgeois et al.~\cite{Bourgeois} use maximum degree branching as long as there are vertices of degree at least five. Otherwise, they utilize specialized algorithms to solve subinstance with an average degree of three or four. Those algorithms perform a rather complex case analysis to find a suitable branching vertex. The analysis is based on exploiting structures that contain 3- or 4-cycles. Branching on specific vertices in such structures often enables further reduction rules to be applied.
 
 Chen et al.~\cite{ChenXiaKanj} use a notion of \emph{good pairs} that are advantageous
 for branching. They chose these good pairs by a set of rules which are omitted
