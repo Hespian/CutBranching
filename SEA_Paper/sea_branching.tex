@@ -803,7 +803,7 @@ Thus, for $84\%$ of all ($93\%$ of solved) instances tested, one of our strategi
 	\label{fig:all_reduction_time}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[tb!]
 	\centering
 	\input{plots/all_reduction_based_branch.pgf}
 	\caption{Performance plot comparing branches of reduction based branching strategies.}
@@ -827,11 +827,13 @@ However, the running time of this approach still suffers from frequent checks if
 A more sophisticated and incremental way of tracking when a vertex becomes a branching vertex might provide significant performance benefits.
 In turn, this might lead to a branching strategy that consistently outperforms branching on the vertex of highest degree independent of the instance type.
 
+\FloatBarrier
+\newpage
+
 %%
 %% Bibliography
 %%
 
-\FloatBarrier
 %% Please use bibtex, 
 \todo{TODO: Before submitting check for all references whether they are actually used in the text}
 \bibliography{references}
@@ -854,6 +856,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			\hline
 			Graph                 & $|V|$              & $|E|$                                               \\
 			\hline
+			36                    & \numprint{26300}   & \numprint{41500}                                    \\
 			37                    & \numprint{198}     & \numprint{808}                                      \\
 			38                    & \numprint{786}     & \numprint{14024}                                    \\
 			39                    & \numprint{6795}    & \numprint{10620}                                    \\
