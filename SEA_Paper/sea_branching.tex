@@ -589,6 +589,7 @@ Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so 
 \begin{theorem}(Unconfined Reduction~\cite{XiaoUnconfined}) In a graph $G=(V,E)$,
   if Algorithm \ref{alg:unconf} returns true for an unconfined vertex $v$, then
   there is always an MIS that does not contain~$v$.
+\end{theorem}
 
 Again, we define a vertex to be almost unconfined:
 
@@ -845,6 +846,8 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 	\scriptsize
 	\caption{Number of vertices $|V|$ and edges $|E|$ for each graph.}
 	\begin{center}
+    \begin{minipage}{0.29\textwidth}
+    \centering
 		\begin{tabular}{|l|r|r|}
 			\hline
           \multicolumn{3}{|l|}{PACE \cite{dzulfikar_et_al:LIPIcs:2019:11486} instances:}                                                            \\
@@ -892,8 +895,9 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			75                    & \numprint{26300}   & \numprint{41500}                                    \\
 			\hline
 		\end{tabular}
-    \vspace{2em}
-    \hspace{2em}
+    \end{minipage}
+    \begin{minipage}{0.7\textwidth}
+    \centering
 		\begin{tabular}{|l|r|r|}
 			\hline
           \multicolumn{3}{|l|}{DIMACS \cite{johnson1993cliques} instances:}                                                          \\
@@ -932,6 +936,8 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			sanr200\_0            & \numprint{200}     & \numprint{6032}                                     \\
 			\hline
 		\end{tabular}
+    \vspace{2em}
+    \newline
 		\begin{tabular}{|l|r|r|c|}
 			\hline			
 			\multicolumn{4}{|l|}{Sparse networks:}                                                           \\
@@ -953,12 +959,13 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			web-Stanford          & \numprint{281903}  & \numprint{1992636}  & \cite{snapnets}               \\
 			\hline
 		\end{tabular}
+    \end{minipage}
 		
 	\end{center}
 	\label{table:instance}
 \end{table}
 \FloatBarrier
-\newpage
+% \newpage
 \section{Detailed Experimental Results}
 \label{app:detailed_results}
 We now present detailed results for our experimental evaluation.
