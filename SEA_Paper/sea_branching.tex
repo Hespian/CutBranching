@@ -965,7 +965,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 \label{app:detailed_results}
 We now present detailed results for our experimental evaluation.
 Each table in this section presents the average running time $t_{avg}$ and geometric mean speedup $t_{geom}$ of one type of strategy (decomposition or reduction based) over the default strategy.
-These aggregates are grouped in two classes: ``all'' includes all instances (timeouts are assigned a running time of ten hours), whereas ``fin.'' only contains instances that have been solved by all techniques.
+These aggregates are grouped in two classes: ``all'' includes all instances (timeouts are assigned a running time of ten hours), whereas ``solved'' only contains instances that have been solved by all techniques.
 Furthermore, for each type of instance we provide tables that include individual running times $t(s)$ (in seconds) and speedups $s$.
 A value is highlighted in bold if its the best one within a row.
 
@@ -979,8 +979,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \numprint{5518.22} & \numprint{5086.61} & \textbf{\numprint{5003.92}} & \numprint{5126.23}  \\
 			$s_{geom}$ (all) & \numprint{1.00} & \numprint{1.07}  & \textbf{\numprint{1.08}}  & \numprint{0.95}  \\
-			$t_{avg}$ (fin.) & \textbf{\numprint{1364.76}} & \numprint{1395.90} & \numprint{1376.49} & \numprint{1388.56} \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \numprint{0.97} & \textbf{\numprint{1.01}}  & \numprint{0.88}  \\
+			$t_{avg}$ (solved) & \textbf{\numprint{1364.76}} & \numprint{1395.90} & \numprint{1376.49} & \numprint{1388.56} \\
+			$s_{geom}$ (solved) & \numprint{1.00} & \numprint{0.97} & \textbf{\numprint{1.01}}  & \numprint{0.88}  \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1039,8 +1039,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \textbf{\numprint{1843.18}} & \multicolumn{2}{r|}{\numprint{1856.49}} & \multicolumn{2}{r|}{\numprint{1847.48}} & \multicolumn{2}{r|}{\numprint{1874.01}}  \\
 			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.96}} \\
-			$t_{avg}$ (fin.) & \textbf{\numprint{967.37}} & \multicolumn{2}{r|}{\numprint{981.02}} & \multicolumn{2}{r|}{\numprint{971.77}} & \multicolumn{2}{r|}{\numprint{998.98}} \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}}  & \multicolumn{2}{r|}{\numprint{0.96}} \\
+			$t_{avg}$ (solved) & \textbf{\numprint{967.37}} & \multicolumn{2}{r|}{\numprint{981.02}} & \multicolumn{2}{r|}{\numprint{971.77}} & \multicolumn{2}{r|}{\numprint{998.98}} \\
+			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}}  & \multicolumn{2}{r|}{\numprint{0.96}} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1088,8 +1088,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \textbf{\numprint{6134.82}} & \multicolumn{2}{r|}{\numprint{6154.39}}& \multicolumn{2}{r|}{\numprint{6164.30}} & \multicolumn{2}{r|}{\numprint{6157.33}} \\
 			$s_{geom}$ (all) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\numprint{0.97}} & \multicolumn{2}{r|}{\numprint{0.78}} \\
-			$t_{avg}$ (fin.) & \textbf{\numprint{1540.18}} & \multicolumn{2}{r|}{\numprint{1562.75}} & \multicolumn{2}{r|}{\numprint{1574.19}} & \multicolumn{2}{r|}{\numprint{1566.15}} \\
-			$s_{geom}$ (fin.) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\numprint{0.97}} & \multicolumn{2}{r|}{\numprint{0.78}} \\
+			$t_{avg}$ (solved) & \textbf{\numprint{1540.18}} & \multicolumn{2}{r|}{\numprint{1562.75}} & \multicolumn{2}{r|}{\numprint{1574.19}} & \multicolumn{2}{r|}{\numprint{1566.15}} \\
+			$s_{geom}$ (solved) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\numprint{0.97}} & \multicolumn{2}{r|}{\numprint{0.78}} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1121,8 +1121,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \numprint{15403.09} & \multicolumn{2}{r|}{\numprint{12561.35}} & \multicolumn{2}{r|}{\textbf{\numprint{12038.24}}}  & \multicolumn{2}{r|}{\numprint{12753.61}} \\
 			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{1.82}} & \multicolumn{2}{r|}{\textbf{\numprint{1.84}}} & \multicolumn{2}{r|}{\numprint{1.65}} \\
-			$t_{avg}$ (fin.) & \numprint{2731.92} & \multicolumn{2}{r|}{\numprint{2876.13}} & \multicolumn{2}{r|}{\textbf{\numprint{2706.92}}} & \multicolumn{2}{r|}{\numprint{2710.59}} \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.92}} & \multicolumn{2}{r|}{\textbf{\numprint{1.06}}} & \multicolumn{2}{r|}{\numprint{0.86}} \\
+			$t_{avg}$ (solved) & \numprint{2731.92} & \multicolumn{2}{r|}{\numprint{2876.13}} & \multicolumn{2}{r|}{\textbf{\numprint{2706.92}}} & \multicolumn{2}{r|}{\numprint{2710.59}} \\
+			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.92}} & \multicolumn{2}{r|}{\textbf{\numprint{1.06}}} & \multicolumn{2}{r|}{\numprint{0.86}} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1138,8 +1138,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \textbf{\numprint{5518.22}} & \numprint{5525.69} & \numprint{5525.30} & \numprint{5559.67} & \numprint{5565.53} \\
 			$s_{geom}$ (all) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
-			$t_{avg}$ (fin.) & \numprint{1364.76} & \numprint{1351.12} & \textbf{\numprint{1350.69}} & \numprint{1389.76} & \numprint{1396.43} \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
+			$t_{avg}$ (solved) & \numprint{1364.76} & \numprint{1351.12} & \textbf{\numprint{1350.69}} & \numprint{1389.76} & \numprint{1396.43} \\
+			$s_{geom}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1198,8 +1198,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \numprint{1843.18} & \multicolumn{2}{r|}{\numprint{1841.68}} & \multicolumn{2}{r|}{\textbf{\numprint{1791.63}}} & \multicolumn{2}{r|}{\numprint{1886.59}} & \multicolumn{2}{r|}{\numprint{1838.78}}  \\
 			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{1.00}} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.85}} & \multicolumn{2}{r|}{\numprint{0.96}} \\
-			$t_{avg}$ (fin.) & \numprint{967.37} & \multicolumn{2}{r|}{\numprint{965.82}} & \multicolumn{2}{r|}{\textbf{\numprint{914.49}}} & \multicolumn{2}{r|}{\numprint{1011.88}} & \multicolumn{2}{r|}{\numprint{962.85}} \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{1.00}} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.85}} & \multicolumn{2}{r|}{\numprint{0.96}} \\
+			$t_{avg}$ (solved) & \numprint{967.37} & \multicolumn{2}{r|}{\numprint{965.82}} & \multicolumn{2}{r|}{\textbf{\numprint{914.49}}} & \multicolumn{2}{r|}{\numprint{1011.88}} & \multicolumn{2}{r|}{\numprint{962.85}} \\
+			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{1.00}} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.85}} & \multicolumn{2}{r|}{\numprint{0.96}} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1248,8 +1248,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \numprint{6134.82} & \multicolumn{2}{r|}{\textbf{\numprint{6106.33}}} & \multicolumn{2}{r|}{\numprint{6153.15}} & \multicolumn{2}{r|}{\numprint{6126.33}} & \multicolumn{2}{r|}{\numprint{6182.37}} \\
 			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.96}} & \multicolumn{2}{r|}{\numprint{1.01}} & \multicolumn{2}{r|}{\numprint{0.94}} \\
-			$t_{avg}$ (fin.) & \numprint{1540.18} & \multicolumn{2}{r|}{\textbf{\numprint{1507.30}}} & \multicolumn{2}{r|}{\numprint{1561.33}} & \multicolumn{2}{r|}{\numprint{1530.39}} & \multicolumn{2}{r|}{\numprint{1595.04}} \\
-			$s_{geom}$ (fin.) & \numprint{1.00} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.96}} & \multicolumn{2}{r|}{\numprint{1.01}} & \multicolumn{2}{r|}{\numprint{0.94}}  \\
+			$t_{avg}$ (solved) & \numprint{1540.18} & \multicolumn{2}{r|}{\textbf{\numprint{1507.30}}} & \multicolumn{2}{r|}{\numprint{1561.33}} & \multicolumn{2}{r|}{\numprint{1530.39}} & \multicolumn{2}{r|}{\numprint{1595.04}} \\
+			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.96}} & \multicolumn{2}{r|}{\numprint{1.01}} & \multicolumn{2}{r|}{\numprint{0.94}}  \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1281,8 +1281,8 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 			$t_{avg}$ (all) & \textbf{\numprint{15403.09}} & \multicolumn{2}{r|}{\numprint{15521.15}} & \multicolumn{2}{r|}{\numprint{15564.66}} & \multicolumn{2}{r|}{\numprint{15553.78}} & \multicolumn{2}{r|}{\numprint{15608.99}} \\
 			$s_{geom}$ (all) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.99}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.71}}  & \multicolumn{2}{r|}{\numprint{0.68}}  \\
-			$t_{avg}$ (fin.) & \numprint{2731.92} & \multicolumn{2}{r|}{\textbf{\numprint{2721.88}}} & \multicolumn{2}{r|}{\numprint{2792.58}} & \multicolumn{2}{r|}{\numprint{2774.90}} & \multicolumn{2}{r|}{\numprint{2864.61}}  \\
-			$s_{geom}$ (fin.) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.99}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.68}}\\
+			$t_{avg}$ (solved) & \numprint{2731.92} & \multicolumn{2}{r|}{\textbf{\numprint{2721.88}}} & \multicolumn{2}{r|}{\numprint{2792.58}} & \multicolumn{2}{r|}{\numprint{2774.90}} & \multicolumn{2}{r|}{\numprint{2864.61}}  \\
+			$s_{geom}$ (solved) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.99}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.68}}\\
 			\hline
 		\end{tabular}
 	\end{center}
