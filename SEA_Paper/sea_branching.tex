@@ -963,11 +963,14 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 \newpage
 \section{Detailed Experimental Results}
 \label{app:detailed_results}
+We now present detailed results for our experimental evaluation.
+Each table in this section presents the average running time $t_{avg}$ and geometric mean speedup $t_{geom}$ of one type of strategy (decomposition or reduction based) over the default strategy.
+These aggregates are grouped in two classes: ``all'' includes all instances (timeouts are assigned a running time of ten hours), whereas ``fin.'' only contains instances that have been solved by all techniques.
+Furthermore, for each type of instance we provide tables that include individual running times $t(s)$ (in seconds) and speedups $s$.
 
 \begin{table}[htb!]	
 	\scriptsize
-  \caption{Average running time $t_{avg}$ and geometric mean speedup $t_{geom}$ of our decomposition based strategies over the default strategy.
-  ``all'' includes all instances (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Aggregated results for our decomposition based strategies.}
 \label{tab:summary_reduction}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|}\hline
@@ -987,9 +990,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 
 \begin{table}[htb!]	
 	\scriptsize
-  \caption{Running times $t(s)$ and speedup $s$ of our decomposition based strategies over the default strategy on the PACE instances. 
-   $t_{avg}$ is the average running time and $t_{geom}$ the geometric mean speedup.
-  ``all'' includes all instances of that type (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Detailed results for our decomposition based strategies on the PACE instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Artik.} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{ND} \\
@@ -1048,9 +1049,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 \end{table}
 \begin{table}
 	\scriptsize
-  \caption{Running times $t(s)$ and speedup $s$ of our decomposition based strategies over the default strategy on the DIMACS instances. 
-   $t_{avg}$ is the average running time and $t_{geom}$ the geometric mean speedup.
-  ``all'' includes all instances of that type (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Detailed results for our decomposition based strategies on the DIMACS instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Artik.} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{ND} \\
@@ -1100,9 +1099,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 
 \begin{table}
 	\scriptsize
-  \caption{Running times $t(s)$ and speedup $s$ of our decomposition based strategies over the default strategy on the sparse networks. 
-   $t_{avg}$ is the average running time and $t_{geom}$ the geometric mean speedup.
-  ``all'' includes all instances of that type (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Detailed results for our decomposition based strategies on sparse networks.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Artik.} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{ND} \\
@@ -1135,8 +1132,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 
 \begin{table}
 	\scriptsize
-  \caption{Average running time $t_{avg}$ and geometric mean speedup $t_{geom}$ of our reduction based strategies over the default strategy.
-  ``all'' includes all instances (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Aggregated results for our reduction based strategies.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
 			Graph & max. deg. & Twin & Funnel & Unconfined & Combined  \\
@@ -1155,9 +1151,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 
 \begin{table}
 	\scriptsize
-  \caption{Running times $t(s)$ and speedup $s$ of our reduction based strategies over the default strategy on the PACE instances. 
-   $t_{avg}$ is the average running time and $t_{geom}$ the geometric mean speedup.
-  ``all'' includes all instances of that type (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Detailed results for our reduction based strategies on the PACE instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Twin} & \multicolumn{2}{c|}{Funnel} & \multicolumn{2}{c|}{Unconfined} & \multicolumn{2}{c|}{Combined}  \\
@@ -1217,9 +1211,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 
 \begin{table}
 	\scriptsize
-  \caption{Running times $t(s)$ and speedup $s$ of our reduction based strategies over the default strategy on the DIMACS instances. 
-   $t_{avg}$ is the average running time and $t_{geom}$ the geometric mean speedup.
-  ``all'' includes all instances of that type (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Detailed results for our reduction based strategies on the DIMACS instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Twin} & \multicolumn{2}{c|}{Funnel} & \multicolumn{2}{c|}{Unconfined} & \multicolumn{2}{c|}{Combined}  \\
@@ -1269,9 +1261,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 
 \begin{table}
 	\scriptsize	
-  \caption{Running times $t(s)$ and speedup $s$ of our reduction based strategies over the default strategy on the sparse networks. 
-   $t_{avg}$ is the average running time and $t_{geom}$ the geometric mean speedup.
-  ``all'' includes all instances of that type (timeouts are assigned a running time of ten hours), ``fin.'' only contains instances that have been solved by all techniques.}
+  \caption{Detailed results for our reduction based strategies on sparse networks.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|rr|}\hline
 			Graph & max. deg. & \multicolumn{2}{c|}{Twin} & \multicolumn{2}{c|}{Funnel} & \multicolumn{2}{c|}{Unconfined} & \multicolumn{2}{c|}{Combined}  \\
