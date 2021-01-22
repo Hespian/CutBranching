@@ -967,6 +967,7 @@ We now present detailed results for our experimental evaluation.
 Each table in this section presents the average running time $t_{avg}$ and geometric mean speedup $t_{geom}$ of one type of strategy (decomposition or reduction based) over the default strategy.
 These aggregates are grouped in two classes: ``all'' includes all instances (timeouts are assigned a running time of ten hours), whereas ``fin.'' only contains instances that have been solved by all techniques.
 Furthermore, for each type of instance we provide tables that include individual running times $t(s)$ (in seconds) and speedups $s$.
+A value is highlighted in bold if its the best one within a row.
 
 \begin{table}[htb!]	
 	\scriptsize
@@ -974,9 +975,7 @@ Furthermore, for each type of instance we provide tables that include individual
 \label{tab:summary_reduction}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|}\hline
-			Graph & max. deg. & Artik. &  edge cuts &  ND  \\
-			\hline
-			All & & & & \\
+			& max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
 			\hline
 			$t_{avg}$ (all) & \numprint{5518.22} & \numprint{5086.61} & \textbf{\numprint{5003.92}} & \numprint{5126.23}  \\
 			$s_{geom}$ (all) & \numprint{1.00} & \numprint{1.07}  & \textbf{\numprint{1.08}}  & \numprint{0.95}  \\
@@ -993,7 +992,7 @@ Furthermore, for each type of instance we provide tables that include individual
   \caption{Detailed results for our decomposition based strategies on the PACE instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{Artik.} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{ND} \\
+			Graph & max. deg. & \multicolumn{2}{c|}{articulation} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{nested dis.} \\
 			\hline
 			PACE & t (s) & t (s) & s & t (s) & s & t (s) & s \\
 			\hline
@@ -1052,7 +1051,7 @@ Furthermore, for each type of instance we provide tables that include individual
   \caption{Detailed results for our decomposition based strategies on the DIMACS instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{Artik.} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{ND} \\
+			Graph & max. deg. & \multicolumn{2}{c|}{articulation} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{nested dis.} \\
 			\hline
 			DIMACS & t (s) & t (s) & s & t (s) & s & t (s) & s \\
 			\hline
@@ -1102,7 +1101,7 @@ Furthermore, for each type of instance we provide tables that include individual
   \caption{Detailed results for our decomposition based strategies on sparse networks.}
 	\begin{center}
 		\begin{tabular}{|l|r|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{Artik.} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{ND} \\
+			Graph & max. deg. & \multicolumn{2}{c|}{articulation} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{nested dis.} \\
 			\hline
 			Sparse networks & t (s) & t (s) & s & t (s) & s & t (s) & s \\
 			\hline
@@ -1135,9 +1134,7 @@ Furthermore, for each type of instance we provide tables that include individual
   \caption{Aggregated results for our reduction based strategies.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
-			Graph & max. deg. & Twin & Funnel & Unconfined & Combined  \\
-			\hline		
-			All & & & & & \\
+			& max. deg. & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
 			\hline
 			$t_{avg}$ (all) & \textbf{\numprint{5518.22}} & \numprint{5525.69} & \numprint{5525.30} & \numprint{5559.67} & \numprint{5565.53} \\
 			$s_{geom}$ (all) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
