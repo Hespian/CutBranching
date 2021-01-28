@@ -235,7 +235,7 @@ The most commonly used branching strategy for MIS and MVC is to select a vertex
 of maximum degree. Fomin et al.~\cite{Fomin} show that using a vertex of maximum
 degree that also minimizes the number of edges between its neighbors is optimal
 with respect to their complexity measure. The algorithm by Akiba and Iwata~\cite{AkibaIwata}
-(which we use for our experiments) also uses this strategy. Akiba and Iwata also
+(which we augment with our new branching rules) also uses this strategy. Akiba and Iwata also
 compare this strategy to branching on a vertex of minimum degree and a random
 vertex. They show that both of these perform significantly worse than branching
 on a maximum degree vertex.
@@ -263,7 +263,7 @@ greedy coloring and branch on vertices with a high coloring number.
 More sophisticated MC algorithms use MaxSAT encodings to prune the set of
 branching vertices~\cite{LiFangXu,LiJiang,LiQuan}. Li et al.~\cite{LiMaxSat}
 combine greedy coloring and MaxSAT reasoning the further reduce the number of
-branching vertices.
+branching vertices.\todo{cite MCS algorithm by Tomita et al?}
 
 Another approach used for MC is using the \emph{degeneracy order} $v_1 < v_2 <
 \dots < v_n$ where $v_i$ is a vertex of smallest degree in $G - \{v_1, \dots
@@ -273,17 +273,17 @@ introduce another vertex ordering using iterative maximum independent set
 computations (which might be easier than MC on some graphs) and breaking ties
 according to the degeneracy order.
 
-\subsection{Branch and Reduce Algorithm by Akiba and Iwata~\cite{AkibaIwata}}
+\subsection{Branch-and-Reduce Algorithm by Akiba and Iwata}
 
-The algorithm by Akiba and Iwata~\cite{AkibaIwata} is a so called
+The algorithm by Akiba and Iwata~\cite{AkibaIwata} is a so-called
 \emph{branch-and-reduce} algorithm: It repeatedly reduces the instance size by a
-set of polynomial time reduction rules and then branches on a vertex once no
+set of polynomial-time reduction rules and then branches on a vertex once no
 more reduction rules can be applied. Since branching removes at least one vertex
 from the graph, more reduction rules might be applicable afterwards. The
-reduction set used in their algorithm is relatively large and not covered
+set of reductions used in their algorithm is relatively large and not covered
 completely here. However, some reduction rules are explained in
-Section~\ref{sec:reduction_branching} where we show how to target a particular reduction
-rules when branching. The reduction rules are applied by iterating over all
+Section~\ref{sec:reduction_branching} where we show how to target particular reduction
+rules when branching. Akiba and Iwata apply the reduction rules by iterating over all
 vertices in the graph once for each rule and checking whether the rule
 can be applied to each vertex. In order to prune the search space, bounds on the largest
 possible independent set of a branch are computed. They implement three different
