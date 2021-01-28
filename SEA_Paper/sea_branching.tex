@@ -717,12 +717,12 @@ searching for branching vertices.\todo{address Darren's comments after figuring
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
     \hline
-    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{sparse nets.} & \multicolumn{2}{c|}{All Instances}                                                                                                            \\
-    technique $\downarrow$      & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} \\
+    & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{sparse nets.} & \multicolumn{2}{c|}{All Instances}                                                                                                            \\
+    & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} \\
     \hline
-    articulation points         & \numprint{0.98}           & \numprint{0.98}             & \numprint{0.98}           & \numprint{0.98}             & \numprint{1.82}          & \numprint{0.92}             & \numprint{1.07}          & \numprint{0.97}             \\
-    edge cuts                   & \textbf{\numprint{1.02}}  & \textbf{\numprint{1.02}}    & \numprint{0.97}           & \numprint{0.97}             & \textbf{\numprint{1.84}} & \textbf{\numprint{1.06}}    & \textbf{\numprint{1.08}} & \textbf{\numprint{1.01}}    \\
-    nested dissections          & \numprint{0.96}           & \numprint{0.96}             & \numprint{0.78}           & \numprint{0.78}             & \numprint{1.65}          & \numprint{0.86}             & \numprint{0.95}          & \numprint{0.88}             \\
+    articulation points         & \numprint{0.99}           & \numprint{0.99}             & \numprint{0.99}           & \numprint{0.99}             & \numprint{1.67}          & \numprint{0.95}             & \numprint{1.29}          & \numprint{1.37}             \\
+    edge cuts                   & \numprint{1.00}  & \numprint{1.00}    & \numprint{0.98}           & \numprint{0.98}             & \textbf{\numprint{1.90}} & \textbf{\numprint{1.01}}    & \textbf{\numprint{1.34}} & \textbf{\numprint{1.37}}    \\
+    nested dissections          & \numprint{0.97}           & \numprint{0.97}             & \numprint{0.78}           & \numprint{0.78}             & \numprint{0.98}          & \numprint{0.98}             & \numprint{1.59}          & \numprint{1.01}             \\
     \hline
     \end{tabular}
 \end{table}
@@ -782,13 +782,13 @@ Thus, for $84\%$ of all ($93\%$ of solved) instances tested, one of our strategi
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
     \hline
-    Instance type $\rightarrow$ & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{sparse nets.} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
-    reduction rule $\downarrow$ & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} \\
+    & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{sparse nets.} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
+    & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} \\
     \hline
-    Twin                        & \numprint{1.00}     & \numprint{1.00}      & \textbf{\numprint{1.02}}     & \textbf{\numprint{1.02}}     & \numprint{0.99}  & \numprint{0.99}      & \textbf{\numprint{1.01}}   & \textbf{\numprint{1.01}}       \\
-    Funnel                      & \textbf{\numprint{1.02}}     & \textbf{\numprint{1.02}}      & \numprint{0.96}     & \numprint{0.96}       & \numprint{0.71}   & \numprint{0.71}       & \numprint{0.96}   & \numprint{0.96}       \\
-    Unconfined                  & \numprint{0.85}    & \numprint{0.85}       & \numprint{1.01}     & \numprint{1.01}       & \numprint{0.71}   & \numprint{0.71}       & \numprint{0.89}   & \numprint{0.89}      \\
-    Combined                    & \numprint{0.96}    & \numprint{0.96}     & \numprint{0.94}     & \numprint{0.94}      & \numprint{0.68}   & \numprint{0.68}      & \numprint{0.92}   & \numprint{0.92}       \\
+    Twin                        & \numprint{1.00}     & \numprint{1.00}      & \textbf{\numprint{1.02}}     & \textbf{\numprint{1.02}}     & \numprint{0.98}  & \textbf{\numprint{1.00}} & \numprint{1.00}   & \numprint{1.01}      \\
+    Funnel                      & \textbf{\numprint{1.06}}     & \textbf{\numprint{1.06}}      & \numprint{0.99}     & \numprint{0.99}       & \numprint{0.98}   & \numprint{0.98}       & \numprint{1.00}   & \textbf{\numprint{1.01}}       \\
+    Unconfined                  & \numprint{0.96}    & \numprint{0.96}       & \numprint{1.01}     & \numprint{1.01}       & \numprint{0.98}   & \numprint{0.98}       & \numprint{0.98}   & \numprint{0.89}      \\
+    Combined                    & \numprint{1.01}    & \numprint{1.01}     & \numprint{0.97}     & \numprint{0.97}      & \numprint{0.97}   & \numprint{0.95}      & \numprint{0.98}   & \numprint{0.98}       \\
     \hline
     \end{tabular}
 \end{table}
@@ -863,6 +863,13 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			\hline
 			Graph                 & $|V|$              & $|E|$                                               \\
 			\hline
+			05 & 200 & 798\\
+			06 & 200 & 733\\
+			10 & 199 & 758\\
+			19 & 200 & 862\\
+			31 & 200 & 813\\
+			33 & 4410 & 6885\\
+			35 & 200 & 864\\
 			36                    & \numprint{26300}   & \numprint{41500}                                    \\
 			37                    & \numprint{198}     & \numprint{808}                                      \\
 			38                    & \numprint{786}     & \numprint{14024}                                    \\
@@ -902,7 +909,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			72                    & \numprint{200}     & \numprint{1167}                                     \\
 			73                    & \numprint{200}     & \numprint{1078}                                     \\
 			74                    & \numprint{200}     & \numprint{805}                                      \\
-			75                    & \numprint{26300}   & \numprint{41500}                                    \\
+			77                    & \numprint{200}   & \numprint{961}                                    \\
 			\hline
 		\end{tabular}
     \end{minipage}
@@ -915,7 +922,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			Graph                 & $|V|$              & $|E|$                                               \\
 			\hline
 			C125                  & \numprint{125}     & \numprint{787}                                      \\
-			C250                  & \numprint{250}     & \numprint{3141}                                     \\
+			%C250                  & \numprint{250}     & \numprint{3141}                                     \\
 			MANN\_a27             & \numprint{378}     & \numprint{702}                                      \\
 			MANN\_a45             & \numprint{1035}    & \numprint{1980}                                     \\
 			brock200\_1           & \numprint{200}     & \numprint{5066}                                     \\
@@ -930,14 +937,14 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			johnson8-4-4          & \numprint{70}      & \numprint{560}                                      \\
 			keller4               & \numprint{171}     & \numprint{5100}                                     \\
 			p\_hat1000-1          & \numprint{1000}    & \numprint{377247}                                   \\
-			p\_hat1000-2          & \numprint{1000}    & \numprint{254701}                                   \\
-			p\_hat1500-1          & \numprint{1500}    & \numprint{839327}                                   \\
+			%p\_hat1000-2          & \numprint{1000}    & \numprint{254701}                                   \\
+			%p\_hat1500-1          & \numprint{1500}    & \numprint{839327}                                   \\
 			p\_hat300-1           & \numprint{300}     & \numprint{33917}                                    \\
 			p\_hat300-2           & \numprint{300}     & \numprint{22922}                                    \\
 			p\_hat300-3           & \numprint{300}     & \numprint{11460}                                    \\
 			p\_hat500-1           & \numprint{500}     & \numprint{93181}                                    \\
 			p\_hat500-2           & \numprint{500}     & \numprint{61804}                                    \\
-			p\_hat500-3           & \numprint{500}     & \numprint{30950}                                    \\
+			%p\_hat500-3           & \numprint{500}     & \numprint{30950}                                    \\
 			p\_hat700-1           & \numprint{700}     & \numprint{183651}                                   \\
 			p\_hat700-2           & \numprint{700}     & \numprint{122922}                                   \\
 			san1000               & \numprint{1000}    & \numprint{249000}                                   \\
@@ -955,14 +962,16 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 			Graph                 & $|V|$              & $|E|$               & source                        \\			
 			\hline
 			as-skitter            & \numprint{1696415} & \numprint{11095298} & \cite{snapnets}               \\
-          bay                     & \numprint{321270}  & \numprint{397415}   & \cite{demetrescu2009shortest} \\
+			baidu-relatedpages    & \numprint{415641} & \numprint{2374044} & \cite{nr} \\
+          	bay                     & \numprint{321270}  & \numprint{397415}   & \cite{demetrescu2009shortest} \\
 			col                   & \numprint{435666}  & \numprint{521200}   & \cite{demetrescu2009shortest} \\
-			feather-deezer-social & \numprint{28281}   & \numprint{92752}    & \cite{snapnets}               \\
 			fla                   & \numprint{1070376} & \numprint{1343951}  & \cite{demetrescu2009shortest} \\
+			hudong-internallink   & \numprint{1984484} & \numprint{14428382} & \cite{nr}\\
+			in-2004 			  & \numprint{1382870} & \numprint{13591473} & \cite{nr}\\
 			libimseti             & \numprint{220970}  & \numprint{17233144} & \cite{nr}                     \\
-			musae-twitch\_DE      & \numprint{9498}    & \numprint{153138}   & \cite{snapnets}               \\
 			musae-twitch\_FR      & \numprint{6549}    & \numprint{112666}   & \cite{snapnets}               \\
-			ny                    & \numprint{264346}  & \numprint{365050}   & \cite{demetrescu2009shortest} \\
+			petster-friendships-dog & \numprint{426820} & \numprint{8543549} & \cite{nr} \\
+			soc-LiveJournal1      & \numprint{4847571} & \numprint{42851237} & \cite{snapnets} \\
 			web-BerkStan          & \numprint{685230}  & \numprint{6649470}  & \cite{snapnets}               \\
 			web-Google            & \numprint{875713}  & \numprint{4322051}  & \cite{snapnets}               \\
 			web-NotreDame         & \numprint{325730}  & \numprint{1090108}  & \cite{snapnets}               \\
@@ -993,16 +1002,8 @@ A value is highlighted in bold if its the best one within a row.
 		\begin{tabular}{|l|r|r|r|r|}\hline
 			& max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
 			\hline
-			
-			$t_{\text{avg}}$ (all) & \numprint{2055.62} & \numprint{1599.25} & \textbf{\numprint{1529.41}} & \numprint{1653.10} \\
-			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{1.14} & \textbf{\numprint{1.17}} & \numprint{0.99} \\
-			$t_{\text{avg}}$ (solved) & \numprint{1659.99} & \numprint{1213.70} & \textbf{\numprint{1210.68}} & \numprint{1222.67} \\
-			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \numprint{1.18} & \textbf{\numprint{1.21}} & \numprint{1.03} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \numprint{0.99} & \textbf{\numprint{547.53}} & \numprint{486.46} & \numprint{91.71} \\
-			$s_{\text{avg}}$ (solved) & \numprint{1.00} & \textbf{\numprint{560.85}} & \numprint{498.27} & \numprint{93.77} \\
-			$s_{\text{sum}}$ (all) & \numprint{1.00} & \numprint{1.29} & \textbf{\numprint{1.34}} & \numprint{1.24} \\
-			$s_{\text{sum}}$ (solved) & \numprint{1.00} & \numprint{1.37} & \textbf{\numprint{1.37}} & \numprint{1.36} \\
+			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{1.29} & \textbf{\numprint{1.34}} & \numprint{1.24} \\
+			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{1.37} & \textbf{\numprint{1.37}} & \numprint{1.36} \\
 			
 			\hline
 		\end{tabular}
@@ -1068,15 +1069,8 @@ A value is highlighted in bold if its the best one within a row.
 			74 & \textbf{\numprint{41.27}} & \numprint{42.22} (\numprint{0.98}) & \numprint{41.96} (\numprint{0.98}) & \numprint{43.06} (\numprint{0.96}) \\
 			77 & \textbf{\numprint{77.46}} & \numprint{79.98} (\numprint{0.97}) & \numprint{79.48} (\numprint{0.97}) & \numprint{77.87} (\numprint{0.99}) \\
 			\hline
-			$t_{\text{avg}}$ (all) & \textbf{\numprint{815.57}} & \numprint{827.29} & \numprint{819.53} & \numprint{844.82} \\
-			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.02}} & \numprint{0.90} \\
-			$t_{\text{avg}}$ (solved) & \textbf{\numprint{815.57}} & \numprint{827.29} & \numprint{819.53} & \numprint{844.82} \\
-			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.02}} & \numprint{0.90} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.05}} & \numprint{0.94} \\
-			$s_{\text{avg}}$ (solved) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.05}} & \numprint{0.94} \\
-			$s_{\text{sum}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{0.97} \\
-			$s_{\text{sum}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{0.97} \\
+			$s_{\text{total}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{0.97} \\
+			$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{0.97} \\
 			
 			\hline
 		\end{tabular}
@@ -1120,17 +1114,9 @@ A value is highlighted in bold if its the best one within a row.
 			san400\_0 & \textbf{\numprint{12826.58}} & \numprint{12964.68} (\numprint{0.99}) & \numprint{13112.91} (\numprint{0.98}) & \numprint{12975.06} (\numprint{0.99}) \\
 			sanr200\_0 & \textbf{\numprint{2144.20}} & \numprint{2187.94} (\numprint{0.98}) & \numprint{2198.09} (\numprint{0.98}) & \numprint{2170.73} (\numprint{0.99}) \\
 			\hline
-			$t_{\text{avg}}$ (all) & \textbf{\numprint{1540.18}} & \numprint{1562.75} & \numprint{1574.19} & \numprint{1566.15} \\
-			$s_{\text{geom}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.97} & \numprint{0.78} \\
-			$t_{\text{avg}}$ (solved) & \textbf{\numprint{1540.18}} & \numprint{1562.75} & \numprint{1574.19} & \numprint{1566.15} \\
-			$s_{\text{geom}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.97} & \numprint{0.78} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.97} & \numprint{0.84} \\
-			$s_{\text{avg}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.97} & \numprint{0.84} \\
-			$s_{\text{sum}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.98} & \numprint{0.98} \\
-			$s_{\text{sum}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.98} & \numprint{0.98} \\
-			
-			
+			$s_{\text{total}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.98} & \numprint{0.98} \\
+			$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.98} & \numprint{0.98} \\
+						
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1150,7 +1136,7 @@ A value is highlighted in bold if its the best one within a row.
 			as-skitter & \numprint{11977.45} & \numprint{12088.82} (\numprint{0.99}) & \numprint{11931.14} (\numprint{1.00}) & \textbf{\numprint{11795.50} (\numprint{1.02})} \\
 			baidu & \textbf{\numprint{5.26}} & \numprint{5.63} (\numprint{0.94}) & \numprint{5.51} (\numprint{0.95}) & \numprint{11.83} (\numprint{0.44}) \\
 			bay-sorted & \numprint{10.82} & \numprint{12.13} (\numprint{0.89}) & \textbf{\numprint{7.90} (\numprint{1.37})} & \numprint{25.25} (\numprint{0.43}) \\
-			col-sorted & \numprint{34384.77} & \numprint{32240.53} (\numprint{1.07}) & \numprint{26677.97} (\numprint{1.29}) & - \\
+			col-sorted & \numprint{34384.77} & \numprint{32240.53} (\numprint{1.07}) & \textbf{\numprint{26677.97} (\numprint{1.29})} & > \numprint{36000} \\
 			fla-sorted & \numprint{157.50} & \numprint{139.68} (\numprint{1.13}) & \numprint{144.67} (\numprint{1.09}) & \textbf{\numprint{137.02} (\numprint{1.15})} \\
 			hudong-internallink & \textbf{\numprint{3.38}} & \numprint{4.15} (\numprint{0.81}) & \numprint{4.33} (\numprint{0.78}) & \numprint{3.97} (\numprint{0.85}) \\
 			in-2004 & \textbf{\numprint{37.76}} & \numprint{39.00} (\numprint{0.97}) & \numprint{38.13} (\numprint{0.99}) & \numprint{47.73} (\numprint{0.79}) \\
@@ -1161,19 +1147,10 @@ A value is highlighted in bold if its the best one within a row.
 			web-BerkStan & \textbf{\numprint{793.05}} & \numprint{2023.01} (\numprint{0.39}) & \numprint{802.19} (\numprint{0.99}) & \numprint{840.56} (\numprint{0.94}) \\
 			web-Google & \numprint{2.91} & \numprint{2.85} (\numprint{1.02}) & \textbf{\numprint{2.68} (\numprint{1.09})} & \numprint{3.66} (\numprint{0.80}) \\
 			web-NotreDame & \numprint{122.57} & \textbf{\numprint{94.59} (\numprint{1.30})} & \numprint{122.09} (\numprint{1.00}) & \numprint{159.76} (\numprint{0.77}) \\
-			web-Stanford & - & \numprint{47.94} ($\infty$) & \numprint{163.79} ($\infty$) & \numprint{112.18} ($\infty$) \\
+			web-Stanford & > \numprint{36000} & \textbf{\numprint{47.94} (> \numprint{750.96})} & \numprint{163.79} (> \numprint{219.79}) & \numprint{112.18} (> \numprint{320.93}) \\
 			\hline
-			$t_{\text{avg}}$ (all) & \numprint{6157.11} & \numprint{3695.74} & \textbf{\numprint{3241.50}} & \numprint{3862.51} \\
-			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{1.41} & \textbf{\numprint{1.45}} & \numprint{1.23} \\
-			$t_{\text{avg}}$ (solved) & \numprint{1690.15} & \numprint{1780.59} & \textbf{\numprint{1675.44}} & \numprint{1678.88} \\
-			$s_{\text{geom}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.89} & \numprint{1.00} & \numprint{0.82} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \numprint{0.93} & \textbf{\numprint{50.93}} & \numprint{15.61} & \numprint{22.19} \\
-			$s_{\text{avg}}$ (solved) & \numprint{1.00} & \numprint{0.92} & \textbf{\numprint{1.01}} & \numprint{0.85} \\
-			$s_{\text{sum}}$ (all) & \numprint{1.00} & \numprint{1.67} & \textbf{\numprint{1.90}} & \numprint{1.59} \\
-			$s_{\text{sum}}$ (solved) & \numprint{1.00} & \numprint{0.95} & \textbf{\numprint{1.01}} & \numprint{1.01} \\
-			
-			
+			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{1.67} & \textbf{\numprint{1.90}} & \numprint{1.59} \\
+			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{0.95} & \textbf{\numprint{1.01}} & \numprint{1.01} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1188,15 +1165,9 @@ A value is highlighted in bold if its the best one within a row.
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
 			& max. deg. & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
 			\hline
-			$t_{\text{avg}}$ (all) & \textbf{\numprint{2055.62}} & \numprint{2063.09} & \numprint{2061.79} & \numprint{2097.27} & \numprint{2102.05} \\
-			$s_{\text{geom}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.97} & \numprint{0.89} & \numprint{0.92} \\
-			$t_{\text{avg}}$ (solved) & \numprint{1237.43} & \numprint{1225.14} & \textbf{\numprint{1223.81}} & \numprint{1260.17} & \numprint{1265.06} \\
-			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.97} & \numprint{0.89} & \numprint{0.92} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \numprint{0.99} & \textbf{\numprint{0.99}} & \numprint{0.99} & \numprint{0.93} & \numprint{0.94} \\
-			$s_{\text{avg}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{1.00} & \numprint{0.95} & \numprint{0.95} \\
-			$s_{\text{sum}}$ (all) & \textbf{\numprint{1.00}} & \numprint{1.00} & \numprint{1.00} & \numprint{0.98} & \numprint{0.98} \\
-			$s_{\text{sum}}$ (solved) & \numprint{1.00} & \numprint{1.01} & \textbf{\numprint{1.01}} & \numprint{0.98} & \numprint{0.98} \\
+			
+			$s_{\text{total}}$ (all) & \textbf{\numprint{1.00}} & \numprint{1.00} & \numprint{1.00} & \numprint{0.98} & \numprint{0.98} \\
+			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{1.01} & \textbf{\numprint{1.01}} & \numprint{0.98} & \numprint{0.98} \\
 			
 			\hline
 		\end{tabular}
@@ -1262,19 +1233,8 @@ A value is highlighted in bold if its the best one within a row.
 			74 & \numprint{41.27} & \numprint{41.21} (\numprint{1.00}) & \textbf{\numprint{41.01} (\numprint{1.01})} & \numprint{47.59} (\numprint{0.87}) & \numprint{43.03} (\numprint{0.96}) \\
 			77 & \numprint{77.46} & \numprint{77.43} (\numprint{1.00}) & \textbf{\numprint{76.80} (\numprint{1.01})} & \numprint{81.62} (\numprint{0.95}) & \numprint{78.81} (\numprint{0.98}) \\
 			\hline
-			$t_{\text{avg}}$ (all) & \numprint{815.57} & \numprint{814.29} & \textbf{\numprint{770.07}} & \numprint{852.86} & \numprint{810.26} \\
-			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.86} & \numprint{0.96} \\
-			$t_{\text{avg}}$ (solved) & \numprint{815.57} & \numprint{814.29} & \textbf{\numprint{770.07}} & \numprint{852.86} & \numprint{810.26} \\
-			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.86} & \numprint{0.96} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.06}} & \numprint{0.93} & \numprint{0.98} \\
-			$s_{\text{avg}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.06}} & \numprint{0.93} & \numprint{0.98} \\
-			$s_{\text{sum}}$ (all) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.06}} & \numprint{0.96} & \numprint{1.01} \\
-			$s_{\text{sum}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.06}} & \numprint{0.96} & \numprint{1.01} \\
-			
-			
-			
-			
+			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.06}} & \numprint{0.96} & \numprint{1.01} \\
+			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.06}} & \numprint{0.96} & \numprint{1.01} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1318,17 +1278,9 @@ A value is highlighted in bold if its the best one within a row.
 			san400\_0 & \numprint{12826.58} & \textbf{\numprint{12540.22} (\numprint{1.02})} & \numprint{13073.50} (\numprint{0.98}) & \numprint{13240.40} (\numprint{0.97}) & \numprint{13528.34} (\numprint{0.95}) \\
 			sanr200\_0 & \numprint{2144.20} & \numprint{2092.56} (\numprint{1.02}) & \textbf{\numprint{2027.34} (\numprint{1.06})} & \numprint{2104.37} (\numprint{1.02}) & \numprint{2106.70} (\numprint{1.02}) \\
 			\hline
-			$t_{\text{avg}}$ (all) & \numprint{1540.18} & \textbf{\numprint{1507.30}} & \numprint{1561.33} & \numprint{1530.39} & \numprint{1595.04} \\
-			$s_{\text{geom}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.96} & \numprint{1.01} & \numprint{0.94} \\
-			$t_{\text{avg}}$ (solved) & \numprint{1540.18} & \textbf{\numprint{1507.30}} & \numprint{1561.33} & \numprint{1530.39} & \numprint{1595.04} \\
-			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.96} & \numprint{1.01} & \numprint{0.94} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.97} & \numprint{1.02} & \numprint{0.95} \\
-			$s_{\text{avg}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.97} & \numprint{1.02} & \numprint{0.95} \\
-			$s_{\text{sum}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.99} & \numprint{1.01} & \numprint{0.97} \\
-			$s_{\text{sum}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.99} & \numprint{1.01} & \numprint{0.97} \\
-			
-			
+			$s_{\text{total}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.99} & \numprint{1.01} & \numprint{0.97} \\
+			$s_{\text{total}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.99} & \numprint{1.01} & \numprint{0.97} \\
+						
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1348,7 +1300,7 @@ A value is highlighted in bold if its the best one within a row.
 			as-skitter & \numprint{11977.45} & \numprint{11936.70} (\numprint{1.00}) & \textbf{\numprint{11128.03} (\numprint{1.08})} & \numprint{11795.90} (\numprint{1.02}) & \numprint{11403.20} (\numprint{1.05}) \\
 			baidu & \textbf{\numprint{5.26}} & \numprint{5.34} (\numprint{0.98}) & \numprint{5.68} (\numprint{0.93}) & \numprint{5.68} (\numprint{0.93}) & \numprint{5.84} (\numprint{0.90}) \\
 			bay-sorted & \textbf{\numprint{10.82}} & \numprint{10.95} (\numprint{0.99}) & \numprint{61.14} (\numprint{0.18}) & \numprint{33.21} (\numprint{0.33}) & \numprint{58.21} (\numprint{0.19}) \\
-			col-sorted & \numprint{34384.77} & - & - & - & - \\
+			col-sorted & \textbf{\numprint{34384.77}} & > \numprint{36000} & > \numprint{36000} & > \numprint{36000} & > \numprint{36000} \\
 			fla-sorted & \textbf{\numprint{157.50}} & \numprint{159.10} (\numprint{0.99}) & \numprint{303.30} (\numprint{0.52}) & \numprint{511.19} (\numprint{0.31}) & \numprint{292.22} (\numprint{0.54}) \\
 			hudong-internallink & \textbf{\numprint{3.38}} & \numprint{3.74} (\numprint{0.90}) & \numprint{3.48} (\numprint{0.97}) & \numprint{3.58} (\numprint{0.94}) & \numprint{3.90} (\numprint{0.87}) \\
 			in-2004 & \numprint{37.76} & \textbf{\numprint{37.66} (\numprint{1.00})} & \numprint{38.01} (\numprint{0.99}) & \numprint{104.12} (\numprint{0.36}) & \numprint{104.42} (\numprint{0.36}) \\
@@ -1359,19 +1311,10 @@ A value is highlighted in bold if its the best one within a row.
 			web-BerkStan & \numprint{793.05} & \numprint{785.55} (\numprint{1.01}) & \textbf{\numprint{741.49} (\numprint{1.07})} & \numprint{939.90} (\numprint{0.84}) & \numprint{963.78} (\numprint{0.82}) \\
 			web-Google & \numprint{2.91} & \textbf{\numprint{2.87} (\numprint{1.01})} & \numprint{2.92} (\numprint{1.00}) & \numprint{3.07} (\numprint{0.95}) & \numprint{3.03} (\numprint{0.96}) \\
 			web-NotreDame & \textbf{\numprint{122.57}} & \numprint{126.49} (\numprint{0.97}) & \numprint{152.53} (\numprint{0.80}) & \numprint{127.48} (\numprint{0.96}) & \numprint{155.77} (\numprint{0.79}) \\
-			web-Stanford & - & - & - & - & - \\
+			web-Stanford & > \numprint{36000} & > \numprint{36000} & > \numprint{36000} & > \numprint{36000} & > \numprint{36000} \\
 			\hline
-			$t_{\text{avg}}$ (all) & \textbf{\numprint{6157.11}} & \numprint{6258.99} & \numprint{6297.59} & \numprint{6292.54} & \numprint{6340.88} \\
-			$s_{\text{geom}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.00}} & \numprint{0.82} & \numprint{0.76} & \numprint{0.73} \\
-			$t_{\text{avg}}$ (solved) & \numprint{1690.15} & \textbf{\numprint{1683.45}} & \numprint{1727.99} & \numprint{1722.16} & \numprint{1777.94} \\
-			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.00}} & \numprint{0.79} & \numprint{0.74} & \numprint{0.70} \\
-			\hline
-			$s_{\text{avg}}$ (all) & \numprint{0.93} & \textbf{\numprint{0.94}} & \numprint{0.81} & \numprint{0.75} & \numprint{0.72} \\
-			$s_{\text{avg}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.86} & \numprint{0.80} & \numprint{0.76} \\
-			$s_{\text{sum}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.98} & \numprint{0.98} & \numprint{0.97} \\
-			$s_{\text{sum}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.98} & \numprint{0.95} \\
-			
-			
+			$s_{\text{total}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.98} & \numprint{0.98} & \numprint{0.97} \\
+			$s_{\text{total}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.98} & \numprint{0.95} \\
 			\hline
 		\end{tabular}
 	\end{center}
