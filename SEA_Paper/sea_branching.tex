@@ -382,7 +382,7 @@ There are two main optimizations that we use when considering the nested dissect
 First, we limit the number of recursive calls during the nested dissection
 computation, because we noticed that vertices at the end of the ordering seldom lead to a decomposition of the graph. 
 This is due to vertices being removed by data reduction which can lead to separators becoming invalid.
-Furthermore, similar to the edge cut based strategy, we limit the size of
+Furthermore, similar to the edge-cut-based strategy, we limit the size of
 separators considered during branching using a threshold.
 Again, this is done to ensure that we do not require too many branching steps to decompose the graph.
 The specific value for this size threshold is given in Section~\ref{sec:algo_conf}.
@@ -403,13 +403,14 @@ of maximum degree. The rational here is that a vertex of large degree changes
 the structure of the graph more than a vertex of small degree even if that
 vertex is guaranteed to enable the application of a reduction rule. Also, our
 current strategies only enable the application of the targeted reduction rule in
-the branch that excludes the vertex from the independent set. However, in the
-case that includes it into the independent set all neighbors are removed from
+the branch that excludes the vertex from the independent set, the
+\emph{excluding branch}. However, in the
+case that includes it into the independent set (\emph{including branch}) all neighbors are removed from
 the graph as well because they already have an adjacent vertex in the solution.
 
 We also did some preliminary experiments with storing the candidate vertices in
-a priority queue across branch-reduce steps and updating that list continually.
-However, changes where too frequent for this approach to be faster because of
+a priority queue without resetting after every branch and updating that list continually.
+However, changes were too frequent for this approach to be faster because of
 the high amount of priority queue operations compared to the relatively low overhead
 caused by the current approach.
 
@@ -426,7 +427,7 @@ The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi
   always an MIS that includes $\{u,v\}$ and therefore
   excludes $N(u)$. Otherwise, let $G'=(V',E')$ be the graph with $V'=(V\setminus
   N[\{u,v\}])\cup\{w\}$ where $w\notin V$ and $E'=(E\cap\binom{V'}{2})\cup
-  \{\{w,x\}\;|\;x\in N^2(u)\})\}$ and let $I'$ be an MIS in $G'$. Then, 
+  \{\{w,x\}\;|\;x\in N^2(u)\}\}$ and let $I'$ be an MIS in $G'$. Then, 
   $
   I=\begin{cases}
     I'\cup \{u,v\} & \text{, if }w\notin I'\\
@@ -436,18 +437,18 @@ The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi
   is an MIS in $G$.
 \end{theorem}
 
-We now define \emph{Almost Twins} as follows:
+We now define \emph{almost twins} as follows:
 \begin{definition} (Almost Twins)
   In a graph $G=(V,E)$ two non adjacent vertices $u$ and $v$ are called almost twins if $d(u) = 4$, $d(v) = 3$ and $N(v)\subseteq N(u)$ (\ie $N(u) = N(v) \cup \{w\}$). 
 \end{definition}
 
 Clearly, after removing $w$, $u$ and $v$ are twins so we can apply the twin
 reduction. Finding almost twins can be done while searching for twins: The
-original algorithm checks for each vertex $v$ of degree $3$ whether there is a
+original algorithm checks for each vertex $v$ of degree-$3$ whether there is a
 vertex $u \in N^2(v)$ which $d(u) = 3$ and $N(u) = N(v)$. We augment this
 algorithm by simultaneously also searching for $u \in N^2(v)$ with $d(u) = 4$
 and $N(v) \subset N(u)$. This induces about the same computational cost for
-degree $4$ vertices in $N^2(v)$ as for degree $3$ vertices. While there might be
+degree-$4$ vertices in $N^2(v)$ as for degree $3$ vertices. While there might be
 instances where this causes high overhead, we expect the practical slowdown to
 be small. Figure~\ref{fig:twin} illustrates branching for almost twins. 
 
@@ -632,11 +633,14 @@ and figures here show aggregated results. For
 detailed results for all of our algorithms across all instances, see Appendix~\ref{app:detailed_results}.
 
 \subsection{Experimental Environment}
-We execute all our experiments on a machine with 4 8-core Intel Xeon E5-4640 CPUs
+We augment a C++-adaptation of the algorithm by Akiba and
+Iwata~\cite{AkibaIwata} with our branching strategies. \todo{add Software} Out
+code is publicly available on GitHub\footnote{\url{https://github.com/Hespian/CutBranching}}. We execute all our experiments on a machine with 4 8-core Intel Xeon E5-4640 CPUs
 (2.4~GHz) and 512 GiB DDR3-PC1600 RAM. To speed up our experiments we use two
 identical machines and run at most 16 instances at once on the
 same machine (using the same machine for all algorithms on a specific instance).
-All numbers reported are arithmetic means of three runs with a timeout of ten hours.
+All numbers reported are arithmetic means of three runs with a timeout of ten
+hours.
 
 \subsection{Algorithm Configuration}
 \label{sec:algo_conf}
@@ -651,17 +655,17 @@ the cut contains at least ten percent of the remaining vertices. If no suitable 
 InertialFlowCutter~\cite{gottesburen2019faster}
 with the KaFFPa~\cite{DBLP:conf/wea/SandersS13}
 backend. The KaFFPa partitioner is configured to use the \emph{strong} preset
-with a fixed seed. For branching we use
+with a fixed seed\footnote{42}\todo{@Christian: Check seed}. For branching we use
 three levels of nested dissections with a minimum balance of at least 40 percent of the vertices in the smaller part of each dissection. Furthermore, we
 only use the nested dissection if separators contain at most
-50 vertices. For the reduction based
+50 vertices. For the reduction-based
 branching rules, we fall back to the default branching strategy if all
 candidates have a degree of less than $\Delta - 2$. 
 
 \subsection{Instances}
 We use instances from several sources: A sample of the instances used for the
 PACE 2019 Challenge on Minimum Vertex Cover~\cite{dzulfikar_et_al:LIPIcs:2019:11486}. 
-Maximum Clique instances from the second DIMACS Implementation Challenge~\cite{johnson1993cliques} and sparse instances from
+Complements of Maximum Clique instances from the second DIMACS Implementation Challenge~\cite{johnson1993cliques} and sparse instances from
 the Stanford Network Analysis Project (SNAP)~\cite{snapnets}, the 9th DIMACS
 Implementation Challenge on Shortest Paths~\cite{demetrescu2009shortest} and the
 Network Data Repository~\cite{nr}. Detailed instance information can
@@ -675,43 +679,45 @@ The remaining set of instances is composed of 40 PACE instances, 30 DIMACS insta
 \label{sec:experiments_decomp}
 
 Figure~\ref{fig:all_decomp_time} shows a performance plot of the running time of
-our decomposition based branching strategies: For each instance, the best
+our decomposition-based branching strategies: For each instance, the best
 algorithm is determined. The plot shows for each algorithm $1 - (t_{best}/
-t_{alg})$, where $t_{best}$ is the time that the fastest algorithm took
-for that instance and $t_{alg}$ is the time the respective algorithm took.
-So a value of $0$ means that
+t_{alg})$, where $t_{best}$ is the running time of the fastest algorithm
+for that instance and $t_{alg}$ is the time of the respective algorithm.
+A value of $0$ means that
 the algorithm was the fastest algorithm on that instance and a value of
 $\numprint{0.5}$ means that the algorithm took twice as long as the fastest
 algorithm. Timeouts are shown as a value $> 1$. For each algorithm, instances
 are then sorted by their value. Note that this means that the points on a
-vertical line do not necessarily correspond to the same instance.
+vertical line do not necessarily correspond to the same instance. Furthermore,
+the plot uses a logarithmic scale for the $y$-axis to better illustrate small values.
 
-The plot shows that for most instances, the default strategy of branching on a
-vertex of maximum degree outperforms our decomposition based approaches.
+The plot in Figure~\ref{fig:all_decomp_time} shows that for most instances, the default strategy of branching on a
+vertex of maximum degree outperforms our decomposition-based approaches.
 However, for instances that have suitable candidates for decomposition such as
 sparse networks, significant speedups compared to the default strategy can be
 seen. To be more specific, accounting a time of ten hours (our timeout threshold) for unfinished
 instances, we achieve a geometric
 mean speedup of $\numprint{1.65}$ to $\numprint{1.84}$ for our
-decomposition based techniques on sparse networks (see
+decomposition-based techniques on sparse networks (see
 Table~\ref{tab:summary_decomp}). In particular, there is one instance (web-stanford) that causes a timeout with the
 default strategy but can be solved in $48$ (articulation points) to $164$ (nested
 dissections) seconds. Table~\ref{tab:summary_decomp} shows that overall, our
-technique using edge cuts seems to be the most beneficial, achieving an overall speedup of $8\%$ over max. degree and $1\%$
-when only considering instances that were solved by all decomposition based
-techniques and max. degree branching.
+technique using edge cuts seems to be the most beneficial, achieving an overall speedup of $8\%$ over maximum degree and $1\%$
+when only considering instances that were solved by all decomposition-based
+techniques and maximum degree branching.
 Finally, most running
 times are only slightly slower than the default strategy with a few instances
 showing a speedup. This is mainly because
 the number of branches required to solve the instances does not change in most
 cases (see Figure~\ref{fig:all_decomp_branch}) and most of the running time
 difference is caused by the overhead from
-searching for branching vertices.
+searching for branching vertices.\todo{address Darren's comments after figuring
+  out how to average speedups}
 % \todo{I would add that this behavior is not 'too' surprising}
 
 \begin{table}[t]
-  \caption{Speedup of our decomposition based techniques over the default
-    strategy (max. degree). ``all'' are geometric means of the speedup over all
+  \caption{Speedup of our decomposition-based techniques over the default
+    strategy (maximum degree). ``all'' are geometric means of the speedup over all
   instances of that type (timeouts are assigned a running time of
   ten hours), ``solved'' are geometric means of the
   speedup over all instances that have been solved by all techniques.}
@@ -732,27 +738,27 @@ searching for branching vertices.
 
 %\begin{figure}[t]
 %\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
-%\caption{Performance plot comparing running times of decomposition based branching strategies.}
+%\caption{Performance plot comparing running times of decomposition-based branching strategies.}
 %\label{fig:all_decomp_time}
 %\end{figure}
 
 %\begin{figure}[t]
 %  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
-%  \caption{Performance plot comparing branches of decomposition based branching strategies.}
+%  \caption{Performance plot comparing branches of decomposition-based branching strategies.}
 %  \label{fig:all_decomp_branch}
 %\end{figure}
 
 \begin{figure}[t]
 	\centering
 	\input{plots/all_decomposition_based_time.pgf}
-	\caption{Performance plot comparing running times of decomposition based branching strategies.}
+	\caption{Performance plot comparing running times of decomposition-based branching strategies.}
 	\label{fig:all_decomp_time}
 \end{figure}
 
 \begin{figure}[t]
 	\centering
 	\input{plots/all_decomposition_based_branch.pgf}
-	\caption{Performance plot comparing branches of decomposition based branching strategies.}
+	\caption{Performance plot comparing branches of decomposition-based branching strategies.}
 	\label{fig:all_decomp_branch}
 \end{figure}
 
@@ -760,28 +766,27 @@ searching for branching vertices.
 % \FloatBarrier
 \subsection{Reduction Branching}
 Figure~\ref{fig:all_reduction_time} shows the performance plot (see
-Section~\ref{sec:experiments_decomp}) for our reduction
-based branching strategies. Here we see that targeting the funnel reduction
+Section~\ref{sec:experiments_decomp}) for our reduction-based branching strategies. Here we see that targeting the funnel reduction
 results in the fastest time for the most number of instances, followed by almost
 twins. In fact, the
-funnel based technique is the fastest for all but 5 of the PACE instances (plus
+funnel-based technique is the fastest for all but 5 of the PACE instances (excluding
 one which was not solved by any algorithm). Furthermore, branching on almost
-twins is faster than max. degree branching on all DIMACS Clique instances that
+twins is faster than maximum degree branching on all DIMACS clique instances that
 were solved by at least one of the techniques. We also show results for a strategy that targets all reduction rules
-described in Section~\ref{sec:reduction_branching}. Even though this approach
+described in Section~\ref{sec:reduction_branching} (called \emph{combined}). Even though this approach
 leads to the lowest number of branches for most instances (see Figure~\ref{fig:all_reduction_branch}), the time required to
 identify candidate vertices for all reduction rules causes too big of an
 overhead to be competitive. Optimizing the algorithms to identify candidate
 vertices could lead to making this combined strategy
-dominant. Table~\ref{tab:summary_reduction} shows that while all reduction based
+dominant. Table~\ref{tab:summary_reduction} shows that while all reduction-based
 techniques combined solve $88\%$ of solved instances faster that the default
-strategy max. degree (see Appendix~\ref{app:detailed_results}), only the twin
+strategy maximum degree (see Appendix~\ref{app:detailed_results}), only the twin
 based technique results in a small speedup of $1\%$ over all instances.
-Thus, for $84\%$ of all ($93\%$ of solved) instances tested, one of our strategies (decomposition or reduction based) is faster than the default strategy.
+Thus, for $84\%$ of all ($93\%$ of solved) instances tested, one of our strategies (decomposition or reduction-based) is faster than the default strategy.
 
 \begin{table}[t]
-  \caption{Speedup of our reduction based techniques over the default
-    strategy (max. degree). ``all'' are geometric means of the speedup over all
+  \caption{Speedup of our reduction-based techniques over the default
+    strategy (maximum degree). ``all'' are geometric means of the speedup over all
   instances of that type (timeouts are assigned a running time of ten hours), ``solved'' are geometric means of the
   speedup over all instances that have been solved by all techniques.}
 \label{tab:summary_reduction}
@@ -802,43 +807,43 @@ Thus, for $84\%$ of all ($93\%$ of solved) instances tested, one of our strategi
 
 %\begin{figure}[t]
 %  \includegraphics[width=\textwidth]{plots/all_reduction_based_time}
-%  \caption{Performance plot comparing running time of reduction based branching strategies.}
+%  \caption{Performance plot comparing running time of reduction-based branching strategies.}
 %  \label{fig:all_reduction_time}
 %\end{figure}
 
 %\begin{figure}[t]
 %  \includegraphics[width=\textwidth]{plots/all_reduction_based_branch}
-%  \caption{Performance plot comparing branches of reduction based branching strategies.}
+%  \caption{Performance plot comparing branches of reduction-based branching strategies.}
 %  \label{fig:all_reduction_branch}
 %\end{figure}
 
 \begin{figure}[t]
 	\centering
 	\input{plots/all_reduction_based_time.pgf}
-	\caption{Performance plot comparing running time of reduction based branching strategies.}
+	\caption{Performance plot comparing running time of reduction-based branching strategies.}
 	\label{fig:all_reduction_time}
 \end{figure}
 
 \begin{figure}[tb!]
 	\centering
 	\input{plots/all_reduction_based_branch.pgf}
-	\caption{Performance plot comparing branches of reduction based branching strategies.}
+	\caption{Performance plot comparing branches of reduction-based branching strategies.}
 	\label{fig:all_reduction_branch}
 \end{figure}
 
 
 \section{Conclusion and Future Work}
 In this work we presented several novel branching strategies for the maximum independent set problem.
-Our strategies either follow a decomposition based or reduction rule based approach.
-The decomposition based strategies make use of increasingly sophisticated methods of finding vertices that are likely to decompose the graph into two or more connected components.
+Our strategies either follow a decomposition-based or reduction-rule-based approach.
+The decomposition-based strategies make use of increasingly sophisticated methods of finding vertices that are likely to decompose the graph into two or more connected components.
 Even though these strategies often come with a non negligible overhead, they work well for graphs that have a suitable structure, such as social networks.
-For instances that still favor the default branching strategy of branching on the vertex of highest degree, our reduction rule based strategies provide a small but consistent speedup.
+For instances that still favor the default branching strategy of branching on the vertex of highest degree, our reduction-rule-based strategies provide a small but consistent speedup.
 These rules aim to facilitate the application of reduction rules which leads to smaller graphs that can be solved more quickly.
 
 Overall, using one of our proposed strategies allows us to find the optimal solution the fastest for most instances tested.
 However, deciding which particular strategy to use for a given instance still remains an open problem.
 Finding suitable graph characteristics to do so provides an interesting opportunity for future work.
-Furthermore, our experimental evaluation on a combined approach that tries to use all reduction rule based strategies at the same time achieves the least number of branches for a large set of instances.
+Furthermore, our experimental evaluation on a combined approach that tries to use all reduction-rule-based strategies at the same time achieves the least number of branches for a large set of instances.
 However, the running time of this approach still suffers from frequent checks if a particular vertex is a potential branching vertex.
 A more sophisticated and incremental way of tracking when a vertex becomes a branching vertex might provide significant performance benefits.
 In turn, this might lead to a branching strategy that consistently outperforms branching on the vertex of highest degree independent of the instance type.
@@ -988,7 +993,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 \section{Detailed Experimental Results}
 \label{app:detailed_results}
 We now present detailed results for our experimental evaluation.
-Each table in this section presents the average running time $t_{avg}$ and geometric mean speedup $t_{geom}$ of one type of strategy (decomposition or reduction based) over the default strategy.
+Each table in this section presents the average running time $t_{avg}$ and geometric mean speedup $t_{geom}$ of one type of strategy (decomposition or reduction-based) over the default strategy.
 These aggregates are grouped in two classes: ``all'' includes all instances (timeouts are assigned a running time of ten hours), whereas ``solved'' only contains instances that have been solved by all techniques.
 Furthermore, for each type of instance we provide tables that include individual running times $t(s)$ (in seconds) and speedups $s$.
 A value is highlighted in bold if its the best one within a row.
@@ -996,7 +1001,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}[htb!]	
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Aggregated results for our decomposition based strategies.}
+	\caption{Aggregated results for our decomposition-based strategies.}
 	\label{tab:summary_reduction}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|}\hline
@@ -1015,7 +1020,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}[htb!]	
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Detailed results for our decomposition based strategies on the PACE instances.}
+	\caption{Detailed results for our decomposition-based strategies on the PACE instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|}\hline
 			Graph & max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
@@ -1091,7 +1096,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Detailed results for our decomposition based strategies on the DIMACS instances.}
+	\caption{Detailed results for our decomposition-based strategies on the DIMACS instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|}\hline
 			Graph & max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
@@ -1143,7 +1148,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Detailed results for our decomposition based strategies on sparse networks.}
+	\caption{Detailed results for our decomposition-based strategies on sparse networks.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|}\hline
 			Graph & max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
@@ -1183,7 +1188,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Aggregated results for our reduction based strategies.}
+	\caption{Aggregated results for our reduction-based strategies.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
 			& max. deg. & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
@@ -1202,7 +1207,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Detailed results for our reduction based strategies on the PACE instances.}
+	\caption{Detailed results for our reduction-based strategies on the PACE instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
 			Graph & \multicolumn{1}{c|}{max. deg.} & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
@@ -1280,7 +1285,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Detailed results for our reduction based strategies on the DIMACS instances.}
+	\caption{Detailed results for our reduction-based strategies on the DIMACS instances.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
 			Graph & \multicolumn{1}{c|}{max. deg.} & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
@@ -1332,7 +1337,7 @@ A value is highlighted in bold if its the best one within a row.
 \begin{table}
 	\scriptsize
 	\setlength{\tabcolsep}{2pt}
-	\caption{Detailed results for our reduction based strategies on sparse networks.}
+	\caption{Detailed results for our reduction-based strategies on sparse networks.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
 			Graph & \multicolumn{1}{c|}{max. deg.} & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
