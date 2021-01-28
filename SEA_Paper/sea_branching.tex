@@ -648,7 +648,7 @@ the cut contains at least ten percent of the remaining vertices. If no suitable 
 InertialFlowCutter~\cite{gottesburen2019faster}
 with the KaFFPa~\cite{DBLP:conf/wea/SandersS13}
 backend. The KaFFPa partitioner is configured to use the \emph{strong} preset
-with a fixed seed\footnote{42}\todo{@Christian: Check seed}. For branching we use
+with a fixed seed\footnote{42}. For branching we use
 three levels of nested dissections with a minimum balance of at least 40 percent of the vertices in the smaller part of each dissection. Furthermore, we
 only use the nested dissection if separators contain at most
 50 vertices. For the reduction-based
@@ -672,9 +672,9 @@ The remaining set of instances is composed of 40 PACE instances, 30 DIMACS insta
 
 Figure~\ref{fig:all_decomp_time} shows a performance plot of the running time of
 our decomposition-based branching strategies: For each instance, the best
-algorithm is determined. The plot shows for each algorithm $1 - (t_{best}/
-t_{alg})$, where $t_{best}$ is the running time of the fastest algorithm
-for that instance and $t_{alg}$ is the time of the respective algorithm.
+algorithm is determined. The plot shows for each algorithm $1 - (t_{\text{best}}/
+t_{\text{alg}})$, where $t_{\text{best}}$ is the running time of the fastest algorithm
+for that instance and $t_{\text{alg}}$ is the time of the respective algorithm.
 A value of $0$ means that
 the algorithm was the fastest algorithm on that instance and a value of
 $\numprint{0.5}$ means that the algorithm took twice as long as the fastest
