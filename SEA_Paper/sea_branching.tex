@@ -995,17 +995,17 @@ A value is highlighted in bold if its the best one within a row.
 
 \begin{table}[htb!]	
 	\scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Aggregated results for our decomposition based strategies.}
-\label{tab:summary_reduction}
+	\setlength{\tabcolsep}{2pt}
+	\caption{Aggregated results for our decomposition based strategies.}
+	\label{tab:summary_reduction}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|}\hline
 			& max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
 			\hline
-			$t_{avg}$ (all) & \numprint{5518.22} & \numprint{5086.61} & \textbf{\numprint{5003.92}} & \numprint{5126.23}  \\
-			$s_{geom}$ (all) & \numprint{1.00} & \numprint{1.07}  & \textbf{\numprint{1.08}}  & \numprint{0.95}  \\
-			$t_{avg}$ (solved) & \textbf{\numprint{1364.76}} & \numprint{1395.90} & \numprint{1376.49} & \numprint{1388.56} \\
-			$s_{geom}$ (solved) & \numprint{1.00} & \numprint{0.97} & \textbf{\numprint{1.01}}  & \numprint{0.88}  \\
+			$t_{\text{avg}}$ (all) & \numprint{6900.32} & \numprint{6552.92} & \textbf{\numprint{6486.11}} & \numprint{6586.06} \\
+			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{1.04} & \textbf{\numprint{1.06}} & \numprint{0.91} \\
+			$t_{\text{avg}}$ (solved) & \textbf{\numprint{1166.84}} & \numprint{1193.75} & \numprint{1177.06} & \numprint{1188.98} \\
+			$s_{\text{geom}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.97} & \numprint{1.00} & \numprint{0.85} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1014,59 +1014,75 @@ A value is highlighted in bold if its the best one within a row.
 
 \begin{table}[htb!]	
 	\scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Detailed results for our decomposition based strategies on the PACE instances.}
+	\setlength{\tabcolsep}{2pt}
+	\caption{Detailed results for our decomposition based strategies on the PACE instances.}
 	\begin{center}
-		\begin{tabular}{|l|r|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{articulation} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{nested dis.} \\
+		\begin{tabular}{|l|r|r|r|r|}\hline
+			Graph & max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
 			\hline
-			PACE & t (s) & t (s) & s & t (s) & s & t (s) & s \\
+			PACE & t (s) & t (s) & t (s) & t (s) \\
 			\hline
-			36 & \textbf{\numprint{10.67}} & \numprint{10.81} & \numprint{0.99} & \numprint{10.72} & \numprint{1.00} & \numprint{13.02} & \numprint{0.82} \\
-			37 & \textbf{\numprint{60.62}} & \numprint{61.64} & \numprint{0.98} & \numprint{61.31} & \numprint{0.99} & \numprint{63.09} & \numprint{0.96} \\
-			38 & \numprint{70.79} & \numprint{64.41} & \numprint{1.10} & \textbf{\numprint{18.80}} & \textbf{\numprint{3.77}} & \numprint{76.09} & \numprint{0.93} \\
-			39 & \textbf{\numprint{559.85}} & \numprint{567.92} & \numprint{0.99} & \numprint{563.61} & \numprint{0.99} & \numprint{578.62} & \numprint{0.97} \\
-			40 & \textbf{\numprint{27278.42}} & \numprint{27624.74} & \numprint{0.99} & \numprint{27385.12} & \numprint{1.00} & \numprint{28154.28} & \numprint{0.97} \\
-			41 & \textbf{\numprint{282.83}} & \numprint{288.96} & \numprint{0.98} & \numprint{286.14} & \numprint{0.99} & \numprint{292.02} & \numprint{0.97} \\
-			42 & \textbf{\numprint{215.43}} & \numprint{220.05} & \numprint{0.98} & \numprint{218.00} & \numprint{0.99} & \numprint{222.76} & \numprint{0.97} \\
-			43 & \textbf{\numprint{1015.97}} & \numprint{1036.92} & \numprint{0.98} & \numprint{1030.05} & \numprint{0.99} & \numprint{1048.52} & \numprint{0.97} \\
-			44 & \textbf{\numprint{545.48}} & \numprint{557.95} & \numprint{0.98} & \numprint{554.30} & \numprint{0.98} & \numprint{563.41} & \numprint{0.97} \\
-			45 & \textbf{\numprint{147.99}} & \numprint{151.41} & \numprint{0.98} & \numprint{150.04} & \numprint{0.99} & \numprint{153.29} & \numprint{0.97} \\
-			46 & \textbf{\numprint{634.70}} & \numprint{643.85} & \numprint{0.99} & \numprint{640.22} & \numprint{0.99} & \numprint{655.75} & \numprint{0.97} \\
-			47 & \textbf{\numprint{342.88}} & \numprint{348.28} & \numprint{0.98} & \numprint{346.03} & \numprint{0.99} & \numprint{354.46} & \numprint{0.97} \\
-			48 & \textbf{\numprint{147.66}} & \numprint{149.99} & \numprint{0.98} & \numprint{148.81} & \numprint{0.99} & \numprint{152.95} & \numprint{0.97} \\
-			49 & \textbf{\numprint{104.01}} & \numprint{105.73} & \numprint{0.98} & \numprint{105.03} & \numprint{0.99} & \numprint{107.91} & \numprint{0.96} \\
-			50 & \textbf{\numprint{285.75}} & \numprint{290.25} & \numprint{0.98} & \numprint{288.28} & \numprint{0.99} & \numprint{295.53} & \numprint{0.97} \\
-			51 & \textbf{\numprint{330.87}} & \numprint{338.28} & \numprint{0.98} & \numprint{335.72} & \numprint{0.99} & \numprint{341.83} & \numprint{0.97} \\
-			52 & \textbf{\numprint{129.84}} & \numprint{132.89} & \numprint{0.98} & \numprint{131.71} & \numprint{0.99} & \numprint{134.53} & \numprint{0.97} \\
-			53 & \textbf{\numprint{351.55}} & \numprint{359.29} & \numprint{0.98} & \numprint{356.87} & \numprint{0.99} & \numprint{363.08} & \numprint{0.97} \\
-			54 & \textbf{\numprint{189.21}} & \numprint{193.49} & \numprint{0.98} & \numprint{192.39} & \numprint{0.98} & \numprint{195.56} & \numprint{0.97} \\
-			55 & \textbf{\numprint{40.08}} & \numprint{41.02} & \numprint{0.98} & \numprint{40.70} & \numprint{0.98} & \numprint{41.87} & \numprint{0.96} \\
-			56 & \textbf{\numprint{563.85}} & \numprint{572.37} & \numprint{0.99} & \numprint{568.09} & \numprint{0.99} & \numprint{582.32} & \numprint{0.97} \\
-			57 & \textbf{\numprint{391.92}} & \numprint{398.06} & \numprint{0.98} & \numprint{395.36} & \numprint{0.99} & \numprint{404.95} & \numprint{0.97} \\
-			58 & \textbf{\numprint{280.57}} & \numprint{285.11} & \numprint{0.98} & \numprint{283.15} & \numprint{0.99} & \numprint{290.23} & \numprint{0.97} \\
-			59 & \textbf{\numprint{78.11}} & \numprint{79.44} & \numprint{0.98} & \numprint{78.90} & \numprint{0.99} & \numprint{81.13} & \numprint{0.96} \\
-			60 & \textbf{\numprint{466.65}} & \numprint{474.19} & \numprint{0.98} & \numprint{471.02} & \numprint{0.99} & \numprint{482.30} & \numprint{0.97} \\
-			61 & \textbf{\numprint{128.58}} & \numprint{131.53} & \numprint{0.98} & \numprint{130.71} & \numprint{0.98} & \numprint{133.14} & \numprint{0.97} \\
-			62 & \textbf{\numprint{386.85}} & \numprint{395.27} & \numprint{0.98} & \numprint{392.36} & \numprint{0.99} & \numprint{399.27} & \numprint{0.97} \\
-			63 & \textbf{\numprint{400.81}} & \numprint{409.70} & \numprint{0.98} & \numprint{406.70} & \numprint{0.99} & \numprint{413.82} & \numprint{0.97} \\
-			64 & \textbf{\numprint{173.83}} & \numprint{177.79} & \numprint{0.98} & \numprint{176.40} & \numprint{0.99} & \numprint{179.85} & \numprint{0.97} \\
-			65 & \textbf{\numprint{212.66}} & \numprint{217.21} & \numprint{0.98} & \numprint{215.30} & \numprint{0.99} & \numprint{219.83} & \numprint{0.97} \\
-			66 & \textbf{\numprint{47.47}} & \numprint{48.29} & \numprint{0.98} & \numprint{47.97} & \numprint{0.99} & \numprint{49.64} & \numprint{0.96} \\
-			67 & \textbf{\numprint{708.92}} & \numprint{718.20} & \numprint{0.99} & \numprint{713.74} & \numprint{0.99} & \numprint{732.34} & \numprint{0.97} \\
-			68 & \textbf{\numprint{50.67}} & \numprint{51.40} & \numprint{0.99} & \numprint{50.94} & \numprint{0.99} & \numprint{52.87} & \numprint{0.96} \\
-			69 & \textbf{\numprint{252.39}} & \numprint{255.92} & \numprint{0.99} & \numprint{254.63} & \numprint{0.99} & \numprint{261.30} & \numprint{0.97} \\
-			70 & \textbf{\numprint{68.24}} & \numprint{69.29} & \numprint{0.98} & \numprint{68.93} & \numprint{0.99} & \numprint{71.01} & \numprint{0.96} \\
-			71 & \textbf{\numprint{208.63}} & \numprint{213.05} & \numprint{0.98} & \numprint{210.80} & \numprint{0.99} & \numprint{215.74} & \numprint{0.97} \\
-			72 & \textbf{\numprint{269.53}} & \numprint{275.26} & \numprint{0.98} & \numprint{272.72} & \numprint{0.99} & \numprint{278.66} & \numprint{0.97} \\
-			73 & \textbf{\numprint{251.79}} & \numprint{257.52} & \numprint{0.98} & \numprint{255.57} & \numprint{0.99} & \numprint{260.38} & \numprint{0.97} \\
-			74 & \textbf{\numprint{41.27}} & \numprint{42.22} & \numprint{0.98} & \numprint{41.96} & \numprint{0.98} & \numprint{43.06} & \numprint{0.96} \\
-			75 & - & - & - & - & - & - & - \\
+			05 & \textbf{\numprint{11.46}} & \numprint{11.84} (\numprint{0.97}) & \numprint{11.72} (\numprint{0.98}) & \numprint{11.94} (\numprint{0.96}) \\
+			06 & \textbf{\numprint{5.01}} & \numprint{5.19} (\numprint{0.97}) & \numprint{5.16} (\numprint{0.97}) & \numprint{5.52} (\numprint{0.91}) \\
+			10 & \textbf{\numprint{13.02}} & \numprint{13.46} (\numprint{0.97}) & \numprint{13.36} (\numprint{0.97}) & \numprint{13.49} (\numprint{0.97}) \\
+			16 & - & - & - & - \\
+			19 & \textbf{\numprint{18.17}} & \numprint{18.76} (\numprint{0.97}) & \numprint{18.50} (\numprint{0.98}) & \numprint{18.66} (\numprint{0.97}) \\
+			31 & \textbf{\numprint{428.74}} & \numprint{442.20} (\numprint{0.97}) & \numprint{438.92} (\numprint{0.98}) & \numprint{429.11} (\numprint{1.00}) \\
+			32 & - & - & - & - \\
+			33 & \textbf{\numprint{5.79}} & \numprint{5.97} (\numprint{0.97}) & \numprint{5.93} (\numprint{0.98}) & \numprint{146.05} (\numprint{0.04}) \\
+			34 & - & - & - & - \\
+			35 & \numprint{44.74} & \numprint{45.72} (\numprint{0.98}) & \numprint{45.54} (\numprint{0.98}) & \textbf{\numprint{43.54} (\numprint{1.03})} \\
+			36 & \textbf{\numprint{10.67}} & \numprint{10.81} (\numprint{0.99}) & \numprint{10.72} (\numprint{1.00}) & \numprint{13.02} (\numprint{0.82}) \\
+			37 & \textbf{\numprint{60.62}} & \numprint{61.64} (\numprint{0.98}) & \numprint{61.31} (\numprint{0.99}) & \numprint{63.09} (\numprint{0.96}) \\
+			38 & \numprint{70.79} & \numprint{64.41} (\numprint{1.10}) & \textbf{\numprint{18.80} (\numprint{3.77})} & \numprint{76.09} (\numprint{0.93}) \\
+			39 & \textbf{\numprint{559.85}} & \numprint{567.92} (\numprint{0.99}) & \numprint{563.61} (\numprint{0.99}) & \numprint{578.62} (\numprint{0.97}) \\
+			40 & \textbf{\numprint{27278.42}} & \numprint{27624.74} (\numprint{0.99}) & \numprint{27385.12} (\numprint{1.00}) & \numprint{28154.28} (\numprint{0.97}) \\
+			41 & \textbf{\numprint{282.83}} & \numprint{288.96} (\numprint{0.98}) & \numprint{286.14} (\numprint{0.99}) & \numprint{292.02} (\numprint{0.97}) \\
+			42 & \textbf{\numprint{215.43}} & \numprint{220.05} (\numprint{0.98}) & \numprint{218.00} (\numprint{0.99}) & \numprint{222.76} (\numprint{0.97}) \\
+			43 & \textbf{\numprint{1015.97}} & \numprint{1036.92} (\numprint{0.98}) & \numprint{1030.05} (\numprint{0.99}) & \numprint{1048.52} (\numprint{0.97}) \\
+			44 & \textbf{\numprint{545.48}} & \numprint{557.95} (\numprint{0.98}) & \numprint{554.30} (\numprint{0.98}) & \numprint{563.41} (\numprint{0.97}) \\
+			45 & \textbf{\numprint{147.99}} & \numprint{151.41} (\numprint{0.98}) & \numprint{150.04} (\numprint{0.99}) & \numprint{153.29} (\numprint{0.97}) \\
+			46 & \textbf{\numprint{634.70}} & \numprint{643.85} (\numprint{0.99}) & \numprint{640.22} (\numprint{0.99}) & \numprint{655.75} (\numprint{0.97}) \\
+			47 & \textbf{\numprint{342.88}} & \numprint{348.28} (\numprint{0.98}) & \numprint{346.03} (\numprint{0.99}) & \numprint{354.46} (\numprint{0.97}) \\
+			48 & \textbf{\numprint{147.66}} & \numprint{149.99} (\numprint{0.98}) & \numprint{148.81} (\numprint{0.99}) & \numprint{152.95} (\numprint{0.97}) \\
+			49 & \textbf{\numprint{104.01}} & \numprint{105.73} (\numprint{0.98}) & \numprint{105.03} (\numprint{0.99}) & \numprint{107.91} (\numprint{0.96}) \\
+			50 & \textbf{\numprint{285.75}} & \numprint{290.25} (\numprint{0.98}) & \numprint{288.28} (\numprint{0.99}) & \numprint{295.53} (\numprint{0.97}) \\
+			51 & \textbf{\numprint{330.87}} & \numprint{338.28} (\numprint{0.98}) & \numprint{335.72} (\numprint{0.99}) & \numprint{341.83} (\numprint{0.97}) \\
+			52 & \textbf{\numprint{129.84}} & \numprint{132.89} (\numprint{0.98}) & \numprint{131.71} (\numprint{0.99}) & \numprint{134.53} (\numprint{0.97}) \\
+			53 & \textbf{\numprint{351.55}} & \numprint{359.29} (\numprint{0.98}) & \numprint{356.87} (\numprint{0.99}) & \numprint{363.08} (\numprint{0.97}) \\
+			54 & \textbf{\numprint{189.21}} & \numprint{193.49} (\numprint{0.98}) & \numprint{192.39} (\numprint{0.98}) & \numprint{195.56} (\numprint{0.97}) \\
+			55 & \textbf{\numprint{40.08}} & \numprint{41.02} (\numprint{0.98}) & \numprint{40.70} (\numprint{0.98}) & \numprint{41.87} (\numprint{0.96}) \\
+			56 & \textbf{\numprint{563.85}} & \numprint{572.37} (\numprint{0.99}) & \numprint{568.09} (\numprint{0.99}) & \numprint{582.32} (\numprint{0.97}) \\
+			57 & \textbf{\numprint{391.92}} & \numprint{398.06} (\numprint{0.98}) & \numprint{395.36} (\numprint{0.99}) & \numprint{404.95} (\numprint{0.97}) \\
+			58 & \textbf{\numprint{280.57}} & \numprint{285.11} (\numprint{0.98}) & \numprint{283.15} (\numprint{0.99}) & \numprint{290.23} (\numprint{0.97}) \\
+			59 & \textbf{\numprint{78.11}} & \numprint{79.44} (\numprint{0.98}) & \numprint{78.90} (\numprint{0.99}) & \numprint{81.13} (\numprint{0.96}) \\
+			60 & \textbf{\numprint{466.65}} & \numprint{474.19} (\numprint{0.98}) & \numprint{471.02} (\numprint{0.99}) & \numprint{482.30} (\numprint{0.97}) \\
+			61 & \textbf{\numprint{128.58}} & \numprint{131.53} (\numprint{0.98}) & \numprint{130.71} (\numprint{0.98}) & \numprint{133.14} (\numprint{0.97}) \\
+			62 & \textbf{\numprint{386.85}} & \numprint{395.27} (\numprint{0.98}) & \numprint{392.36} (\numprint{0.99}) & \numprint{399.27} (\numprint{0.97}) \\
+			63 & \textbf{\numprint{400.81}} & \numprint{409.70} (\numprint{0.98}) & \numprint{406.70} (\numprint{0.99}) & \numprint{413.82} (\numprint{0.97}) \\
+			64 & \textbf{\numprint{173.83}} & \numprint{177.79} (\numprint{0.98}) & \numprint{176.40} (\numprint{0.99}) & \numprint{179.85} (\numprint{0.97}) \\
+			65 & \textbf{\numprint{212.66}} & \numprint{217.21} (\numprint{0.98}) & \numprint{215.30} (\numprint{0.99}) & \numprint{219.83} (\numprint{0.97}) \\
+			66 & \textbf{\numprint{47.47}} & \numprint{48.29} (\numprint{0.98}) & \numprint{47.97} (\numprint{0.99}) & \numprint{49.64} (\numprint{0.96}) \\
+			67 & \textbf{\numprint{708.92}} & \numprint{718.20} (\numprint{0.99}) & \numprint{713.74} (\numprint{0.99}) & \numprint{732.34} (\numprint{0.97}) \\
+			68 & \textbf{\numprint{50.67}} & \numprint{51.40} (\numprint{0.99}) & \numprint{50.94} (\numprint{0.99}) & \numprint{52.87} (\numprint{0.96}) \\
+			69 & \textbf{\numprint{252.39}} & \numprint{255.92} (\numprint{0.99}) & \numprint{254.63} (\numprint{0.99}) & \numprint{261.30} (\numprint{0.97}) \\
+			70 & \textbf{\numprint{68.24}} & \numprint{69.29} (\numprint{0.98}) & \numprint{68.93} (\numprint{0.99}) & \numprint{71.01} (\numprint{0.96}) \\
+			71 & \textbf{\numprint{208.63}} & \numprint{213.05} (\numprint{0.98}) & \numprint{210.80} (\numprint{0.99}) & \numprint{215.74} (\numprint{0.97}) \\
+			72 & \textbf{\numprint{269.53}} & \numprint{275.26} (\numprint{0.98}) & \numprint{272.72} (\numprint{0.99}) & \numprint{278.66} (\numprint{0.97}) \\
+			73 & \textbf{\numprint{251.79}} & \numprint{257.52} (\numprint{0.98}) & \numprint{255.57} (\numprint{0.99}) & \numprint{260.38} (\numprint{0.97}) \\
+			74 & \textbf{\numprint{41.27}} & \numprint{42.22} (\numprint{0.98}) & \numprint{41.96} (\numprint{0.98}) & \numprint{43.06} (\numprint{0.96}) \\
+			75 & - & - & - & - \\
+			76 & - & - & - & - \\
+			77 & \textbf{\numprint{77.46}} & \numprint{79.98} (\numprint{0.97}) & \numprint{79.48} (\numprint{0.97}) & \numprint{77.87} (\numprint{0.99}) \\
+			78 & - & - & - & - \\
+			79 & - & - & - & - \\
+			80 & - & - & - & - \\
 			\hline
-			$t_{avg}$ (all) & \textbf{\numprint{1843.18}} & \multicolumn{2}{r|}{\numprint{1856.49}} & \multicolumn{2}{r|}{\numprint{1847.48}} & \multicolumn{2}{r|}{\numprint{1874.01}}  \\
-			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.96}} \\
-			$t_{avg}$ (solved) & \textbf{\numprint{967.37}} & \multicolumn{2}{r|}{\numprint{981.02}} & \multicolumn{2}{r|}{\numprint{971.77}} & \multicolumn{2}{r|}{\numprint{998.98}} \\
-			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}}  & \multicolumn{2}{r|}{\numprint{0.96}} \\
+			$t_{\text{avg}}$ (all) & \textbf{\numprint{5933.30}} & \numprint{5943.32} & \numprint{5936.69} & \numprint{5958.30} \\
+			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.02}} & \numprint{0.90} \\
+			$t_{\text{avg}}$ (solved) & \textbf{\numprint{815.57}} & \numprint{827.29} & \numprint{819.53} & \numprint{844.82} \\
+			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.02}} & \numprint{0.90} \\
+			
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1074,83 +1090,50 @@ A value is highlighted in bold if its the best one within a row.
 \end{table}
 \begin{table}
 	\scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Detailed results for our decomposition based strategies on the DIMACS instances.}
+	\setlength{\tabcolsep}{2pt}
+	\caption{Detailed results for our decomposition based strategies on the DIMACS instances.}
 	\begin{center}
-		\begin{tabular}{|l|r|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{articulation} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{nested dis.} \\
+		\begin{tabular}{|l|r|r|r|r|}\hline
+			Graph & max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
 			\hline
-			DIMACS & t (s) & t (s) & s & t (s) & s & t (s) & s \\
+			DIMACS & t (s) & t (s) & t (s) & t (s) \\
 			\hline
-			C125 & \textbf{\numprint{5.49}} & \numprint{5.62} & \numprint{0.98} & \numprint{5.68} & \numprint{0.97} & \numprint{6.03} & \numprint{0.91} \\
-			C250 & - & - & - & - & - & - & - \\
-			MANN\_a27 & \textbf{\numprint{3.05}} & \numprint{3.11} & \numprint{0.98} & \numprint{3.17} & \numprint{0.96} & \numprint{3.58} & \numprint{0.85} \\
-			MANN\_a45 & \textbf{\numprint{473.07}} & \numprint{480.19} & \numprint{0.99} & \numprint{488.14} & \numprint{0.97} & \numprint{479.79} & \numprint{0.99} \\
-			brock200\_1 & \textbf{\numprint{790.54}} & \numprint{805.51} & \numprint{0.98} & \numprint{803.13} & \numprint{0.98} & \numprint{802.48} & \numprint{0.99} \\
-			brock200\_2 & \textbf{\numprint{27.00}} & \numprint{28.39} & \numprint{0.95} & \numprint{27.92} & \numprint{0.97} & \numprint{32.82} & \numprint{0.82} \\
-			brock200\_3 & \textbf{\numprint{134.07}} & \numprint{136.48} & \numprint{0.98} & \numprint{136.43} & \numprint{0.98} & \numprint{140.52} & \numprint{0.95} \\
-			brock200\_4 & \textbf{\numprint{167.00}} & \numprint{169.84} & \numprint{0.98} & \numprint{170.28} & \numprint{0.98} & \numprint{173.32} & \numprint{0.96} \\
-			c-fat200-1 & \textbf{\numprint{0.75}} & \numprint{0.79} & \numprint{0.95} & \numprint{0.90} & \numprint{0.84} & \numprint{5.19} & \numprint{0.15} \\
-			gen200\_p0 & \textbf{\numprint{822.73}} & \numprint{852.78} & \numprint{0.96} & \numprint{846.15} & \numprint{0.97} & \numprint{833.19} & \numprint{0.99} \\
-			hamming6-4 & \textbf{\numprint{0.14}} & \numprint{0.14} & \numprint{0.96} & \numprint{0.15} & \numprint{0.90} & \numprint{0.48} & \numprint{0.29} \\
-			hamming8-4 & \textbf{\numprint{129.50}} & \numprint{135.30} & \numprint{0.96} & \numprint{133.14} & \numprint{0.97} & \numprint{137.20} & \numprint{0.94} \\
-			johnson16-2-4 & \textbf{\numprint{236.42}} & \numprint{242.22} & \numprint{0.98} & \numprint{240.87} & \numprint{0.98} & \numprint{239.57} & \numprint{0.99} \\
-			johnson8-4-4 & \textbf{\numprint{0.37}} & \numprint{0.39} & \numprint{0.94} & \numprint{0.38} & \numprint{0.97} & \numprint{1.38} & \numprint{0.27} \\
-			keller4 & \textbf{\numprint{15.94}} & \numprint{16.75} & \numprint{0.95} & \numprint{16.40} & \numprint{0.97} & \numprint{17.94} & \numprint{0.89} \\
-			p\_hat1000-1 & \textbf{\numprint{5498.84}} & \numprint{5517.79} & \numprint{1.00} & \numprint{5640.30} & \numprint{0.97} & \numprint{5605.71} & \numprint{0.98} \\
-			p\_hat1000-2 & - & - & - & - & - & - & - \\
-			p\_hat1500-1 & - & - & - & - & - & - & - \\
-			p\_hat300-1 & \textbf{\numprint{25.36}} & \numprint{25.94} & \numprint{0.98} & \numprint{26.52} & \numprint{0.96} & \numprint{47.59} & \numprint{0.53} \\
-			p\_hat300-2 & \textbf{\numprint{34.20}} & \numprint{34.77} & \numprint{0.98} & \numprint{35.31} & \numprint{0.97} & \numprint{50.36} & \numprint{0.68} \\
-			p\_hat300-3 & \textbf{\numprint{1124.48}} & \numprint{1138.15} & \numprint{0.99} & \numprint{1147.00} & \numprint{0.98} & \numprint{1146.45} & \numprint{0.98} \\
-			p\_hat500-1 & \textbf{\numprint{251.75}} & \numprint{255.29} & \numprint{0.99} & \numprint{261.24} & \numprint{0.96} & \numprint{276.61} & \numprint{0.91} \\
-			p\_hat500-2 & \textbf{\numprint{593.16}} & \numprint{613.28} & \numprint{0.97} & \numprint{608.09} & \numprint{0.98} & \numprint{611.76} & \numprint{0.97} \\
-			p\_hat500-3 & - & - & - & - & - & - & - \\
-			p\_hat700-1 & \textbf{\numprint{1035.72}} & \numprint{1044.02} & \numprint{0.99} & \numprint{1066.74} & \numprint{0.97} & \numprint{1065.20} & \numprint{0.97} \\
-			p\_hat700-2 & \textbf{\numprint{5675.42}} & \numprint{5707.71} & \numprint{0.99} & \numprint{5775.82} & \numprint{0.98} & \numprint{5745.93} & \numprint{0.99} \\
-			san1000 & \textbf{\numprint{6738.26}} & \numprint{6947.83} & \numprint{0.97} & \numprint{6864.69} & \numprint{0.98} & \numprint{6843.53} & \numprint{0.98} \\
-			san200\_0 & \textbf{\numprint{1290.60}} & \numprint{1316.67} & \numprint{0.98} & \numprint{1319.54} & \numprint{0.98} & \numprint{1307.43} & \numprint{0.99} \\
-			san400\_0 & \textbf{\numprint{12826.58}} & \numprint{12964.68} & \numprint{0.99} & \numprint{13112.91} & \numprint{0.98} & \numprint{12975.06} & \numprint{0.99} \\
-			sanr200\_0 & \textbf{\numprint{2144.20}} & \numprint{2187.94} & \numprint{0.98} & \numprint{2198.09} & \numprint{0.98} & \numprint{2170.73} & \numprint{0.99} \\
+			C125 & \textbf{\numprint{5.49}} & \numprint{5.62} (\numprint{0.98}) & \numprint{5.68} (\numprint{0.97}) & \numprint{6.03} (\numprint{0.91}) \\
+			C250 & - & - & - & - \\
+			MANN\_a27 & \textbf{\numprint{3.05}} & \numprint{3.11} (\numprint{0.98}) & \numprint{3.17} (\numprint{0.96}) & \numprint{3.58} (\numprint{0.85}) \\
+			MANN\_a45 & \textbf{\numprint{473.07}} & \numprint{480.19} (\numprint{0.99}) & \numprint{488.14} (\numprint{0.97}) & \numprint{479.79} (\numprint{0.99}) \\
+			brock200\_1 & \textbf{\numprint{790.54}} & \numprint{805.51} (\numprint{0.98}) & \numprint{803.13} (\numprint{0.98}) & \numprint{802.48} (\numprint{0.99}) \\
+			brock200\_2 & \textbf{\numprint{27.00}} & \numprint{28.39} (\numprint{0.95}) & \numprint{27.92} (\numprint{0.97}) & \numprint{32.82} (\numprint{0.82}) \\
+			brock200\_3 & \textbf{\numprint{134.07}} & \numprint{136.48} (\numprint{0.98}) & \numprint{136.43} (\numprint{0.98}) & \numprint{140.52} (\numprint{0.95}) \\
+			brock200\_4 & \textbf{\numprint{167.00}} & \numprint{169.84} (\numprint{0.98}) & \numprint{170.28} (\numprint{0.98}) & \numprint{173.32} (\numprint{0.96}) \\
+			c-fat200-1 & \textbf{\numprint{0.75}} & \numprint{0.79} (\numprint{0.95}) & \numprint{0.90} (\numprint{0.84}) & \numprint{5.19} (\numprint{0.15}) \\
+			gen200\_p0 & \textbf{\numprint{822.73}} & \numprint{852.78} (\numprint{0.96}) & \numprint{846.15} (\numprint{0.97}) & \numprint{833.19} (\numprint{0.99}) \\
+			hamming6-4 & \textbf{\numprint{0.14}} & \numprint{0.14} (\numprint{0.96}) & \numprint{0.15} (\numprint{0.90}) & \numprint{0.48} (\numprint{0.29}) \\
+			hamming8-4 & \textbf{\numprint{129.50}} & \numprint{135.30} (\numprint{0.96}) & \numprint{133.14} (\numprint{0.97}) & \numprint{137.20} (\numprint{0.94}) \\
+			johnson16-2-4 & \textbf{\numprint{236.42}} & \numprint{242.22} (\numprint{0.98}) & \numprint{240.87} (\numprint{0.98}) & \numprint{239.57} (\numprint{0.99}) \\
+			johnson8-4-4 & \textbf{\numprint{0.37}} & \numprint{0.39} (\numprint{0.94}) & \numprint{0.38} (\numprint{0.97}) & \numprint{1.38} (\numprint{0.27}) \\
+			keller4 & \textbf{\numprint{15.94}} & \numprint{16.75} (\numprint{0.95}) & \numprint{16.40} (\numprint{0.97}) & \numprint{17.94} (\numprint{0.89}) \\
+			p\_hat1000-1 & \textbf{\numprint{5498.84}} & \numprint{5517.79} (\numprint{1.00}) & \numprint{5640.30} (\numprint{0.97}) & \numprint{5605.71} (\numprint{0.98}) \\
+			p\_hat1000-2 & - & - & - & - \\
+			p\_hat1500-1 & - & - & - & - \\
+			p\_hat300-1 & \textbf{\numprint{25.36}} & \numprint{25.94} (\numprint{0.98}) & \numprint{26.52} (\numprint{0.96}) & \numprint{47.59} (\numprint{0.53}) \\
+			p\_hat300-2 & \textbf{\numprint{34.20}} & \numprint{34.77} (\numprint{0.98}) & \numprint{35.31} (\numprint{0.97}) & \numprint{50.36} (\numprint{0.68}) \\
+			p\_hat300-3 & \textbf{\numprint{1124.48}} & \numprint{1138.15} (\numprint{0.99}) & \numprint{1147.00} (\numprint{0.98}) & \numprint{1146.45} (\numprint{0.98}) \\
+			p\_hat500-1 & \textbf{\numprint{251.75}} & \numprint{255.29} (\numprint{0.99}) & \numprint{261.24} (\numprint{0.96}) & \numprint{276.61} (\numprint{0.91}) \\
+			p\_hat500-2 & \textbf{\numprint{593.16}} & \numprint{613.28} (\numprint{0.97}) & \numprint{608.09} (\numprint{0.98}) & \numprint{611.76} (\numprint{0.97}) \\
+			p\_hat500-3 & - & - & - & - \\
+			p\_hat700-1 & \textbf{\numprint{1035.72}} & \numprint{1044.02} (\numprint{0.99}) & \numprint{1066.74} (\numprint{0.97}) & \numprint{1065.20} (\numprint{0.97}) \\
+			p\_hat700-2 & \textbf{\numprint{5675.42}} & \numprint{5707.71} (\numprint{0.99}) & \numprint{5775.82} (\numprint{0.98}) & \numprint{5745.93} (\numprint{0.99}) \\
+			san1000 & \textbf{\numprint{6738.26}} & \numprint{6947.83} (\numprint{0.97}) & \numprint{6864.69} (\numprint{0.98}) & \numprint{6843.53} (\numprint{0.98}) \\
+			san200\_0 & \textbf{\numprint{1290.60}} & \numprint{1316.67} (\numprint{0.98}) & \numprint{1319.54} (\numprint{0.98}) & \numprint{1307.43} (\numprint{0.99}) \\
+			san400\_0 & \textbf{\numprint{12826.58}} & \numprint{12964.68} (\numprint{0.99}) & \numprint{13112.91} (\numprint{0.98}) & \numprint{12975.06} (\numprint{0.99}) \\
+			sanr200\_0 & \textbf{\numprint{2144.20}} & \numprint{2187.94} (\numprint{0.98}) & \numprint{2198.09} (\numprint{0.98}) & \numprint{2170.73} (\numprint{0.99}) \\
 			\hline
-			$t_{avg}$ (all) & \textbf{\numprint{6134.82}} & \multicolumn{2}{r|}{\numprint{6154.39}}& \multicolumn{2}{r|}{\numprint{6164.30}} & \multicolumn{2}{r|}{\numprint{6157.33}} \\
-			$s_{geom}$ (all) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\numprint{0.97}} & \multicolumn{2}{r|}{\numprint{0.78}} \\
-			$t_{avg}$ (solved) & \textbf{\numprint{1540.18}} & \multicolumn{2}{r|}{\numprint{1562.75}} & \multicolumn{2}{r|}{\numprint{1574.19}} & \multicolumn{2}{r|}{\numprint{1566.15}} \\
-			$s_{geom}$ (solved) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.98}}  & \multicolumn{2}{r|}{\numprint{0.97}} & \multicolumn{2}{r|}{\numprint{0.78}} \\
-			\hline
-		\end{tabular}
-	\end{center}
-	\label{table:another_table}
-\end{table}
-
-\begin{table}
-	\scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Detailed results for our decomposition based strategies on sparse networks.}
-	\begin{center}
-		\begin{tabular}{|l|r|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{articulation} & \multicolumn{2}{c|}{edge cuts} & \multicolumn{2}{c|}{nested dis.} \\
-			\hline
-			Sparse networks & t (s) & t (s) & s & t (s) & s & t (s) & s \\
-			\hline
-			as-skitter & \numprint{11977.45} & \numprint{12088.82} & \numprint{0.99} & \numprint{11931.14} & \numprint{1.00} & \textbf{\numprint{11795.50}} & \textbf{\numprint{1.02}} \\
-			bay & \numprint{10.82} & \numprint{12.13} & \numprint{0.89} & \textbf{\numprint{7.90}} & \textbf{\numprint{1.37}} & \numprint{25.25} & \numprint{0.43} \\
-			col & \numprint{34384.77} & \numprint{32240.53} & \numprint{1.07} & \textbf{\numprint{26677.97}} & \textbf{\numprint{1.29}} & - & - \\
-			feather-deezer-social & - & - & - & - & - & - & - \\
-			fla & \numprint{157.50} & \numprint{139.68} & \numprint{1.13} & \numprint{144.67} & \numprint{1.09} & \textbf{\numprint{137.02}} & \textbf{\numprint{1.15}} \\
-			libimseti & \numprint{8579.32} & \numprint{8428.66} & \numprint{1.02} & \textbf{\numprint{8427.01}} & \textbf{\numprint{1.02}} & \numprint{8510.58} & \numprint{1.01} \\
-			musae-twitch\_DE & - & - & - & - & - & - & - \\
-			musae-twitch\_FR & \textbf{\numprint{211.72}} & \numprint{219.32} & \numprint{0.97} & \numprint{217.71} & \numprint{0.97} & \numprint{212.38} & \numprint{1.00} \\
-			ny & - & - & - & - & - & - & - \\
-			web-BerkStan & \textbf{\numprint{793.05}} & \numprint{2023.01} & \numprint{0.39} & \numprint{802.19} & \numprint{0.99} & \numprint{840.56} & \numprint{0.94} \\
-			web-Google & \numprint{2.91} & \numprint{2.85} & \numprint{1.02} & \textbf{\numprint{2.68}} & \textbf{\numprint{1.09}} & \numprint{3.66} & \numprint{0.80} \\
-			web-NotreDame & \numprint{122.57} & \textbf{\numprint{94.59}} & \textbf{\numprint{1.30}} & \numprint{122.09} & \numprint{1.00} & \numprint{159.76} & \numprint{0.77} \\
-			web-Stanford & - & \textbf{\numprint{47.94}} & \textbf{$\infty$} & \numprint{163.79} & $\infty$ & \numprint{112.18} & $\infty$ \\
-			\hline
-			$t_{avg}$ (all) & \numprint{15403.09} & \multicolumn{2}{r|}{\numprint{12561.35}} & \multicolumn{2}{r|}{\textbf{\numprint{12038.24}}}  & \multicolumn{2}{r|}{\numprint{12753.61}} \\
-			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{1.82}} & \multicolumn{2}{r|}{\textbf{\numprint{1.84}}} & \multicolumn{2}{r|}{\numprint{1.65}} \\
-			$t_{avg}$ (solved) & \numprint{2731.92} & \multicolumn{2}{r|}{\numprint{2876.13}} & \multicolumn{2}{r|}{\textbf{\numprint{2706.92}}} & \multicolumn{2}{r|}{\numprint{2710.59}} \\
-			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{0.92}} & \multicolumn{2}{r|}{\textbf{\numprint{1.06}}} & \multicolumn{2}{r|}{\numprint{0.86}} \\
+			$t_{\text{avg}}$ (all) & \textbf{\numprint{6134.82}} & \numprint{6154.39} & \numprint{6164.30} & \numprint{6157.33} \\
+			$s_{\text{geom}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.97} & \numprint{0.78} \\
+			$t_{\text{avg}}$ (solved) & \textbf{\numprint{1540.18}} & \numprint{1562.75} & \numprint{1574.19} & \numprint{1566.15} \\
+			$s_{\text{geom}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{0.97} & \numprint{0.78} \\
+			
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1159,16 +1142,57 @@ A value is highlighted in bold if its the best one within a row.
 
 \begin{table}
 	\scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Aggregated results for our reduction based strategies.}
+	\setlength{\tabcolsep}{2pt}
+	\caption{Detailed results for our decomposition based strategies on sparse networks.}
+	\begin{center}
+		\begin{tabular}{|l|r|r|r|r|}\hline
+			Graph & max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
+			\hline
+			Sparse networks & t (s) & t (s) & t (s)  & t (s)  \\
+			\hline
+			as-skitter & \numprint{11977.45} & \numprint{12088.82} (\numprint{0.99}) & \numprint{11931.14} (\numprint{1.00}) & \textbf{\numprint{11795.50} (\numprint{1.02})} \\
+			baidu & \textbf{\numprint{5.26}} & \numprint{5.63} (\numprint{0.94}) & \numprint{5.51} (\numprint{0.95}) & \numprint{11.83} (\numprint{0.44}) \\
+			bay-sorted & \numprint{10.82} & \numprint{12.13} (\numprint{0.89}) & \textbf{\numprint{7.90} (\numprint{1.37})} & \numprint{25.25} (\numprint{0.43}) \\
+			col-sorted & \numprint{34384.77} & \numprint{32240.53} (\numprint{1.07}) & \numprint{26677.97} (\numprint{1.29}) & - \\
+			deezer\_europe & - & - & - & - \\
+			fla-sorted & \numprint{157.50} & \numprint{139.68} (\numprint{1.13}) & \numprint{144.67} (\numprint{1.09}) & \textbf{\numprint{137.02} (\numprint{1.15})} \\
+			hudong-internallink & \textbf{\numprint{3.38}} & \numprint{4.15} (\numprint{0.81}) & \numprint{4.33} (\numprint{0.78}) & \numprint{3.97} (\numprint{0.85}) \\
+			in-2004 & \textbf{\numprint{37.76}} & \numprint{39.00} (\numprint{0.97}) & \numprint{38.13} (\numprint{0.99}) & \numprint{47.73} (\numprint{0.79}) \\
+			libimseti & \numprint{8579.32} & \numprint{8428.66} (\numprint{1.02}) & \textbf{\numprint{8427.01} (\numprint{1.02})} & \numprint{8510.58} (\numprint{1.01}) \\
+			musae\_DE & - & - & - & - \\
+			musae\_FR & \textbf{\numprint{211.72}} & \numprint{219.32} (\numprint{0.97}) & \numprint{217.71} (\numprint{0.97}) & \numprint{212.38} (\numprint{1.00}) \\
+			ny-sorted & - & - & - & - \\
+			petster-friendships-dog & \numprint{38.66} & \numprint{45.73} (\numprint{0.85}) & \numprint{40.28} (\numprint{0.96}) & \textbf{\numprint{36.61} (\numprint{1.06})} \\
+			soc-LiveJournal1 & \textbf{\numprint{31.54}} & \numprint{44.11} (\numprint{0.72}) & \numprint{37.10} (\numprint{0.85}) & \numprint{40.66} (\numprint{0.78}) \\
+			web-BerkStan & \textbf{\numprint{793.05}} & \numprint{2023.01} (\numprint{0.39}) & \numprint{802.19} (\numprint{0.99}) & \numprint{840.56} (\numprint{0.94}) \\
+			web-Google & \numprint{2.91} & \numprint{2.85} (\numprint{1.02}) & \textbf{\numprint{2.68} (\numprint{1.09})} & \numprint{3.66} (\numprint{0.80}) \\
+			web-NotreDame & \numprint{122.57} & \textbf{\numprint{94.59} (\numprint{1.30})} & \numprint{122.09} (\numprint{1.00}) & \numprint{159.76} (\numprint{0.77}) \\
+			web-Stanford & - & \numprint{47.94} ($\infty$) & \numprint{163.79} ($\infty$) & \numprint{112.18} ($\infty$) \\
+			\hline
+			$t_{\text{avg}}$ (all) & \numprint{11130.93} & \numprint{9079.79} & \textbf{\numprint{8701.25}} & \numprint{9218.76} \\
+			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{1.41} & \textbf{\numprint{1.45}} & \numprint{1.25} \\
+			$t_{\text{avg}}$ (solved) & \numprint{1690.15} & \numprint{1780.59} & \textbf{\numprint{1675.44}} & \numprint{1678.88} \\
+			$s_{\text{geom}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.89} & \numprint{1.00} & \numprint{0.82} \\
+			
+			\hline
+		\end{tabular}
+	\end{center}
+	\label{table:another_table}
+\end{table}
+
+\begin{table}
+	\scriptsize
+	\setlength{\tabcolsep}{2pt}
+	\caption{Aggregated results for our reduction based strategies.}
 	\begin{center}
 		\begin{tabular}{|l|r|r|r|r|r|}\hline
 			& max. deg. & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
 			\hline
-			$t_{avg}$ (all) & \textbf{\numprint{5518.22}} & \numprint{5525.69} & \numprint{5525.30} & \numprint{5559.67} & \numprint{5565.53} \\
-			$s_{geom}$ (all) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
-			$t_{avg}$ (solved) & \numprint{1364.76} & \numprint{1351.12} & \textbf{\numprint{1350.69}} & \numprint{1389.76} & \numprint{1396.43} \\
-			$s_{geom}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.96} & \numprint{0.89} & \numprint{0.92} \\
+			$t_{\text{avg}}$ (all) & \textbf{\numprint{7251.19}} & \numprint{7257.51} & \numprint{7256.41} & \numprint{7286.47} & \numprint{7290.51} \\
+			$s_{\text{geom}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.97} & \numprint{0.89} & \numprint{0.92} \\
+			$t_{\text{avg}}$ (solved) & \numprint{1237.43} & \numprint{1225.14} & \textbf{\numprint{1223.81}} & \numprint{1260.17} & \numprint{1265.06} \\
+			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.01}} & \numprint{0.97} & \numprint{0.89} & \numprint{0.92} \\
+			
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1177,59 +1201,76 @@ A value is highlighted in bold if its the best one within a row.
 
 \begin{table}
 	\scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Detailed results for our reduction based strategies on the PACE instances.}
+	\setlength{\tabcolsep}{2pt}
+	\caption{Detailed results for our reduction based strategies on the PACE instances.}
 	\begin{center}
-		\begin{tabular}{|l|r|rr|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{Twin} & \multicolumn{2}{c|}{Funnel} & \multicolumn{2}{c|}{Unconfined} & \multicolumn{2}{c|}{Combined}  \\
+		\begin{tabular}{|l|r|r|r|r|r|}\hline
+			Graph & \multicolumn{1}{c|}{max. deg.} & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
 			\hline
-			PACE & t (s) & t (s) & s & t (s) & s & t (s) & s & t (s) & s \\
+			PACE & t (s) & t (s) & t (s) & t (s) & t (s) \\
 			\hline
-			36 & \textbf{\numprint{10.67}} & \numprint{10.82} & \numprint{0.99} & \numprint{67.92} & \numprint{0.16} & \numprint{975.40} & \numprint{0.01} & \numprint{74.73} & \numprint{0.14} \\
-			37 & \textbf{\numprint{60.62}} & \numprint{60.73} & \numprint{1.00} & \numprint{63.42} & \numprint{0.96} & \numprint{63.38} & \numprint{0.96} & \numprint{65.95} & \numprint{0.92} \\
-			38 & \numprint{70.79} & \numprint{70.76} & \numprint{1.00} & \textbf{\numprint{65.55}} & \textbf{\numprint{1.08}} & \numprint{66.96} & \numprint{1.06} & \numprint{67.73} & \numprint{1.05} \\
-			39 & \numprint{559.85} & \numprint{560.56} & \numprint{1.00} & \textbf{\numprint{201.00}} & \textbf{\numprint{2.79}} & \numprint{780.71} & \numprint{0.72} & \numprint{564.12} & \numprint{0.99} \\
-			40 & \numprint{27278.42} & \numprint{27235.60} & \numprint{1.00} & \textbf{\numprint{26066.83}} & \textbf{\numprint{1.05}} & \numprint{27500.50} & \numprint{0.99} & \numprint{27218.27} & \numprint{1.00} \\
-			41 & \numprint{282.83} & \numprint{282.81} & \numprint{1.00} & \textbf{\numprint{254.90}} & \textbf{\numprint{1.11}} & \numprint{290.35} & \numprint{0.97} & \numprint{263.18} & \numprint{1.07} \\
-			42 & \textbf{\numprint{215.43}} & \numprint{215.80} & \numprint{1.00} & \numprint{215.73} & \numprint{1.00} & \numprint{222.44} & \numprint{0.97} & \numprint{220.72} & \numprint{0.98} \\
-			43 & \numprint{1015.97} & \numprint{1015.94} & \numprint{1.00} & \textbf{\numprint{959.03}} & \textbf{\numprint{1.06}} & \numprint{1032.41} & \numprint{0.98} & \numprint{988.41} & \numprint{1.03} \\
-			44 & \numprint{545.48} & \numprint{545.20} & \numprint{1.00} & \textbf{\numprint{504.69}} & \textbf{\numprint{1.08}} & \numprint{567.84} & \numprint{0.96} & \numprint{526.25} & \numprint{1.04} \\
-			45 & \textbf{\numprint{147.99}} & \numprint{148.01} & \numprint{1.00} & \numprint{155.06} & \numprint{0.95} & \numprint{155.50} & \numprint{0.95} & \numprint{162.30} & \numprint{0.91} \\
-			46 & \numprint{634.70} & \numprint{632.60} & \numprint{1.00} & \textbf{\numprint{560.56}} & \textbf{\numprint{1.13}} & \numprint{645.63} & \numprint{0.98} & \numprint{571.84} & \numprint{1.11} \\
-			47 & \numprint{342.88} & \numprint{341.82} & \numprint{1.00} & \textbf{\numprint{322.93}} & \textbf{\numprint{1.06}} & \numprint{354.86} & \numprint{0.97} & \numprint{334.53} & \numprint{1.02} \\
-			48 & \numprint{147.66} & \numprint{147.31} & \numprint{1.00} & \textbf{\numprint{138.04}} & \textbf{\numprint{1.07}} & \numprint{153.72} & \numprint{0.96} & \numprint{141.82} & \numprint{1.04} \\
-			49 & \numprint{104.01} & \numprint{103.71} & \numprint{1.00} & \textbf{\numprint{99.41}} & \textbf{\numprint{1.05}} & \numprint{113.83} & \numprint{0.91} & \numprint{105.30} & \numprint{0.99} \\
-			50 & \numprint{285.75} & \numprint{285.05} & \numprint{1.00} & \textbf{\numprint{279.88}} & \textbf{\numprint{1.02}} & \numprint{297.58} & \numprint{0.96} & \numprint{290.71} & \numprint{0.98} \\
-			51 & \numprint{330.87} & \numprint{330.51} & \numprint{1.00} & \textbf{\numprint{312.10}} & \textbf{\numprint{1.06}} & \numprint{342.94} & \numprint{0.96} & \numprint{324.68} & \numprint{1.02} \\
-			52 & \numprint{129.84} & \numprint{129.44} & \numprint{1.00} & \textbf{\numprint{125.31}} & \textbf{\numprint{1.04}} & \numprint{137.82} & \numprint{0.94} & \numprint{134.13} & \numprint{0.97} \\
-			53 & \numprint{351.55} & \numprint{351.14} & \numprint{1.00} & \textbf{\numprint{334.23}} & \textbf{\numprint{1.05}} & \numprint{363.54} & \numprint{0.97} & \numprint{345.66} & \numprint{1.02} \\
-			54 & \numprint{189.21} & \numprint{188.61} & \numprint{1.00} & \textbf{\numprint{179.16}} & \textbf{\numprint{1.06}} & \numprint{198.46} & \numprint{0.95} & \numprint{187.24} & \numprint{1.01} \\
-			55 & \numprint{40.08} & \numprint{39.97} & \numprint{1.00} & \textbf{\numprint{39.54}} & \textbf{\numprint{1.01}} & \numprint{42.06} & \numprint{0.95} & \numprint{41.52} & \numprint{0.97} \\
-			56 & \numprint{563.85} & \numprint{562.77} & \numprint{1.00} & \textbf{\numprint{538.68}} & \textbf{\numprint{1.05}} & \numprint{582.59} & \numprint{0.97} & \numprint{554.00} & \numprint{1.02} \\
-			57 & \numprint{391.92} & \numprint{391.16} & \numprint{1.00} & \textbf{\numprint{353.28}} & \textbf{\numprint{1.11}} & \numprint{398.09} & \numprint{0.98} & \numprint{359.49} & \numprint{1.09} \\
-			58 & \numprint{280.57} & \numprint{279.59} & \numprint{1.00} & \textbf{\numprint{277.96}} & \textbf{\numprint{1.01}} & \numprint{290.47} & \numprint{0.97} & \numprint{295.63} & \numprint{0.95} \\
-			59 & \numprint{78.11} & \numprint{77.81} & \numprint{1.00} & \textbf{\numprint{77.53}} & \textbf{\numprint{1.01}} & \numprint{81.95} & \numprint{0.95} & \numprint{79.48} & \numprint{0.98} \\
-			60 & \numprint{466.65} & \numprint{464.83} & \numprint{1.00} & \textbf{\numprint{439.16}} & \textbf{\numprint{1.06}} & \numprint{482.55} & \numprint{0.97} & \numprint{457.52} & \numprint{1.02} \\
-			61 & \numprint{128.58} & \numprint{128.63} & \numprint{1.00} & \textbf{\numprint{124.98}} & \textbf{\numprint{1.03}} & \numprint{134.11} & \numprint{0.96} & \numprint{127.63} & \numprint{1.01} \\
-			62 & \numprint{386.85} & \numprint{385.80} & \numprint{1.00} & \textbf{\numprint{359.66}} & \textbf{\numprint{1.08}} & \numprint{403.67} & \numprint{0.96} & \numprint{376.14} & \numprint{1.03} \\
-			63 & \numprint{400.81} & \numprint{399.60} & \numprint{1.00} & \textbf{\numprint{371.92}} & \textbf{\numprint{1.08}} & \numprint{420.44} & \numprint{0.95} & \numprint{386.58} & \numprint{1.04} \\
-			64 & \numprint{173.83} & \numprint{173.54} & \numprint{1.00} & \textbf{\numprint{164.74}} & \textbf{\numprint{1.06}} & \numprint{177.58} & \numprint{0.98} & \numprint{171.06} & \numprint{1.02} \\
-			65 & \numprint{212.66} & \numprint{212.62} & \numprint{1.00} & \textbf{\numprint{200.84}} & \textbf{\numprint{1.06}} & \numprint{224.66} & \numprint{0.95} & \numprint{209.17} & \numprint{1.02} \\
-			66 & \numprint{47.47} & \numprint{47.40} & \numprint{1.00} & \textbf{\numprint{45.69}} & \textbf{\numprint{1.04}} & \numprint{49.27} & \numprint{0.96} & \numprint{47.36} & \numprint{1.00} \\
-			67 & \numprint{708.92} & \numprint{706.97} & \numprint{1.00} & \textbf{\numprint{681.84}} & \textbf{\numprint{1.04}} & \numprint{727.18} & \numprint{0.97} & \numprint{715.19} & \numprint{0.99} \\
-			68 & \numprint{50.67} & \textbf{\numprint{50.45}} & \textbf{\numprint{1.00}} & \numprint{53.65} & \numprint{0.94} & \numprint{52.82} & \numprint{0.96} & \numprint{55.57} & \numprint{0.91} \\
-			69 & \numprint{252.39} & \numprint{251.75} & \numprint{1.00} & \textbf{\numprint{234.74}} & \textbf{\numprint{1.08}} & \numprint{262.70} & \numprint{0.96} & \numprint{246.46} & \numprint{1.02} \\
-			70 & \numprint{68.24} & \numprint{67.83} & \numprint{1.01} & \textbf{\numprint{61.13}} & \textbf{\numprint{1.12}} & \numprint{72.52} & \numprint{0.94} & \numprint{64.01} & \numprint{1.07} \\
-			71 & \numprint{208.63} & \numprint{208.06} & \numprint{1.00} & \textbf{\numprint{193.27}} & \textbf{\numprint{1.08}} & \numprint{209.53} & \numprint{1.00} & \numprint{203.51} & \numprint{1.03} \\
-			72 & \numprint{269.53} & \numprint{269.31} & \numprint{1.00} & \textbf{\numprint{253.55}} & \textbf{\numprint{1.06}} & \numprint{277.97} & \numprint{0.97} & \numprint{261.98} & \numprint{1.03} \\
-			73 & \numprint{251.79} & \numprint{251.31} & \numprint{1.00} & \textbf{\numprint{246.16}} & \textbf{\numprint{1.02}} & \numprint{261.86} & \numprint{0.96} & \numprint{268.31} & \numprint{0.94} \\
-			74 & \numprint{41.27} & \numprint{41.21} & \numprint{1.00} & \textbf{\numprint{41.01}} & \textbf{\numprint{1.01}} & \numprint{47.59} & \numprint{0.87} & \numprint{43.03} & \numprint{0.96} \\
-			75 & - & - & - & - & - & - & - & - & - \\
+			05 & \textbf{\numprint{11.46}} & \numprint{11.48} (\numprint{1.00}) & \numprint{12.06} (\numprint{0.95}) & \numprint{12.26} (\numprint{0.93}) & \numprint{13.37} (\numprint{0.86}) \\
+			06 & \numprint{5.01} & \numprint{5.01} (\numprint{1.00}) & \textbf{\numprint{4.56} (\numprint{1.10})} & \numprint{5.61} (\numprint{0.89}) & \numprint{5.11} (\numprint{0.98}) \\
+			10 & \numprint{13.02} & \textbf{\numprint{13.01} (\numprint{1.00})} & \numprint{13.46} (\numprint{0.97}) & \numprint{13.94} (\numprint{0.93}) & \numprint{13.22} (\numprint{0.99}) \\
+			16 & - & - & - & - & - \\
+			19 & \numprint{18.17} & \numprint{18.11} (\numprint{1.00}) & \textbf{\numprint{17.34} (\numprint{1.05})} & \numprint{19.13} (\numprint{0.95}) & \numprint{18.00} (\numprint{1.01}) \\
+			31 & \numprint{428.74} & \numprint{428.74} (\numprint{1.00}) & \numprint{351.96} (\numprint{1.22}) & \numprint{434.53} (\numprint{0.99}) & \textbf{\numprint{346.98} (\numprint{1.24})} \\
+			32 & - & - & - & - & - \\
+			33 & \textbf{\numprint{5.79}} & \numprint{5.84} (\numprint{0.99}) & \numprint{7.00} (\numprint{0.83}) & \numprint{6.80} (\numprint{0.85}) & \numprint{7.75} (\numprint{0.75}) \\
+			34 & - & - & - & - & - \\
+			35 & \textbf{\numprint{44.74}} & \numprint{44.81} (\numprint{1.00}) & \numprint{44.82} (\numprint{1.00}) & \numprint{47.11} (\numprint{0.95}) & \numprint{47.68} (\numprint{0.94}) \\
+			36 & \textbf{\numprint{10.67}} & \numprint{10.82} (\numprint{0.99}) & \numprint{67.92} (\numprint{0.16}) & \numprint{975.40} (\numprint{0.01}) & \numprint{74.73} (\numprint{0.14}) \\
+			37 & \textbf{\numprint{60.62}} & \numprint{60.73} (\numprint{1.00}) & \numprint{63.42} (\numprint{0.96}) & \numprint{63.38} (\numprint{0.96}) & \numprint{65.95} (\numprint{0.92}) \\
+			38 & \numprint{70.79} & \numprint{70.76} (\numprint{1.00}) & \textbf{\numprint{65.55} (\numprint{1.08})} & \numprint{66.96} (\numprint{1.06}) & \numprint{67.73} (\numprint{1.05}) \\
+			39 & \numprint{559.85} & \numprint{560.56} (\numprint{1.00}) & \textbf{\numprint{201.00} (\numprint{2.79})} & \numprint{780.71} (\numprint{0.72}) & \numprint{564.12} (\numprint{0.99}) \\
+			40 & \numprint{27278.42} & \numprint{27235.60} (\numprint{1.00}) & \textbf{\numprint{26066.83} (\numprint{1.05})} & \numprint{27500.50} (\numprint{0.99}) & \numprint{27218.27} (\numprint{1.00}) \\
+			41 & \numprint{282.83} & \numprint{282.81} (\numprint{1.00}) & \textbf{\numprint{254.90} (\numprint{1.11})} & \numprint{290.35} (\numprint{0.97}) & \numprint{263.18} (\numprint{1.07}) \\
+			42 & \textbf{\numprint{215.43}} & \numprint{215.80} (\numprint{1.00}) & \numprint{215.73} (\numprint{1.00}) & \numprint{222.44} (\numprint{0.97}) & \numprint{220.72} (\numprint{0.98}) \\
+			43 & \numprint{1015.97} & \numprint{1015.94} (\numprint{1.00}) & \textbf{\numprint{959.03} (\numprint{1.06})} & \numprint{1032.41} (\numprint{0.98}) & \numprint{988.41} (\numprint{1.03}) \\
+			44 & \numprint{545.48} & \numprint{545.20} (\numprint{1.00}) & \textbf{\numprint{504.69} (\numprint{1.08})} & \numprint{567.84} (\numprint{0.96}) & \numprint{526.25} (\numprint{1.04}) \\
+			45 & \textbf{\numprint{147.99}} & \numprint{148.01} (\numprint{1.00}) & \numprint{155.06} (\numprint{0.95}) & \numprint{155.50} (\numprint{0.95}) & \numprint{162.30} (\numprint{0.91}) \\
+			46 & \numprint{634.70} & \numprint{632.60} (\numprint{1.00}) & \textbf{\numprint{560.56} (\numprint{1.13})} & \numprint{645.63} (\numprint{0.98}) & \numprint{571.84} (\numprint{1.11}) \\
+			47 & \numprint{342.88} & \numprint{341.82} (\numprint{1.00}) & \textbf{\numprint{322.93} (\numprint{1.06})} & \numprint{354.86} (\numprint{0.97}) & \numprint{334.53} (\numprint{1.02}) \\
+			48 & \numprint{147.66} & \numprint{147.31} (\numprint{1.00}) & \textbf{\numprint{138.04} (\numprint{1.07})} & \numprint{153.72} (\numprint{0.96}) & \numprint{141.82} (\numprint{1.04}) \\
+			49 & \numprint{104.01} & \numprint{103.71} (\numprint{1.00}) & \textbf{\numprint{99.41} (\numprint{1.05})} & \numprint{113.83} (\numprint{0.91}) & \numprint{105.30} (\numprint{0.99}) \\
+			50 & \numprint{285.75} & \numprint{285.05} (\numprint{1.00}) & \textbf{\numprint{279.88} (\numprint{1.02})} & \numprint{297.58} (\numprint{0.96}) & \numprint{290.71} (\numprint{0.98}) \\
+			51 & \numprint{330.87} & \numprint{330.51} (\numprint{1.00}) & \textbf{\numprint{312.10} (\numprint{1.06})} & \numprint{342.94} (\numprint{0.96}) & \numprint{324.68} (\numprint{1.02}) \\
+			52 & \numprint{129.84} & \numprint{129.44} (\numprint{1.00}) & \textbf{\numprint{125.31} (\numprint{1.04})} & \numprint{137.82} (\numprint{0.94}) & \numprint{134.13} (\numprint{0.97}) \\
+			53 & \numprint{351.55} & \numprint{351.14} (\numprint{1.00}) & \textbf{\numprint{334.23} (\numprint{1.05})} & \numprint{363.54} (\numprint{0.97}) & \numprint{345.66} (\numprint{1.02}) \\
+			54 & \numprint{189.21} & \numprint{188.61} (\numprint{1.00}) & \textbf{\numprint{179.16} (\numprint{1.06})} & \numprint{198.46} (\numprint{0.95}) & \numprint{187.24} (\numprint{1.01}) \\
+			55 & \numprint{40.08} & \numprint{39.97} (\numprint{1.00}) & \textbf{\numprint{39.54} (\numprint{1.01})} & \numprint{42.06} (\numprint{0.95}) & \numprint{41.52} (\numprint{0.97}) \\
+			56 & \numprint{563.85} & \numprint{562.77} (\numprint{1.00}) & \textbf{\numprint{538.68} (\numprint{1.05})} & \numprint{582.59} (\numprint{0.97}) & \numprint{554.00} (\numprint{1.02}) \\
+			57 & \numprint{391.92} & \numprint{391.16} (\numprint{1.00}) & \textbf{\numprint{353.28} (\numprint{1.11})} & \numprint{398.09} (\numprint{0.98}) & \numprint{359.49} (\numprint{1.09}) \\
+			58 & \numprint{280.57} & \numprint{279.59} (\numprint{1.00}) & \textbf{\numprint{277.96} (\numprint{1.01})} & \numprint{290.47} (\numprint{0.97}) & \numprint{295.63} (\numprint{0.95}) \\
+			59 & \numprint{78.11} & \numprint{77.81} (\numprint{1.00}) & \textbf{\numprint{77.53} (\numprint{1.01})} & \numprint{81.95} (\numprint{0.95}) & \numprint{79.48} (\numprint{0.98}) \\
+			60 & \numprint{466.65} & \numprint{464.83} (\numprint{1.00}) & \textbf{\numprint{439.16} (\numprint{1.06})} & \numprint{482.55} (\numprint{0.97}) & \numprint{457.52} (\numprint{1.02}) \\
+			61 & \numprint{128.58} & \numprint{128.63} (\numprint{1.00}) & \textbf{\numprint{124.98} (\numprint{1.03})} & \numprint{134.11} (\numprint{0.96}) & \numprint{127.63} (\numprint{1.01}) \\
+			62 & \numprint{386.85} & \numprint{385.80} (\numprint{1.00}) & \textbf{\numprint{359.66} (\numprint{1.08})} & \numprint{403.67} (\numprint{0.96}) & \numprint{376.14} (\numprint{1.03}) \\
+			63 & \numprint{400.81} & \numprint{399.60} (\numprint{1.00}) & \textbf{\numprint{371.92} (\numprint{1.08})} & \numprint{420.44} (\numprint{0.95}) & \numprint{386.58} (\numprint{1.04}) \\
+			64 & \numprint{173.83} & \numprint{173.54} (\numprint{1.00}) & \textbf{\numprint{164.74} (\numprint{1.06})} & \numprint{177.58} (\numprint{0.98}) & \numprint{171.06} (\numprint{1.02}) \\
+			65 & \numprint{212.66} & \numprint{212.62} (\numprint{1.00}) & \textbf{\numprint{200.84} (\numprint{1.06})} & \numprint{224.66} (\numprint{0.95}) & \numprint{209.17} (\numprint{1.02}) \\
+			66 & \numprint{47.47} & \numprint{47.40} (\numprint{1.00}) & \textbf{\numprint{45.69} (\numprint{1.04})} & \numprint{49.27} (\numprint{0.96}) & \numprint{47.36} (\numprint{1.00}) \\
+			67 & \numprint{708.92} & \numprint{706.97} (\numprint{1.00}) & \textbf{\numprint{681.84} (\numprint{1.04})} & \numprint{727.18} (\numprint{0.97}) & \numprint{715.19} (\numprint{0.99}) \\
+			68 & \numprint{50.67} & \textbf{\numprint{50.45} (\numprint{1.00})} & \numprint{53.65} (\numprint{0.94}) & \numprint{52.82} (\numprint{0.96}) & \numprint{55.57} (\numprint{0.91}) \\
+			69 & \numprint{252.39} & \numprint{251.75} (\numprint{1.00}) & \textbf{\numprint{234.74} (\numprint{1.08})} & \numprint{262.70} (\numprint{0.96}) & \numprint{246.46} (\numprint{1.02}) \\
+			70 & \numprint{68.24} & \numprint{67.83} (\numprint{1.01}) & \textbf{\numprint{61.13} (\numprint{1.12})} & \numprint{72.52} (\numprint{0.94}) & \numprint{64.01} (\numprint{1.07}) \\
+			71 & \numprint{208.63} & \numprint{208.06} (\numprint{1.00}) & \textbf{\numprint{193.27} (\numprint{1.08})} & \numprint{209.53} (\numprint{1.00}) & \numprint{203.51} (\numprint{1.03}) \\
+			72 & \numprint{269.53} & \numprint{269.31} (\numprint{1.00}) & \textbf{\numprint{253.55} (\numprint{1.06})} & \numprint{277.97} (\numprint{0.97}) & \numprint{261.98} (\numprint{1.03}) \\
+			73 & \numprint{251.79} & \numprint{251.31} (\numprint{1.00}) & \textbf{\numprint{246.16} (\numprint{1.02})} & \numprint{261.86} (\numprint{0.96}) & \numprint{268.31} (\numprint{0.94}) \\
+			74 & \numprint{41.27} & \numprint{41.21} (\numprint{1.00}) & \textbf{\numprint{41.01} (\numprint{1.01})} & \numprint{47.59} (\numprint{0.87}) & \numprint{43.03} (\numprint{0.96}) \\
+			75 & - & - & - & - & - \\
+			76 & - & - & - & - & - \\
+			77 & \numprint{77.46} & \numprint{77.43} (\numprint{1.00}) & \textbf{\numprint{76.80} (\numprint{1.01})} & \numprint{81.62} (\numprint{0.95}) & \numprint{78.81} (\numprint{0.98}) \\
+			78 & - & - & - & - & - \\
+			79 & - & - & - & - & - \\
+			80 & - & - & - & - & - \\
 			\hline
-			$t_{avg}$ (all) & \numprint{1843.18} & \multicolumn{2}{r|}{\numprint{1841.68}} & \multicolumn{2}{r|}{\textbf{\numprint{1791.63}}} & \multicolumn{2}{r|}{\numprint{1886.59}} & \multicolumn{2}{r|}{\numprint{1838.78}}  \\
-			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{1.00}} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.85}} & \multicolumn{2}{r|}{\numprint{0.96}} \\
-			$t_{avg}$ (solved) & \numprint{967.37} & \multicolumn{2}{r|}{\numprint{965.82}} & \multicolumn{2}{r|}{\textbf{\numprint{914.49}}} & \multicolumn{2}{r|}{\numprint{1011.88}} & \multicolumn{2}{r|}{\numprint{962.85}} \\
-			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\numprint{1.00}} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.85}} & \multicolumn{2}{r|}{\numprint{0.96}} \\
+			$t_{\text{avg}}$ (all) & \numprint{5933.30} & \numprint{5932.21} & \textbf{\numprint{5894.42}} & \numprint{5965.17} & \numprint{5928.77} \\
+			$s_{\text{geom}}$ (all) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.86} & \numprint{0.96} \\
+			$t_{\text{avg}}$ (solved) & \numprint{815.57} & \numprint{814.29} & \textbf{\numprint{770.07}} & \numprint{852.86} & \numprint{810.26} \\
+			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.86} & \numprint{0.96} \\
+			
+			
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1238,87 +1279,92 @@ A value is highlighted in bold if its the best one within a row.
 
 \begin{table}
 	\scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Detailed results for our reduction based strategies on the DIMACS instances.}
+	\setlength{\tabcolsep}{2pt}
+	\caption{Detailed results for our reduction based strategies on the DIMACS instances.}
 	\begin{center}
-		\begin{tabular}{|l|r|rr|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{Twin} & \multicolumn{2}{c|}{Funnel} & \multicolumn{2}{c|}{Unconfined} & \multicolumn{2}{c|}{Combined}  \\
+		\begin{tabular}{|l|r|r|r|r|r|}\hline
+			Graph & \multicolumn{1}{c|}{max. deg.} & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
 			\hline
-			DIMACS & t (s) & t (s) & s & t (s) & s & t (s) & s & t (s) & s \\
+			DIMACS & t (s) & t (s) & t (s) & t (s) & t (s) \\
 			\hline
-			C125 & \numprint{5.49} & \numprint{5.34} & \numprint{1.03} & \textbf{\numprint{5.24}} & \textbf{\numprint{1.05}} & \numprint{5.57} & \numprint{0.99} & \numprint{5.60} & \numprint{0.98} \\
-			C250 & - & - & - & - & - & - & - & - & - \\
-			MANN\_a27 & \numprint{3.05} & \textbf{\numprint{2.98}} & \textbf{\numprint{1.03}} & \numprint{4.08} & \numprint{0.75} & \numprint{3.30} & \numprint{0.93} & \numprint{4.29} & \numprint{0.71} \\
-			MANN\_a45 & \numprint{473.07} & \textbf{\numprint{461.60}} & \textbf{\numprint{1.02}} & \numprint{602.88} & \numprint{0.78} & \numprint{500.84} & \numprint{0.94} & \numprint{620.94} & \numprint{0.76} \\
-			brock200\_1 & \numprint{790.54} & \textbf{\numprint{771.78}} & \textbf{\numprint{1.02}} & \numprint{803.96} & \numprint{0.98} & \numprint{786.84} & \numprint{1.00} & \numprint{832.33} & \numprint{0.95} \\
-			brock200\_2 & \numprint{27.00} & \textbf{\numprint{26.97}} & \textbf{\numprint{1.00}} & \numprint{28.24} & \numprint{0.96} & \numprint{27.39} & \numprint{0.99} & \numprint{28.94} & \numprint{0.93} \\
-			brock200\_3 & \numprint{134.07} & \textbf{\numprint{130.76}} & \textbf{\numprint{1.03}} & \numprint{137.64} & \numprint{0.97} & \numprint{133.19} & \numprint{1.01} & \numprint{142.11} & \numprint{0.94} \\
-			brock200\_4 & \numprint{167.00} & \textbf{\numprint{162.98}} & \textbf{\numprint{1.02}} & \numprint{173.06} & \numprint{0.97} & \numprint{165.49} & \numprint{1.01} & \numprint{177.95} & \numprint{0.94} \\
-			c-fat200-1 & \numprint{0.75} & \textbf{\numprint{0.74}} & \textbf{\numprint{1.03}} & \numprint{0.79} & \numprint{0.95} & \numprint{0.74} & \numprint{1.01} & \numprint{0.81} & \numprint{0.93} \\
-			gen200\_p0 & \numprint{822.73} & \numprint{807.96} & \numprint{1.02} & \textbf{\numprint{779.23}} & \textbf{\numprint{1.06}} & \numprint{868.49} & \numprint{0.95} & \numprint{824.22} & \numprint{1.00} \\
-			hamming6-4 & \numprint{0.14} & \textbf{\numprint{0.14}} & \textbf{\numprint{1.02}} & \numprint{0.15} & \numprint{0.95} & \numprint{0.14} & \numprint{1.02} & \numprint{0.15} & \numprint{0.94} \\
-			hamming8-4 & \numprint{129.50} & \textbf{\numprint{129.42}} & \textbf{\numprint{1.00}} & \numprint{135.48} & \numprint{0.96} & \numprint{130.23} & \numprint{0.99} & \numprint{135.31} & \numprint{0.96} \\
-			johnson16-2-4 & \numprint{236.42} & \textbf{\numprint{230.70}} & \textbf{\numprint{1.02}} & \numprint{243.17} & \numprint{0.97} & \numprint{239.50} & \numprint{0.99} & \numprint{257.80} & \numprint{0.92} \\
-			johnson8-4-4 & \numprint{0.37} & \textbf{\numprint{0.37}} & \textbf{\numprint{1.01}} & \numprint{0.40} & \numprint{0.92} & \numprint{0.38} & \numprint{0.98} & \numprint{0.42} & \numprint{0.89} \\
-			keller4 & \numprint{15.94} & \textbf{\numprint{15.73}} & \textbf{\numprint{1.01}} & \numprint{16.76} & \numprint{0.95} & \numprint{16.19} & \numprint{0.98} & \numprint{17.27} & \numprint{0.92} \\
-			p\_hat1000-1 & \numprint{5498.84} & \textbf{\numprint{5362.44}} & \textbf{\numprint{1.03}} & \numprint{5560.49} & \numprint{0.99} & \numprint{5437.00} & \numprint{1.01} & \numprint{5697.92} & \numprint{0.97} \\
-			p\_hat1000-2 & - & - & - & - & - & - & - & - & - \\
-			p\_hat1500-1 & - & - & - & - & - & - & - & - & - \\
-			p\_hat300-1 & \numprint{25.36} & \textbf{\numprint{24.75}} & \textbf{\numprint{1.02}} & \numprint{26.25} & \numprint{0.97} & \numprint{25.09} & \numprint{1.01} & \numprint{26.92} & \numprint{0.94} \\
-			p\_hat300-2 & \numprint{34.20} & \textbf{\numprint{33.35}} & \textbf{\numprint{1.03}} & \numprint{35.24} & \numprint{0.97} & \numprint{33.82} & \numprint{1.01} & \numprint{36.20} & \numprint{0.94} \\
-			p\_hat300-3 & \numprint{1124.48} & \textbf{\numprint{1097.77}} & \textbf{\numprint{1.02}} & \numprint{1133.11} & \numprint{0.99} & \numprint{1102.21} & \numprint{1.02} & \numprint{1160.75} & \numprint{0.97} \\
-			p\_hat500-1 & \numprint{251.75} & \textbf{\numprint{245.70}} & \textbf{\numprint{1.02}} & \numprint{257.28} & \numprint{0.98} & \numprint{249.54} & \numprint{1.01} & \numprint{264.20} & \numprint{0.95} \\
-			p\_hat500-2 & \numprint{593.16} & \textbf{\numprint{585.37}} & \textbf{\numprint{1.01}} & \numprint{615.66} & \numprint{0.96} & \numprint{592.60} & \numprint{1.00} & \numprint{629.68} & \numprint{0.94} \\
-			p\_hat500-3 & - & - & - & - & - & - & - & - & - \\
-			p\_hat700-1 & \numprint{1035.72} & \textbf{\numprint{1010.70}} & \textbf{\numprint{1.02}} & \numprint{1052.85} & \numprint{0.98} & \numprint{1024.93} & \numprint{1.01} & \numprint{1079.55} & \numprint{0.96} \\
-			p\_hat700-2 & \numprint{5675.42} & \textbf{\numprint{5537.37}} & \textbf{\numprint{1.02}} & \numprint{5736.46} & \numprint{0.99} & \numprint{5590.47} & \numprint{1.02} & \numprint{5869.41} & \numprint{0.97} \\
-			san1000 & \numprint{6738.26} & \textbf{\numprint{6653.61}} & \textbf{\numprint{1.01}} & \numprint{6918.81} & \numprint{0.97} & \numprint{6727.94} & \numprint{1.00} & \numprint{6997.43} & \numprint{0.96} \\
-			san200\_0 & \numprint{1290.60} & \numprint{1258.57} & \numprint{1.03} & \numprint{1226.54} & \numprint{1.05} & \textbf{\numprint{783.37}} & \textbf{\numprint{1.65}} & \numprint{1025.87} & \numprint{1.26} \\
-			san400\_0 & \numprint{12826.58} & \textbf{\numprint{12540.22}} & \textbf{\numprint{1.02}} & \numprint{13073.50} & \numprint{0.98} & \numprint{13240.40} & \numprint{0.97} & \numprint{13528.34} & \numprint{0.95} \\
-			sanr200\_0 & \numprint{2144.20} & \numprint{2092.56} & \numprint{1.02} & \textbf{\numprint{2027.34}} & \textbf{\numprint{1.06}} & \numprint{2104.37} & \numprint{1.02} & \numprint{2106.70} & \numprint{1.02} \\
+			C125 & \numprint{5.49} & \numprint{5.34} (\numprint{1.03}) & \textbf{\numprint{5.24} (\numprint{1.05})} & \numprint{5.57} (\numprint{0.99}) & \numprint{5.60} (\numprint{0.98}) \\
+			C250 & - & - & - & - & - \\
+			MANN\_a27 & \numprint{3.05} & \textbf{\numprint{2.98} (\numprint{1.03})} & \numprint{4.08} (\numprint{0.75}) & \numprint{3.30} (\numprint{0.93}) & \numprint{4.29} (\numprint{0.71}) \\
+			MANN\_a45 & \numprint{473.07} & \textbf{\numprint{461.60} (\numprint{1.02})} & \numprint{602.88} (\numprint{0.78}) & \numprint{500.84} (\numprint{0.94}) & \numprint{620.94} (\numprint{0.76}) \\
+			brock200\_1 & \numprint{790.54} & \textbf{\numprint{771.78} (\numprint{1.02})} & \numprint{803.96} (\numprint{0.98}) & \numprint{786.84} (\numprint{1.00}) & \numprint{832.33} (\numprint{0.95}) \\
+			brock200\_2 & \numprint{27.00} & \textbf{\numprint{26.97} (\numprint{1.00})} & \numprint{28.24} (\numprint{0.96}) & \numprint{27.39} (\numprint{0.99}) & \numprint{28.94} (\numprint{0.93}) \\
+			brock200\_3 & \numprint{134.07} & \textbf{\numprint{130.76} (\numprint{1.03})} & \numprint{137.64} (\numprint{0.97}) & \numprint{133.19} (\numprint{1.01}) & \numprint{142.11} (\numprint{0.94}) \\
+			brock200\_4 & \numprint{167.00} & \textbf{\numprint{162.98} (\numprint{1.02})} & \numprint{173.06} (\numprint{0.97}) & \numprint{165.49} (\numprint{1.01}) & \numprint{177.95} (\numprint{0.94}) \\
+			c-fat200-1 & \numprint{0.75} & \textbf{\numprint{0.74} (\numprint{1.03})} & \numprint{0.79} (\numprint{0.95}) & \numprint{0.74} (\numprint{1.01}) & \numprint{0.81} (\numprint{0.93}) \\
+			gen200\_p0 & \numprint{822.73} & \numprint{807.96} (\numprint{1.02}) & \textbf{\numprint{779.23} (\numprint{1.06})} & \numprint{868.49} (\numprint{0.95}) & \numprint{824.22} (\numprint{1.00}) \\
+			hamming6-4 & \numprint{0.14} & \textbf{\numprint{0.14} (\numprint{1.02})} & \numprint{0.15} (\numprint{0.95}) & \numprint{0.14} (\numprint{1.02}) & \numprint{0.15} (\numprint{0.94}) \\
+			hamming8-4 & \numprint{129.50} & \textbf{\numprint{129.42} (\numprint{1.00})} & \numprint{135.48} (\numprint{0.96}) & \numprint{130.23} (\numprint{0.99}) & \numprint{135.31} (\numprint{0.96}) \\
+			johnson16-2-4 & \numprint{236.42} & \textbf{\numprint{230.70} (\numprint{1.02})} & \numprint{243.17} (\numprint{0.97}) & \numprint{239.50} (\numprint{0.99}) & \numprint{257.80} (\numprint{0.92}) \\
+			johnson8-4-4 & \numprint{0.37} & \textbf{\numprint{0.37} (\numprint{1.01})} & \numprint{0.40} (\numprint{0.92}) & \numprint{0.38} (\numprint{0.98}) & \numprint{0.42} (\numprint{0.89}) \\
+			keller4 & \numprint{15.94} & \textbf{\numprint{15.73} (\numprint{1.01})} & \numprint{16.76} (\numprint{0.95}) & \numprint{16.19} (\numprint{0.98}) & \numprint{17.27} (\numprint{0.92}) \\
+			p\_hat1000-1 & \numprint{5498.84} & \textbf{\numprint{5362.44} (\numprint{1.03})} & \numprint{5560.49} (\numprint{0.99}) & \numprint{5437.00} (\numprint{1.01}) & \numprint{5697.92} (\numprint{0.97}) \\
+			p\_hat1000-2 & - & - & - & - & - \\
+			p\_hat1500-1 & - & - & - & - & - \\
+			p\_hat300-1 & \numprint{25.36} & \textbf{\numprint{24.75} (\numprint{1.02})} & \numprint{26.25} (\numprint{0.97}) & \numprint{25.09} (\numprint{1.01}) & \numprint{26.92} (\numprint{0.94}) \\
+			p\_hat300-2 & \numprint{34.20} & \textbf{\numprint{33.35} (\numprint{1.03})} & \numprint{35.24} (\numprint{0.97}) & \numprint{33.82} (\numprint{1.01}) & \numprint{36.20} (\numprint{0.94}) \\
+			p\_hat300-3 & \numprint{1124.48} & \textbf{\numprint{1097.77} (\numprint{1.02})} & \numprint{1133.11} (\numprint{0.99}) & \numprint{1102.21} (\numprint{1.02}) & \numprint{1160.75} (\numprint{0.97}) \\
+			p\_hat500-1 & \numprint{251.75} & \textbf{\numprint{245.70} (\numprint{1.02})} & \numprint{257.28} (\numprint{0.98}) & \numprint{249.54} (\numprint{1.01}) & \numprint{264.20} (\numprint{0.95}) \\
+			p\_hat500-2 & \numprint{593.16} & \textbf{\numprint{585.37} (\numprint{1.01})} & \numprint{615.66} (\numprint{0.96}) & \numprint{592.60} (\numprint{1.00}) & \numprint{629.68} (\numprint{0.94}) \\
+			p\_hat500-3 & - & - & - & - & - \\
+			p\_hat700-1 & \numprint{1035.72} & \textbf{\numprint{1010.70} (\numprint{1.02})} & \numprint{1052.85} (\numprint{0.98}) & \numprint{1024.93} (\numprint{1.01}) & \numprint{1079.55} (\numprint{0.96}) \\
+			p\_hat700-2 & \numprint{5675.42} & \textbf{\numprint{5537.37} (\numprint{1.02})} & \numprint{5736.46} (\numprint{0.99}) & \numprint{5590.47} (\numprint{1.02}) & \numprint{5869.41} (\numprint{0.97}) \\
+			san1000 & \numprint{6738.26} & \textbf{\numprint{6653.61} (\numprint{1.01})} & \numprint{6918.81} (\numprint{0.97}) & \numprint{6727.94} (\numprint{1.00}) & \numprint{6997.43} (\numprint{0.96}) \\
+			san200\_0 & \numprint{1290.60} & \numprint{1258.57} (\numprint{1.03}) & \numprint{1226.54} (\numprint{1.05}) & \textbf{\numprint{783.37} (\numprint{1.65})} & \numprint{1025.87} (\numprint{1.26}) \\
+			san400\_0 & \numprint{12826.58} & \textbf{\numprint{12540.22} (\numprint{1.02})} & \numprint{13073.50} (\numprint{0.98}) & \numprint{13240.40} (\numprint{0.97}) & \numprint{13528.34} (\numprint{0.95}) \\
+			sanr200\_0 & \numprint{2144.20} & \numprint{2092.56} (\numprint{1.02}) & \textbf{\numprint{2027.34} (\numprint{1.06})} & \numprint{2104.37} (\numprint{1.02}) & \numprint{2106.70} (\numprint{1.02}) \\
 			\hline
-			$t_{avg}$ (all) & \numprint{6134.82} & \multicolumn{2}{r|}{\textbf{\numprint{6106.33}}} & \multicolumn{2}{r|}{\numprint{6153.15}} & \multicolumn{2}{r|}{\numprint{6126.33}} & \multicolumn{2}{r|}{\numprint{6182.37}} \\
-			$s_{geom}$ (all) & \numprint{1.00} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.96}} & \multicolumn{2}{r|}{\numprint{1.01}} & \multicolumn{2}{r|}{\numprint{0.94}} \\
-			$t_{avg}$ (solved) & \numprint{1540.18} & \multicolumn{2}{r|}{\textbf{\numprint{1507.30}}} & \multicolumn{2}{r|}{\numprint{1561.33}} & \multicolumn{2}{r|}{\numprint{1530.39}} & \multicolumn{2}{r|}{\numprint{1595.04}} \\
-			$s_{geom}$ (solved) & \numprint{1.00} & \multicolumn{2}{r|}{\textbf{\numprint{1.02}}} & \multicolumn{2}{r|}{\numprint{0.96}} & \multicolumn{2}{r|}{\numprint{1.01}} & \multicolumn{2}{r|}{\numprint{0.94}}  \\
+			$t_{\text{avg}}$ (all) & \numprint{6134.82} & \textbf{\numprint{6106.33}} & \numprint{6153.15} & \numprint{6126.33} & \numprint{6182.37} \\
+			$s_{\text{geom}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.96} & \numprint{1.01} & \numprint{0.94} \\
+			$t_{\text{avg}}$ (solved) & \numprint{1540.18} & \textbf{\numprint{1507.30}} & \numprint{1561.33} & \numprint{1530.39} & \numprint{1595.04} \\
+			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.02}} & \numprint{0.96} & \numprint{1.01} & \numprint{0.94} \\
+			
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	\label{table:another_tablee}
 \end{table}
 
 \begin{table}
-  \scriptsize
-  \setlength{\tabcolsep}{2pt}
-  \caption{Detailed results for our reduction based strategies on sparse networks.}
+	\scriptsize
+	\setlength{\tabcolsep}{2pt}
+	\caption{Detailed results for our reduction based strategies on sparse networks.}
 	\begin{center}
-		\begin{tabular}{|l|r|rr|rr|rr|rr|}\hline
-			Graph & max. deg. & \multicolumn{2}{c|}{Twin} & \multicolumn{2}{c|}{Funnel} & \multicolumn{2}{c|}{Unconfined} & \multicolumn{2}{c|}{Combined}  \\
+		\begin{tabular}{|l|r|r|r|r|r|}\hline
+			Graph & \multicolumn{1}{c|}{max. deg.} & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Combined}  \\
 			\hline
-			Sparse networks & t (s) & t (s) & s & t (s) & s & t (s) & s & t (s) & s \\
+			Sparse networks & t (s) & t (s) & t (s) & t (s)  & t (s)  \\
 			\hline
-			as-skitter & \numprint{11977.45} & \numprint{11936.70} & \numprint{1.00} & \textbf{\numprint{11128.03}} & \textbf{\numprint{1.08}} & \numprint{11795.90} & \numprint{1.02} & \numprint{11403.20} & \numprint{1.05} \\
-			bay & \textbf{\numprint{10.82}} & \numprint{10.95} & \numprint{0.99} & \numprint{61.14} & \numprint{0.18} & \numprint{33.21} & \numprint{0.33} & \numprint{58.21} & \numprint{0.19} \\
-			col & \textbf{\numprint{34384.77}} & - & - & - & - & - & - & - & - \\
-			feather-deezer-social & - & - & - & - & - & - & - & - & - \\
-			fla & \textbf{\numprint{157.50}} & \numprint{159.10} & \numprint{0.99} & \numprint{303.30} & \numprint{0.52} & \numprint{511.19} & \numprint{0.31} & \numprint{292.22} & \numprint{0.54} \\
-			libimseti & \numprint{8579.32} & \textbf{\numprint{8537.78}} & \textbf{\numprint{1.00}} & \numprint{9715.24} & \numprint{0.88} & \numprint{8541.15} & \numprint{1.00} & \numprint{9772.28} & \numprint{0.88} \\
-			musae-twitch\_DE & - & - & - & - & - & - & - & - & - \\
-			musae-twitch\_FR & \textbf{\numprint{211.72}} & \numprint{215.57} & \numprint{0.98} & \numprint{235.97} & \numprint{0.90} & \numprint{247.27} & \numprint{0.86} & \numprint{268.42} & \numprint{0.79} \\
-			ny & - & - & - & - & - & - & - & - & - \\
-			web-BerkStan & \numprint{793.05} & \numprint{785.55} & \numprint{1.01} & \textbf{\numprint{741.49}} & \textbf{\numprint{1.07}} & \numprint{939.90} & \numprint{0.84} & \numprint{963.78} & \numprint{0.82} \\
-			web-Google & \numprint{2.91} & \textbf{\numprint{2.87}} & \textbf{\numprint{1.01}} & \numprint{2.92} & \numprint{1.00} & \numprint{3.07} & \numprint{0.95} & \numprint{3.03} & \numprint{0.96} \\
-			web-NotreDame & \textbf{\numprint{122.57}} & \numprint{126.49} & \numprint{0.97} & \numprint{152.53} & \numprint{0.80} & \numprint{127.48} & \numprint{0.96} & \numprint{155.77} & \numprint{0.79} \\
-			web-Stanford & - & - & - & - & - & - & - & - & - \\
-			\hline
-			$t_{avg}$ (all) & \textbf{\numprint{15403.09}} & \multicolumn{2}{r|}{\numprint{15521.15}} & \multicolumn{2}{r|}{\numprint{15564.66}} & \multicolumn{2}{r|}{\numprint{15553.78}} & \multicolumn{2}{r|}{\numprint{15608.99}} \\
-			$s_{geom}$ (all) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.99}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.71}}  & \multicolumn{2}{r|}{\numprint{0.68}}  \\
-			$t_{avg}$ (solved) & \numprint{2731.92} & \multicolumn{2}{r|}{\textbf{\numprint{2721.88}}} & \multicolumn{2}{r|}{\numprint{2792.58}} & \multicolumn{2}{r|}{\numprint{2774.90}} & \multicolumn{2}{r|}{\numprint{2864.61}}  \\
-			$s_{geom}$ (solved) & \textbf{\numprint{1.00}} & \multicolumn{2}{r|}{\numprint{0.99}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.71}} & \multicolumn{2}{r|}{\numprint{0.68}}\\
+			as-skitter & \numprint{11977.45} & \numprint{11936.70} (\numprint{1.00}) & \textbf{\numprint{11128.03} (\numprint{1.08})} & \numprint{11795.90} (\numprint{1.02}) & \numprint{11403.20} (\numprint{1.05}) \\
+			baidu & \textbf{\numprint{5.26}} & \numprint{5.34} (\numprint{0.98}) & \numprint{5.68} (\numprint{0.93}) & \numprint{5.68} (\numprint{0.93}) & \numprint{5.84} (\numprint{0.90}) \\
+			bay-sorted & \textbf{\numprint{10.82}} & \numprint{10.95} (\numprint{0.99}) & \numprint{61.14} (\numprint{0.18}) & \numprint{33.21} (\numprint{0.33}) & \numprint{58.21} (\numprint{0.19}) \\
+			col-sorted & \numprint{34384.77} & - & - & - & - \\
+			deezer\_europe & - & - & - & - & - \\
+			fla-sorted & \textbf{\numprint{157.50}} & \numprint{159.10} (\numprint{0.99}) & \numprint{303.30} (\numprint{0.52}) & \numprint{511.19} (\numprint{0.31}) & \numprint{292.22} (\numprint{0.54}) \\
+			hudong-internallink & \textbf{\numprint{3.38}} & \numprint{3.74} (\numprint{0.90}) & \numprint{3.48} (\numprint{0.97}) & \numprint{3.58} (\numprint{0.94}) & \numprint{3.90} (\numprint{0.87}) \\
+			in-2004 & \numprint{37.76} & \textbf{\numprint{37.66} (\numprint{1.00})} & \numprint{38.01} (\numprint{0.99}) & \numprint{104.12} (\numprint{0.36}) & \numprint{104.42} (\numprint{0.36}) \\
+			libimseti & \numprint{8579.32} & \textbf{\numprint{8537.78} (\numprint{1.00})} & \numprint{9715.24} (\numprint{0.88}) & \numprint{8541.15} (\numprint{1.00}) & \numprint{9772.28} (\numprint{0.88}) \\
+			musae\_DE & - & - & - & - & - \\
+			musae\_FR & \textbf{\numprint{211.72}} & \numprint{215.57} (\numprint{0.98}) & \numprint{235.97} (\numprint{0.90}) & \numprint{247.27} (\numprint{0.86}) & \numprint{268.42} (\numprint{0.79}) \\
+			ny-sorted & - & - & - & - & - \\
+			petster-friendships-dog & \numprint{38.66} & \textbf{\numprint{34.69} (\numprint{1.11})} & \numprint{39.60} (\numprint{0.98}) & \numprint{36.02} (\numprint{1.07}) & \numprint{37.50} (\numprint{1.03}) \\
+			soc-LiveJournal1 & \numprint{31.54} & \textbf{\numprint{28.46} (\numprint{1.11})} & \numprint{36.50} (\numprint{0.86}) & \numprint{39.52} (\numprint{0.80}) & \numprint{44.69} (\numprint{0.71}) \\
+			web-BerkStan & \numprint{793.05} & \numprint{785.55} (\numprint{1.01}) & \textbf{\numprint{741.49} (\numprint{1.07})} & \numprint{939.90} (\numprint{0.84}) & \numprint{963.78} (\numprint{0.82}) \\
+			web-Google & \numprint{2.91} & \textbf{\numprint{2.87} (\numprint{1.01})} & \numprint{2.92} (\numprint{1.00}) & \numprint{3.07} (\numprint{0.95}) & \numprint{3.03} (\numprint{0.96}) \\
+			web-NotreDame & \textbf{\numprint{122.57}} & \numprint{126.49} (\numprint{0.97}) & \numprint{152.53} (\numprint{0.80}) & \numprint{127.48} (\numprint{0.96}) & \numprint{155.77} (\numprint{0.79}) \\
+			web-Stanford & - & - & - & - & - \\\hline
+			$t_{\text{avg}}$ (all) & \textbf{\numprint{11130.93}} & \numprint{11215.83} & \numprint{11247.99} & \numprint{11243.78} & \numprint{11284.07} \\
+			$s_{\text{geom}}$ (all) & \numprint{1.00} & \textbf{\numprint{1.00}} & \numprint{0.79} & \numprint{0.73} & \numprint{0.70} \\
+			$t_{\text{avg}}$ (solved) & \numprint{1690.15} & \textbf{\numprint{1683.45}} & \numprint{1727.99} & \numprint{1722.16} & \numprint{1777.94} \\
+			$s_{\text{geom}}$ (solved) & \numprint{1.00} & \textbf{\numprint{1.00}} & \numprint{0.79} & \numprint{0.74} & \numprint{0.70} \\
+			
 			\hline
 		\end{tabular}
 	\end{center}
 	\label{table:another_table}
 \end{table}
-
 \end{document}
