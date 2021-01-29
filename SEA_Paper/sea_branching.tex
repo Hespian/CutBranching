@@ -40,7 +40,7 @@
     funding}}
 
 \author{Sebastian Lamm}{Karlsruhe Institute of Technology, Institute for
-  Theoretical Informatics, Germany}{lamm@kit.edu}{}{\todo{Add funding}}
+  Theoretical Informatics, Germany}{lamm@kit.edu}{https://orcid.org/0000-0001-7828-921X}{\todo{Add funding}}
 
 \author{Christian Schorr}{Karlsruhe Institute of Technology, Institute for
   Theoretical Informatics, Germany}{christian.schorr@student.kit.edu}{}{}
@@ -135,12 +135,9 @@ Our strategies are based on one of two approaches which are motivated by existin
 They either (1) aim to decompose the graph into two or more connected components which can then be solved independently, or (2) try to remove vertices that hinder the application of a reduction rule which can lead to smaller graphs.
 Our experimental evaluation on a large set of real-world instances indicates
 that our strategies are able to improve the performance of the state-of-the-art
-branch-and-reduce algorithm by Akiba and Iwata by a geometric mean speedup of $8\%$. In particular, our
-decomposition-based strategy achieves a geometric mean speedup of $\numprint{1.8}$ on sparse networks.
-Furthermore, our reduction-rule-based strategies are able to outperform the
-default branching strategy of selecting a vertex of highest degree on $78\%$ of all
-($88\%$ of solved)
-instances tested.
+branch-and-reduce algorithm by Akiba and Iwata. To be more specific,
+we are able to compute a solution faster than the default branching strategy of selecting a vertex of highest degree on $90\%$ of all ($90\%$ of solved) instances tested.
+Furthermore, our decomposition-based strategies are able to achieve a speedup of $33\%$ on sparse networks.
 
 \end{abstract}
 
@@ -170,9 +167,9 @@ improving the performance of branch-and-reduce algorithms so far has been
 focused on either proposing more practically efficient special cases of already
 existing rules~\cite{ChangKern,dahlum2016accelerating}, or maintaining
 dependencies between reduction rules to reduce unnecessary
-checks~\cite{alsahafy2020computing,hespe2019scalable}.\todo{cite SAT-and-reduce?}
-In comparison, efforts to improve other aspects of branch-and-reduce are still lacking.
-However, the branching strategy in particular has been shown to have a significant impact on the running time~\cite{AkibaIwata}.
+checks~\cite{alsahafy2020computing,hespe2019scalable}.
+However, improving other aspects of branch-and-reduce has been shown to benefit its performance~\cite{plachetta2021sat}.
+The branching strategy in particular has been shown to have a significant impact on the running time~\cite{AkibaIwata}.
 Up to now, the most frequently used branching strategy employed in many state-of-the-art solvers selects branching vertices solely based on their degree.
 Other factors, such as the actual reduction rules used during the algorithm are rarely taken into account.
 However, recently there have been some attempts to incorporate such branching
@@ -188,9 +185,9 @@ For each approach we present several concrete strategies that vary in their comp
 Finally, we evaluate their performance by comparing them to the aforementioned default strategy used in the state-of-the-art solver by Akiba and Iwata~\cite{AkibaIwata}.
 For this purpose we make of a wide spectrum of instances from different graph classes and applications.
 Our experiments indicate that our strategies are able to find an optimal
-solution faster than the default strategy on $84\%$ of all ($93\%$ of solved)
-instances tested.\todo{make these numbers the same here and in abstract}
-In particular, our strategies achieve a geometric mean speedup of $8\%$ (over the default strategy) over all instances.
+solution faster than the default strategy on $90\%$ of all ($90\%$ of solved)
+instances tested.\todo{Should we change this now that its 90\% for both?}
+In particular, our strategies achieve a speedup of $33\%$ (over the default strategy) over all instances.
 A more detailed explanation of a previous version of this work
 can be found in Schorr's Bachelor's thesis~\cite{schorr2020improved}.
 
@@ -258,12 +255,13 @@ contained in that set to remove further vertices from the graph. Akiba and
 Iwata~\cite{AkibaIwata} use the same concept in their \emph{packing} rule. Chen
 et al. combine good pairs, tuples and high degree vertices for their branching strategy.
 
-Most algorithms for MC (e.g. San Segundo and Tapia~\cite{Color}) compute a
+Most algorithms for MC (e.g. \cite{Color,DBLP:journals/ieicet/TomitaSHW13}) compute a
 greedy coloring and branch on vertices with a high coloring number.
+% Tomita et al.~\cite{DBLP:journals/ieicet/TomitaSHW13} introduce a recoloring scheme for approximate coloring to further reduce the size of the search space. 
 More sophisticated MC algorithms use MaxSAT encodings to prune the set of
 branching vertices~\cite{LiFangXu,LiJiang,LiQuan}. Li et al.~\cite{LiMaxSat}
 combine greedy coloring and MaxSAT reasoning the further reduce the number of
-branching vertices.\todo{cite MCS algorithm by Tomita et al?}
+branching vertices.
 
 Another approach used for MC is using the \emph{degeneracy order} $v_1 < v_2 <
 \dots < v_n$ where $v_i$ is a vertex of smallest degree in $G - \{v_1, \dots
@@ -842,7 +840,7 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 %%
 
 %% Please use bibtex, 
-\todo{TODO: Before submitting check for all references whether they are actually used in the text}
+% \todo{TODO: Before submitting check for all references whether they are actually used in the text}
 \bibliography{references}
 
 \newpage
