@@ -2358,7 +2358,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.947347in,y=2.678257in,,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont all instances - runtime}%
+\pgftext[x=2.947347in,y=2.678257in,,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont all instances - running time}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -2450,7 +2450,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=3.722910in,y=1.996202in,left,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont twin reduction based}%
+\pgftext[x=3.722910in,y=1.996202in,left,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont twin-reduction-based}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -2479,7 +2479,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=3.722910in,y=1.867030in,left,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont funnel reduction based}%
+\pgftext[x=3.722910in,y=1.867030in,left,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont funnel-reduction-based}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -2509,7 +2509,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=3.722910in,y=1.737858in,left,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont unconfined reduction based}%
+\pgftext[x=3.722910in,y=1.737858in,left,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont unconfined-reduction-based}%
 \end{pgfscope}%
 \end{pgfpicture}%
 \makeatother%
