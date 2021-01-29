@@ -1984,7 +1984,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=2.947347in,y=2.678257in,,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont all instances - runtime}%
+\pgftext[x=2.947347in,y=2.678257in,,base]{\color{textcolor}\rmfamily\fontsize{8.330000}{9.996000}\selectfont all instances - running time}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
