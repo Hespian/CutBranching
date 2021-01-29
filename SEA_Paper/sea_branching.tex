@@ -22,6 +22,10 @@
 \SetCommentSty{emph}
 \def\algorithmautorefname{Algorithm}
 
+\clubpenalty10000
+\widowpenalty10000
+\displaywidowpenalty=10000
+
 \listfiles
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
@@ -222,9 +226,9 @@ A \emph{clique} is a subset of vertices $K \subseteq V$ such that all vertices o
 Finally, a (maximum) independent set of a graph $G$ is a \emph{(maximum) clique} (MC) in the complement graph $\overline{G} = (V, \overline{E})$, where $\overline{E} = \{\{u,v\} \mid \{u,v\} \not\in E\}$.
 
 \section{Related Work}
-Selecting branching vertices is a part of every branch-and-reduce or
-branch-and-bound algorithm. In this section we give an overview of the techniques used in
-algorithms for MIS, MVC and MC.
+% Selecting branching vertices is a part of every branch-and-reduce or
+% branch-and-bound algorithm. In this section we give an overview of the techniques used in
+% algorithms for MIS, MVC and MC.
 
 The most commonly used branching strategy for MIS and MVC is to select a vertex
 of maximum degree. Fomin et al.~\cite{Fomin} show that using a vertex of maximum
@@ -402,10 +406,9 @@ case that includes it into the independent set (\emph{including branch}) all nei
 the graph as well because they already have an adjacent vertex in the solution.
 
 We also did some preliminary experiments with storing the candidate vertices in
-a priority queue without resetting after every branch and updating that list continually.
+a priority queue without resetting after every branch.
 However, changes were too frequent for this approach to be faster because of
-the high amount of priority queue operations compared to the relatively low overhead
-caused by the current approach.
+the high amount of priority queue operations.
 
 \subsection{Almost Twins}
 
@@ -553,19 +556,10 @@ Nagamochi~\cite{XiaoUnconfined} is to detect vertices not required for an MIS
 that can therefore can be removed from the graph by algorithmically
 contradicting the assumption that every MIS contains the vertex.
 
-\begin{definition} (Removable Vertex~\cite{XiaoUnconfined})
-	In a graph $G=(V,E)$ a vertex $v$ is called removable, if 
-	$\alpha(G) = \alpha(G-\{v\})$.
-\end{definition}
-
 \begin{definition} (Child, Parent~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ with an \textit{independent set} $I$, a vertex $v$ is called a child of $I$, if $|N(v)\cap I| = 1$ and the unique neighbor of $v$ in $I$ is called the parent of $v$.
 \end{definition}
 
-\begin{theorem} (\cite{XiaoUnconfined})\label{theorem:unconfined}
-	In a graph $G=(V,E)$ let $S$ be an independent set that is not maximal but is contained in every MIS of $G$ and let $v$ be any child of $S$. Then, every MIS includes at least one vertex from $N(v)\setminus N[S]$.
-\end{theorem}
-
-Based on Theorem \ref{theorem:unconfined} Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
+Algorithm \ref{alg:unconf} detects so called \textit{unconfined} vertices.
 
 \begin{algorithm}[t]
 	\caption{Unconfined -- Xiao and Nagamochi
