@@ -626,9 +626,10 @@ detailed results for all of our algorithms across all instances, see Appendix~\r
 
 \subsection{Experimental Environment}
 We augment a C++-adaptation of the algorithm by Akiba and
-Iwata~\cite{AkibaIwata} with our branching strategies. \todo{add Software} Our
+Iwata~\cite{AkibaIwata} with our branching strategies and compile it
+with g++ 9.3.0 using full optimizations (\texttt{-O3}). Our
 code is publicly available on GitHub\footnote{\url{https://github.com/Hespian/CutBranching}}. We execute all our experiments on a machine with 4 8-core Intel Xeon E5-4640 CPUs
-(2.4~GHz) and 512 GiB DDR3-PC1600 RAM. To speed up our experiments we use two
+(2.4~GHz) and 512 GiB DDR3-PC1600 RAM running Ubuntu 20.04.1 with Linux Kernel 5.4.0-64. To speed up our experiments we use two
 identical machines and run at most 16 instances at once on the
 same machine (using the same machine for all algorithms on a specific instance).
 All numbers reported are arithmetic means of three runs with a timeout of ten
@@ -654,7 +655,7 @@ branching rules, we fall back to the default branching strategy if all
 candidates have a degree of less than $\Delta - 2$. 
 
 \subsection{Instances}
-We use instances from several sources: A sample of the instances used for the
+We use instances from several sources: The ``easy'' instances used for the
 PACE 2019 Challenge on Minimum Vertex Cover~\cite{dzulfikar_et_al:LIPIcs:2019:11486}. 
 Complements of Maximum Clique instances from the second DIMACS Implementation Challenge~\cite{johnson1993cliques} and sparse instances from
 the Stanford Network Analysis Project (SNAP)~\cite{snapnets}, the 9th DIMACS
@@ -662,9 +663,9 @@ Implementation Challenge on Shortest Paths~\cite{demetrescu2009shortest} and the
 Network Data Repository~\cite{nr}. Detailed instance information can
 be found in Table~\ref{table:instance} in Appendix~\ref{app:instances}. Directed instances were converted into
 undirected graphs by ignoring the direction of edges and removing duplicates.
-Our original set of instances contained the first 100 public PACE instances, 41 DIMACS instances and 29 sparse networks.
-From these instances, we excluded all instances that (1) required no branches, (2) on which all techniques had a running time of less than $0.1$ second, and (3) on which no technique was able to find a solution within 24 hours.
-The remaining set of instances is composed of 40 PACE instances, 30 DIMACS instances and 13 sparse networks.
+Our original set of instances contained the first 80 PACE instances, 32 DIMACS instances and 34 sparse networks.
+From these instances, we excluded all instances that (1) required no branches, (2) on which all techniques had a running time of less than $0.1$ seconds, and (3) on which no technique was able to find a solution within 10 hours.
+The remaining set of instances is composed of 47 PACE instances, 26 DIMACS instances and 15 sparse networks.
 
 \subsection{Decomposition Branching}\label{sec:experiments_decomp}
 
@@ -685,32 +686,32 @@ The plot in Figure~\ref{fig:all_decomp_time} shows that for most instances, the 
 vertex of maximum degree outperforms our decomposition-based approaches.
 However, for instances that have suitable candidates for decomposition such as
 sparse networks, significant speedups compared to the default strategy can be
-seen. To be more specific, accounting a time of ten hours (our timeout threshold) for unfinished
-instances, we achieve a geometric
-mean speedup of $\numprint{1.65}$ to $\numprint{1.84}$ for our
+seen. To be more specific, assigning a time of ten hours (our timeout threshold) for unfinished
+instances, we achieve a total speedup (calculated by dividing the running times
+to solve all instances for two algorithms) of $\numprint{1.59}$ to $\numprint{1.90}$ for our
 decomposition-based techniques on sparse networks (see
 Table~\ref{tab:summary_decomp}). In particular, there is one instance (web-stanford) that causes a timeout with the
 default strategy but can be solved in $48$ (articulation points) to $164$ (nested
-dissections) seconds. Table~\ref{tab:summary_decomp} shows that overall, our
-technique using edge cuts seems to be the most beneficial, achieving an overall speedup of $8\%$ over maximum degree and $1\%$
+dissections) seconds using a decomposition-based approach. When ignoring this instance, the total speedup drops down
+to $\numprint{0.95}$ to $\numprint{1.01}$. Table~\ref{tab:summary_decomp} shows that overall, our
+technique using edge cuts seems to be the most beneficial, achieving an overall
+speedup of $33\%$ over maximum degree and a slight slowdown
 when only considering instances that were solved by all decomposition-based
 techniques and maximum degree branching.
-Finally, most running
+Finally, Figure~\ref{fig:all_decomp_time} shows that most running
 times are only slightly slower than the default strategy with a few instances
 showing a speedup. This is mainly because
 the number of branches required to solve the instances does not change in most
 cases (see Figure~\ref{fig:all_decomp_branch}) and most of the running time
 difference is caused by the overhead from
-searching for branching vertices.\todo{address Darren's comments after figuring
-  out how to average speedups}
-% \todo{I would add that this behavior is not 'too' surprising}
+searching for branching vertices.% \todo{I would add that this behavior is not 'too' surprising}
 
 \begin{table}[t]
   \caption{Speedup of our decomposition-based techniques over the default
-    strategy (maximum degree). ``all'' are geometric means of the speedup over all
+    strategy (maximum degree). ``all'' total speedups over all
   instances of that type (timeouts are assigned a running time of
-  ten hours), ``solved'' are geometric means of the
-  speedup over all instances that have been solved by all techniques.}\label{tab:summary_decomp}
+  ten hours), ``solved'' are total
+  speedups over all instances that have been solved by all techniques.}\label{tab:summary_decomp}
 
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
@@ -756,26 +757,27 @@ Figure~\ref{fig:all_reduction_time} shows the performance plot (see
 Section~\ref{sec:experiments_decomp}) for our reduction-based branching strategies. Here we see that targeting the funnel reduction
 results in the fastest time for the most number of instances, followed by almost
 twins. In fact, the
-funnel-based technique is the fastest for all but 5 of the PACE instances (excluding
-one which was not solved by any algorithm). Furthermore, branching on almost
-twins is faster than maximum degree branching on all DIMACS clique instances that
-were solved by at least one of the techniques. We also show results for a strategy that targets all reduction rules
+funnel-based technique is the faster than maximum degree branching for all but 9 of the PACE instances. Furthermore, branching on almost
+twins is faster than maximum degree branching on all DIMACS clique instances. We also show results for a strategy that targets all reduction rules
 described in Section~\ref{sec:reduction_branching} (called \emph{combined}). Even though this approach
 leads to the lowest number of branches for most instances (see Figure~\ref{fig:all_reduction_branch}), the time required to
 identify candidate vertices for all reduction rules causes too big of an
 overhead to be competitive. Optimizing the algorithms to identify candidate
 vertices could lead to making this combined strategy
 dominant. Table~\ref{tab:summary_reduction} shows that while all reduction-based
-techniques combined solve $88\%$ of solved instances faster that the default
-strategy maximum degree (see Appendix~\ref{app:detailed_results}), only the twin
-based technique results in a small speedup of $1\%$ over all instances.
-Thus, for $84\%$ of all ($93\%$ of solved) instances tested, one of our strategies (decomposition or reduction-based) is faster than the default strategy.
+techniques combined solve $84\%$ of solved instances faster that the default
+strategy maximum degree (see Appendix~\ref{app:detailed_results}), none of our
+reduction based techniques achieves a speedup over all instances. However, for
+the DIMACS and PACE instances, the twin and funnel-based techniques achieve
+speedups of $2\%$ and $6\%$, leaving only sparse networks for which we have seen
+our decomposition-based techniques to work well.
 
 \begin{table}[t]
   \caption{Speedup of our reduction-based techniques over the default
-    strategy (maximum degree). ``all'' are geometric means of the speedup over all
-  instances of that type (timeouts are assigned a running time of ten hours), ``solved'' are geometric means of the
-  speedup over all instances that have been solved by all techniques.}\label{tab:summary_reduction}
+    strategy (maximum degree). ``all'' total speedups over all
+    instances of that type (timeouts are assigned a running time of
+    ten hours), ``solved'' are total
+    speedups over all instances that have been solved by all techniques.}\label{tab:summary_reduction}
 
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
