@@ -688,32 +688,32 @@ The plot in Figure~\ref{fig:all_decomp_time} shows that for most instances, the 
 vertex of maximum degree outperforms our decomposition-based approaches.
 However, for instances that have suitable candidates for decomposition such as
 sparse networks, significant speedups compared to the default strategy can be
-seen. To be more specific, accounting a time of ten hours (our timeout threshold) for unfinished
-instances, we achieve a geometric
-mean speedup of $\numprint{1.65}$ to $\numprint{1.84}$ for our
+seen. To be more specific, assigning a time of ten hours (our timeout threshold) for unfinished
+instances, we achieve a total speedup (calculated by dividing the running times
+to solve all instances for two algorithms) of $\numprint{1.59}$ to $\numprint{1.90}$ for our
 decomposition-based techniques on sparse networks (see
 Table~\ref{tab:summary_decomp}). In particular, there is one instance (web-stanford) that causes a timeout with the
 default strategy but can be solved in $48$ (articulation points) to $164$ (nested
-dissections) seconds. Table~\ref{tab:summary_decomp} shows that overall, our
-technique using edge cuts seems to be the most beneficial, achieving an overall speedup of $8\%$ over maximum degree and $1\%$
+dissections) seconds using a decomposition-based approach. When ignoring this instance, the total speedup drops down
+to $\numprint{0.95}$ to $\numprint{1.01}$. Table~\ref{tab:summary_decomp} shows that overall, our
+technique using edge cuts seems to be the most beneficial, achieving an overall
+speedup of $33\%$ over maximum degree and a slight slowdown
 when only considering instances that were solved by all decomposition-based
 techniques and maximum degree branching.
-Finally, most running
+Finally, Figure~\ref{fig:all_decomp_time} shows that most running
 times are only slightly slower than the default strategy with a few instances
 showing a speedup. This is mainly because
 the number of branches required to solve the instances does not change in most
 cases (see Figure~\ref{fig:all_decomp_branch}) and most of the running time
 difference is caused by the overhead from
-searching for branching vertices.\todo{address Darren's comments after figuring
-  out how to average speedups}
-% \todo{I would add that this behavior is not 'too' surprising}
+searching for branching vertices.% \todo{I would add that this behavior is not 'too' surprising}
 
 \begin{table}[t]
   \caption{Speedup of our decomposition-based techniques over the default
-    strategy (maximum degree). ``all'' are geometric means of the speedup over all
+    strategy (maximum degree). ``all'' total speedups over all
   instances of that type (timeouts are assigned a running time of
-  ten hours), ``solved'' are geometric means of the
-  speedup over all instances that have been solved by all techniques.}\label{tab:summary_decomp}
+  ten hours), ``solved'' are total
+  speedups over all instances that have been solved by all techniques.}\label{tab:summary_decomp}
 
   \centering
   \begin{tabular}{|l|rr|rr|rr|rr|}
