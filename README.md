@@ -30,3 +30,18 @@ to compute a MIS for all graphs in `graph_dir_path`. The result is written to th
 - `7` for funnel-reduction-based branching
 - `8` for unconfined-reduction-based branching
 - `9` for combined branching
+
+## Paper
+
+If you use this code in your publication, please cite our paper:
+
+```
+@misc{hespe2021targeted,
+      title={Targeted Branching for the Maximum Independent Set Problem}, 
+      author={Demian Hespe and Sebastian Lamm and Christian Schorr},
+      year={2021},
+      eprint={2102.01540},
+      archivePrefix={arXiv},
+      primaryClass={cs.DS}
+}
+```
