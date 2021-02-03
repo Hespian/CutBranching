@@ -7,7 +7,7 @@
 #include <algorithm>
 
 
-std::vector<std::vector<int>> readPaceGraph(std::istream &infile)
+std::vector<std::vector<int>> readGraph(std::istream &infile)
 {
     int numVertices;
     int numEdges;
@@ -23,8 +23,7 @@ std::vector<std::vector<int>> readPaceGraph(std::istream &infile)
 
         if (firstSymbol == 'p')
         {
-            std::string td;
-            iss >> td >> numVertices >> numEdges;
+            iss >> numVertices >> numEdges;
             break;
         }
     }
@@ -48,9 +47,6 @@ std::vector<std::vector<int>> readPaceGraph(std::istream &infile)
         int u, v;
         iss >> u >> v;
 
-        --u;
-        --v;
-
         if (u < 0 || u >= numVertices)
         {
             std::cout << "Invalid node ID: " << u << std::endl;
@@ -67,15 +63,7 @@ std::vector<std::vector<int>> readPaceGraph(std::istream &infile)
             continue;
         }
 
-        if (std::find(graph[u].begin(), graph[u].end(), v) == graph[u].end())
-        {
-            graph[u].push_back(v);
-        }
-
-        if (std::find(graph[v].begin(), graph[v].end(), u) == graph[v].end())
-        {
-            graph[v].push_back(u);
-        }
+        graph[u].push_back(v);
     }
 
     for (int i = 0; i < numVertices; ++i)
@@ -86,13 +74,13 @@ std::vector<std::vector<int>> readPaceGraph(std::istream &infile)
     return graph;
 }
 
-std::vector<std::vector<int>> readPaceGraphFromFile(std::string fileName)
+std::vector<std::vector<int>> readGraphFromFile(std::string fileName)
 {
     std::ifstream fin(fileName);
-    return readPaceGraph(fin);
+    return readGraph(fin);
 }
 
-std::vector<std::vector<int>> readPaceGraphFromCin()
+std::vector<std::vector<int>> readGraphFromCin()
 {
-    return readPaceGraph(std::cin);
+    return readGraph(std::cin);
 }

@@ -1,0 +1,3 @@
+[submodule "extern/InertialFlowCutter"]
+	path = extern/InertialFlowCutter
+	url = https://github.com/ChristianSchorr/InertialFlowCutter.git

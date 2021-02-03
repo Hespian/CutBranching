@@ -27,8 +27,9 @@
 #include "timer.h"
 
 #include "max_flow.h"
-#include "id_queue.h"
-#include "../InertialFlowCutter/include/inertial_flow_cutter.h"
+#ifdef USE_IFC
+#include "../extern/InertialFlowCutter/include/inertial_flow_cutter.h"
+#endif
 
 // system includes
 #include <vector>
@@ -41,7 +42,6 @@
 #include <fstream>
 #include <regex.h>
 #include <memory>
-#include "../Metis/include/metis.h"
 
 //void get_nd_separators_cutter(std::vector<std::vector<int>> &adj, double balance, std::vector<std::pair<int, std::vector<int>>> &separators);
 
@@ -94,6 +94,7 @@ public:
 	double SHRINK;
 	int depth;
 	int maxDepth;
+	int max_depth = 0;
 	int rootDepth;
 	int n;
 	int N;
@@ -252,59 +253,39 @@ public:
 	void dfs_iteratively(int v);
 	std::stack<std::pair<int,int>> dfs_stack;
 
-	// global mincuts
-	int get_mincut_vertex();
-
 	// st cuts
 	int s, t;
 	int branch_t = 0;
 	std::vector<int> cut;
-
 	void get_stcut_vertices();
-	// void find_st_vtcs(std::shared_ptr<graph_access> graph, int ss = -1, int tt = -1);
 
 	// utility
 	inline int get_max_deg_vtx();
 
 	// Nested Dissection
 	bool nd_computed = false;
-	int nd_threshold = 30;
 	std::vector<int> nd_order;
-
-	void compute_nd_order();
 	void compute_nd_order_cutter();
-	std::vector<std::vector<int>> get_nd_separators_a(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
-
 
 	// almost dominated
-	RoutingKit::MinIDQueue pq;
 	std::vector<int> domin_vtcs;
 	bool almost_dominated();
 
 	// almost unconfined
 	std::vector<int> unconf_vtcs;
-	std::vector<int> unconf_map;
-	bool is_almost_unconfined(int v);
-	bool is_unconfined(int v);
 
 	// almost twins 
 	std::vector<int> twin_vtcs;
-	std::vector<int> twin_map;
-	bool is_almost_twin(int v);
-	bool is_twin(int v);
 	int _uid;
 	// almost funnel
 
 	std::vector<int> funnel_vtcs;
-	std::vector<int> funnel_map;
 	bool is_almost_funnel(int v);
 
 	std::vector<int> b_vtcs;
 
 	int max_nh_vtx();
 
-	bool uses_pq = false;
-	int max_depth = 0;
 
 #if 0
 }

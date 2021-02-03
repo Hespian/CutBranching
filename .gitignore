@@ -1,17 +1,6 @@
 build
-Metis
-NestedDissection
-VieCut
-reduced_instances
-branch_orders
 .vscode*
-branch_order
-branch_trees
-networkit
 
-extern
-pg.cpp
-run.sh
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
