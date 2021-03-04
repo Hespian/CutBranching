@@ -68,20 +68,17 @@ int main(int argc, char **argv)
     setParams(argc);
 
 
-    out_path += "/resuts_" + to_string(branching_strat) + "_" 
+    out_path += "/results_" + to_string(branching_strat) + "_" 
                           + to_string(tuningParam1) + "_" 
                           + to_string(tuningParam2) + "_" 
                           + to_string(tuningParam3) + ".txt";
-
-    #ifdef USE_IFC
-    std::cout << "HIER" << endl;
-    #endif
     
     for (const auto &entry : std::filesystem::directory_iterator(instances_path))
     {
         if (!entry.is_directory())
         {
             std::vector<std::vector<int>> adj = readGraphFromFile(entry.path());
+            int N = adj.size();
              
             branch_and_reduce_algorithm::resetStatistics();
             branch_and_reduce_algorithm algo = branch_and_reduce_algorithm(adj, adj.size());
@@ -91,7 +88,7 @@ int main(int argc, char **argv)
             int vcSize = algo.solve(t, 6000);
             double secs = t.elapsed();
 
-            Result res(entry.path().filename(), algo.nBranchings, secs, vcSize);
+            Result res(entry.path().filename(), algo.nBranchings, secs, N - vcSize);
             // Timeout
             if (vcSize == -1)
             {
@@ -99,7 +96,7 @@ int main(int argc, char **argv)
                 res.time = -1;
             }
             else
-                res.misSize = adj.size() - vcSize;
+                res.misSize = N - vcSize;
 
             writeResultToFile(res, out_path);
         }
