@@ -307,11 +307,11 @@ complexity: articulation points, edge cuts and nested dissections.
 \subsection{Articulation Points}
 First, we are concerned with finding single vertices that are able to decompose a graph into at least two separated components.
 Such points are called \emph{articulation points} (or cut vertices).
-Articulation points can be computed in linear time $\mathcal{O}(n+m)$ using a simple depth-first search (DFS) algorithm.
+Articulation points can be computed in linear time $\mathcal{O}(n+m)$ using a simple depth-first search (DFS) algorithm (see Hopcroft and Tarjan~\cite{hopcroft1973algorithm} for a detailed description).
 In particular, a vertex $v$ is an articulation point if it is either the root of
 the DFS tree and has at least two children or any non-root vertex that has a child $u$, such that no vertex in
 the subtree rooted at $u$ has a back edge to one of the ancestors of
-$v$.\todo{Explain how to do this. Maybe by citing something?}
+$v$. 
 
 For our first branching strategy we maintain a set of articulation points $A \subseteq V$.
 When selecting a branching vertex, we first discard all invalid vertices from
