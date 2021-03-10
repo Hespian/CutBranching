@@ -560,8 +560,9 @@ contradicting the assumption that every MIS contains the vertex.
 \begin{definition} (Child, Parent~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ with an \textit{independent set} $I$, a vertex $v$ is called a child of $I$, if $|N(v)\cap I| = 1$ and the unique neighbor of $v$ in $I$ is called the parent of $v$.
 \end{definition}
 
-Algorithm \ref{alg:unconf} detects so called \textit{unconfined}
-vertices.\todo{Address reviewer comment about $W$ being an independent set}
+Algorithm~\ref{alg:unconf} shows the algorithm used by Akiba and
+Iwata~\cite{AkibaIwata} to detect so called \textit{unconfined}
+vertices.
 
 \begin{algorithm}[t]
 	\caption{Unconfined -- Xiao and Nagamochi
