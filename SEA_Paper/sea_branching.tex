@@ -613,6 +613,19 @@ adding them to the actual candidate list if $v$ is not removed.
 % Note that this special case of almost unconfined vertices might not catch all
 % cases of almost dominated vertices.
 
+\subsection{Almost Packing}\label{sec:almost_packing}
+
+The core idea behind the packing branching rule by Akiba and Iwata \cite{AkibaIwata} is  that when branching in the case of excluding a vertex $v$ from the solution, one can assume that no maximum independent set contains $v$. Otherwise, if there is a maximum independent set that contains $v$, the algorithm finds it in the branch that includes $v$. Based on the assumption that no maximum independent set includes a vertex $v$, constraints for the remaining vertices can be derived. For example, a maximum independent set that does not contain $v$ has to include at least two neighbors of $v$. The corresponding constraint is $\sum_{u\in N(v)}x_u \geq2$, where $x_u$ is a binary variable that indicates whether a vertex is included in the current solution. The algorithm creates such constraints when branching, and updates them accordingly during the data reductions and branching steps. When a vertex $v$ is eliminated from the graph, $x_v$ gets removed from all constraints. If $v$ is included into the current solution, the corresponding right sides are also decreased by one.
+
+A constraint $\sum_{v\in S\subset V}x_v\geq k$ can be utilized in two reductions. Firstly, if $k$ is equal to the number of variables $|S|$, all vertices from $S$ have to be included into the current solution. Secondly, if there is a vertex $v$, such that $|S|-|N(v)\cap S| < k$, then $v$ has to be excluded from the current solution. If $k > |S|$, the constraint can not be fulfilled and the current branch is pruned.
+
+In our branching strategy we target both reductions. If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$, where $|S| = k + 1$, excluding any vertex of $S$ from the solution or including a vertex of $S$ that has one neighbour in $S$ enables the first reduction. Thus, we consider all vertices in $S$ for branching. Note, that including a vertex from $S$ that has more than one neighbour in $S$ makes the constraint unfulfillable and the branch is pruned.
+
+If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$ and a vertex $v$, such that $k = |S|-|N(v)\cap S|$, excluding any vertex of $S\setminus N(v)$ from the solution or including a vertex of $S\setminus N(v)$ that has at least one neighbour in $S\setminus N(v)$ enables the second reduction. Thus, we consider all vertices in $S\setminus N(v)$ for branching.
+
+Detecting these branching candidates can be done with small constant overhead whilst performing the packing reduction.
+
+
 \section{Experimental Evaluation}
 
 In this section we present the results of our experimental evaluation. Tables
@@ -647,7 +660,7 @@ three levels of nested dissections with a minimum balance of at least 40 percent
 only use the nested dissection if separators contain at most
 50 vertices. For the reduction-based
 branching rules, we fall back to the default branching strategy if all
-candidates have a degree of less than $\Delta - 2$. 
+candidates have a degree of less than $\Delta - k$. In the case of twin-, funnel- and unconfined-reduction-based branching strategies we choose $k$ as $2$. For the packing-reduction-based branching rule $k$ is set to $5$ and for the combined branching rule $k$ is set to $4$.
 
 \subsection{Instances}
 We use instances from several sources: The ``easy'' instances used for the
@@ -658,9 +671,9 @@ Implementation Challenge on Shortest Paths~\cite{demetrescu2009shortest} and the
 Network Data Repository~\cite{nr}. Detailed instance information can
 be found in Table~\ref{table:instance} in Appendix~\ref{app:instances}. Directed instances were converted into
 undirected graphs by ignoring the direction of edges and removing duplicates.
-Our original set of instances contained the first 80 PACE instances, 32 DIMACS instances and 34 sparse networks.
+Our original set of instances contained the first 80 PACE instances, 53 DIMACS instances and 34 sparse networks.
 From these instances, we excluded all instances that (1) required no branches, (2) on which all techniques had a running time of less than $0.1$ seconds, and (3) on which no technique was able to find a solution within 10 hours.
-The remaining set of instances is composed of 47 PACE instances, 26 DIMACS instances and 15 sparse networks.
+The remaining set of instances is composed of 48 PACE instances, 37 DIMACS instances and 16 sparse networks.
 
 \subsection{Decomposition Branching}\label{sec:experiments_decomp}
 
@@ -742,9 +755,9 @@ searching for branching vertices.% \todo{I would add that this behavior is not '
     & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{Sparse net.} & \multicolumn{2}{c|}{All Instances}                                                                                                            \\
     & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}  & \multicolumn{1}{c|}{solved} \\
     \hline
-    articulation points         & \numprint{0.99}           & \numprint{0.99}             & \numprint{0.99}           & \numprint{0.99}             & \numprint{1.67}          & \numprint{0.95}             & \numprint{1.27}          & \numprint{0.98}             \\
-    edge cuts                   & \numprint{1.00}  & \numprint{1.00}    & \numprint{0.98}           & \numprint{0.98}             & \textbf{\numprint{1.90}} & \textbf{\numprint{1.01}}    & \textbf{\numprint{1.33}} & \numprint{0.99}   \\
-    nested dissections          & \numprint{0.97}           & \numprint{0.97}             & \numprint{0.98}           & \numprint{0.98}          & \numprint{1.59}          & \numprint{1.01}   & \numprint{1.23} & \numprint{0.98}          \\
+    articulation points         & \numprint{0.99}           & \numprint{0.99}             & \numprint{0.99}           & \numprint{0.99}             & \numprint{2.17}          & \numprint{0.98}             & \numprint{1.20}          & \numprint{0.98}             \\
+    edge cuts                   & \numprint{1.00}  & \numprint{1.00}    & \numprint{0.99}           & \numprint{0.99}             & \textbf{\numprint{2.29}} & \textbf{\numprint{1.04}}    & \textbf{\numprint{1.22}} & \numprint{1.00}   \\
+    nested dissections          & \numprint{1.00}           & \numprint{1.00}             & \numprint{0.99}           & \numprint{0.99}          & \numprint{2.15}          & \numprint{0.97}   & \numprint{1.21} & \numprint{0.99}          \\
     \hline
     \end{tabular}
 \end{table}
@@ -811,10 +824,11 @@ our decomposition-based techniques to work well.
     & \multicolumn{2}{c|}{PACE} & \multicolumn{2}{c|}{DIMACS} & \multicolumn{2}{c|}{Sparse net.} & \multicolumn{2}{c|}{All Instances}                                                                                                          \\
     & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all}   & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} & \multicolumn{1}{c}{all} & \multicolumn{1}{c|}{solved} \\
     \hline
-    Twin                        & \numprint{1.00}     & \numprint{1.00}      & \textbf{\numprint{1.02}}     & \textbf{\numprint{1.02}}     & \numprint{0.98}  & \textbf{\numprint{1.00}} & \numprint{1.00}   & \numprint{1.01}      \\
-    Funnel                      & \textbf{\numprint{1.06}}     & \textbf{\numprint{1.06}}      & \numprint{0.99}     & \numprint{0.99}       & \numprint{0.98}   & \numprint{0.98}       & \numprint{1.00}   & \textbf{\numprint{1.01}}       \\
-    Unconfined                  & \numprint{0.96}    & \numprint{0.96}       & \numprint{1.01}     & \numprint{1.01}       & \numprint{0.98}   & \numprint{0.98}       & \numprint{0.98}   & \numprint{0.98}      \\
-    Combined                    & \numprint{1.01}    & \numprint{1.01}     & \numprint{0.97}     & \numprint{0.97}      & \numprint{0.97}   & \numprint{0.95}      & \numprint{0.98}   & \numprint{0.98}       \\
+    Twin                        & \numprint{1.00}     & \numprint{1.00}      & \numprint{1.00}    & \numprint{1.00}     & \numprint{0.99}  & \numprint{0.97} & \numprint{0.99}   & \numprint{0.99}      \\
+    Funnel                      & \numprint{1.14}     & \numprint{1.14}      & \numprint{0.99}     & \numprint{0.99}       & \numprint{0.99}   & \numprint{0.98}       & \numprint{1.01}   & \numprint{1.02}       \\
+    Unconfined                  & \numprint{0.79}    & \numprint{0.79}       & \numprint{1.00}     & \numprint{1.00}       & \numprint{0.93}   & \numprint{0.86}       & \numprint{0.94}   & \numprint{0.92}      \\
+    Packing                    & \textbf{\numprint{1.34}}    & \textbf{\numprint{1.34}}     & \textbf{\numprint{1.04}}     & \textbf{\numprint{1.04}}      & \textbf{\numprint{1.31}}   & \numprint{0.93}      & \textbf{\numprint{1.16}}   & \textbf{\numprint{1.07}}       \\
+    Combined                    & \numprint{1.14}    & \numprint{1.14}     & \numprint{1.03}     & \numprint{1.03}      & \numprint{1.30}   & \numprint{0.91}      & \numprint{1.12}   & \numprint{1.02}       \\
     \hline
     \end{tabular}
 \end{table}
@@ -1010,8 +1024,8 @@ A value is highlighted in bold if its the best one within a row.
 		\begin{tabular}{|l|r|r|r|r|}\hline
 			& max. deg. & \multicolumn{1}{c|}{articulation} & \multicolumn{1}{c|}{edge cuts} & \multicolumn{1}{c|}{nested dis.} \\
 			\hline
-			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{1.20} & \textbf{\numprint{1.22}} & \numprint{1.21} \\
-			$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{1.00} & \numprint{0.99} \\
+			$s_{\text{total}}$ & \numprint{1.00} & \numprint{1.20} & \textbf{\numprint{1.22}} & \numprint{1.21} \\
+			%$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.98} & \numprint{1.00} & \numprint{0.99} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1077,8 +1091,8 @@ A value is highlighted in bold if its the best one within a row.
 			74 & \textbf{\numprint{7.06}} & \numprint{7.24} (\numprint{0.97}) & \numprint{7.14} (\numprint{0.99}) & \numprint{7.49} (\numprint{0.94}) \\
 			77 & \textbf{\numprint{13.30}} & \numprint{13.65} (\numprint{0.97}) & \numprint{13.51} (\numprint{0.98}) & \numprint{13.79} (\numprint{0.96}) \\
 			\hline
-			$s_{\text{total}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{1.00} \\
-			$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{1.00} \\
+			$s_{\text{total}}$ & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{1.00} \\
+			%$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{1.00} & \numprint{1.00} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1132,8 +1146,8 @@ A value is highlighted in bold if its the best one within a row.
 			sanr400\_0.5 & \textbf{\numprint{373.40}} & \numprint{374.20} (\numprint{1.00}) & \numprint{374.26} (\numprint{1.00}) & \numprint{380.08} (\numprint{0.98}) \\
 			sanr400\_0.7 & \textbf{\numprint{29766.80}} & \numprint{30390.80} (\numprint{0.98}) & \numprint{30270.10} (\numprint{0.98}) & \numprint{30001.55} (\numprint{0.99}) \\
 			\hline
-			$s_{\text{total}}$ (all) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.99} & \numprint{0.99} \\
-			$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.99} & \numprint{0.99} \\
+			$s_{\text{total}}$ & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.99} & \numprint{0.99} \\
+			%$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.99} & \numprint{0.99} & \numprint{0.99} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1167,8 +1181,8 @@ A value is highlighted in bold if its the best one within a row.
 			web-NotreDame & \numprint{12.10} & \textbf{\numprint{9.07} (\numprint{1.33})} & \numprint{12.11} (\numprint{1.00}) & \numprint{48.83} (\numprint{0.25}) \\
 			web-Stanford & >\numprint{36000} & \textbf{\numprint{8.38} (>\numprint{4294.84})} & \numprint{27.41} (>\numprint{1313.18}) & \numprint{42.80} (>\numprint{841.16}) \\
 			\hline
-			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{2.17} & \textbf{\numprint{2.29}} & \numprint{2.15} \\
-			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.04}} & \numprint{0.97} \\
+			$s_{\text{total}}$ & \numprint{1.00} & \numprint{2.17} & \textbf{\numprint{2.29}} & \numprint{2.15} \\
+			%$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{0.98} & \textbf{\numprint{1.04}} & \numprint{0.97} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1185,8 +1199,8 @@ A value is highlighted in bold if its the best one within a row.
 		\begin{tabular}{|l|r|r|r|r|r|r|}\hline
 			& max. deg. & \multicolumn{1}{c|}{Twin} & \multicolumn{1}{c|}{Funnel} & \multicolumn{1}{c|}{Unconfined} & \multicolumn{1}{c|}{Packing} & \multicolumn{1}{c|}{Combined}  \\
 			\hline
-			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{0.99} & \numprint{1.01} & \numprint{0.94} & \textbf{\numprint{1.16}} & \numprint{1.12} \\
-			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{0.99} & \numprint{1.02} & \numprint{0.92} & \textbf{\numprint{1.07}} & \numprint{1.02} \\
+			$s_{\text{total}}$ & \numprint{1.00} & \numprint{0.99} & \numprint{1.01} & \numprint{0.94} & \textbf{\numprint{1.16}} & \numprint{1.12} \\
+			%$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{0.99} & \numprint{1.02} & \numprint{0.92} & \textbf{\numprint{1.07}} & \numprint{1.02} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1252,8 +1266,8 @@ A value is highlighted in bold if its the best one within a row.
 			74 & \numprint{7.06} & \numprint{7.06} (\numprint{1.00}) & \numprint{6.67} (\numprint{1.06}) & \numprint{7.86} (\numprint{0.90}) & \textbf{\numprint{5.48} (\numprint{1.29})} & \numprint{6.96} (\numprint{1.01}) \\
 			77 & \numprint{13.30} & \numprint{13.25} (\numprint{1.00}) & \numprint{12.74} (\numprint{1.04}) & \numprint{13.80} (\numprint{0.96}) & \textbf{\numprint{10.61} (\numprint{1.25})} & \numprint{12.31} (\numprint{1.08}) \\
 			\hline
-			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{1.00} & \numprint{1.14} & \numprint{0.79} & \textbf{\numprint{1.34}} & \numprint{1.14} \\
-			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \numprint{1.14} & \numprint{0.79} & \textbf{\numprint{1.34}} & \numprint{1.14} \\
+			$s_{\text{total}}$ & \numprint{1.00} & \numprint{1.00} & \numprint{1.14} & \numprint{0.79} & \textbf{\numprint{1.34}} & \numprint{1.14} \\
+			%$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \numprint{1.14} & \numprint{0.79} & \textbf{\numprint{1.34}} & \numprint{1.14} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1308,8 +1322,8 @@ A value is highlighted in bold if its the best one within a row.
 			sanr400\_0.5 & \numprint{373.40} & \textbf{\numprint{370.59} (\numprint{1.01})} & \numprint{376.93} (\numprint{0.99}) & \numprint{377.71} (\numprint{0.99}) & \numprint{370.72} (\numprint{1.01}) & \numprint{376.10} (\numprint{0.99}) \\
 			sanr400\_0.7 & \numprint{29766.80} & \numprint{29838.40} (\numprint{1.00}) & \numprint{30466.35} (\numprint{0.98}) & \numprint{29844.65} (\numprint{1.00}) & \textbf{\numprint{29473.60} (\numprint{1.01})} & \numprint{30242.80} (\numprint{0.98}) \\
 			\hline
-			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{1.00} & \numprint{0.99} & \numprint{1.00} & \textbf{\numprint{1.04}} & \numprint{1.03} \\
-			$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \numprint{0.99} & \numprint{1.00} & \textbf{\numprint{1.04}} & \numprint{1.03} \\
+			$s_{\text{total}}$ & \numprint{1.00} & \numprint{1.00} & \numprint{0.99} & \numprint{1.00} & \textbf{\numprint{1.04}} & \numprint{1.03} \\
+			%$s_{\text{total}}$ (solved) & \numprint{1.00} & \numprint{1.00} & \numprint{0.99} & \numprint{1.00} & \textbf{\numprint{1.04}} & \numprint{1.03} \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1343,8 +1357,8 @@ A value is highlighted in bold if its the best one within a row.
 			web-NotreDame & \textbf{\numprint{12.10}} & \numprint{12.63} (\numprint{0.96}) & \numprint{15.23} (\numprint{0.79}) & \numprint{12.38} (\numprint{0.98}) & \numprint{14.09} (\numprint{0.86}) & \numprint{17.52} (\numprint{0.69}) \\
 			web-Stanford & >\numprint{36000} & >\numprint{36000} & >\numprint{36000} & >\numprint{36000} & \textbf{\numprint{17886.35} (>\numprint{2.01})} & \numprint{17989.97} (>\numprint{2.00}) \\
 			\hline
-			$s_{\text{total}}$ (all) & \numprint{1.00} & \numprint{0.99} & \numprint{0.99} & \numprint{0.93} & \textbf{\numprint{1.31}} & \numprint{1.30} \\
-			$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.97} & \numprint{0.98} & \numprint{0.86} & \numprint{0.93} & \numprint{0.91} \\
+			$s_{\text{total}}$ & \numprint{1.00} & \numprint{0.99} & \numprint{0.99} & \numprint{0.93} & \textbf{\numprint{1.31}} & \numprint{1.30} \\
+			%$s_{\text{total}}$ (solved) & \textbf{\numprint{1.00}} & \numprint{0.97} & \numprint{0.98} & \numprint{0.86} & \numprint{0.93} & \numprint{0.91} \\
 			\hline
 		\end{tabular}
 	\end{center}
