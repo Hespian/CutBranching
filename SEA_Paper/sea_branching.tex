@@ -8,7 +8,7 @@
 %for anonymousing the authors (e.g. for double-blind review), add "anonymous"
 %for enabling thm-restate support, use "thm-restate"
 %for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
-
+\usepackage{marvosym}
 \usepackage{todonotes}
 \usepackage{numprint}
 \npstyleenglish
@@ -732,13 +732,13 @@ searching for branching vertices.% \todo{I would add that this behavior is not '
 \begin{figure}[t!]
 \begin{subfigure}[t!]{\textwidth}
 	\centering
-	\input{plots/all_decomposition_based_time.pgf}
+	\input{plots/decomposition_based_time.tex}
 	% \caption{Performance plot comparing running times of decomposition-based branching strategies.}\label{fig:all_decomp_time}
 \end{subfigure}
 
 \begin{subfigure}[t!]{\textwidth}
 	\centering
-	\input{plots/all_decomposition_based_branch.pgf}
+	\input{plots/decomposition_based_branches.tex}
 	% \caption{Performance plot comparing branches of decomposition-based branching strategies.}\label{fig:all_decomp_branch}
 \end{subfigure}
 \caption{Performance plots for decomposition-based branching strategies}\label{fig:all_decomp}
@@ -799,13 +799,13 @@ our decomposition-based techniques to work well.
 \begin{figure}[t!]
 \begin{subfigure}[t!]{\textwidth}
 	\centering
-	\input{plots/all_reduction_based_time.pgf}
+	\input{plots/reduction_based_time.tex}
 	% \caption{Performance plot comparing running time of reduction-based branching strategies.}\label{fig:all_reduction_time}
 \end{subfigure}
 
 \begin{subfigure}[t!]{\textwidth}
 	\centering
-	\input{plots/all_reduction_based_branch.pgf}
+	\input{plots/reduction_based_branches.tex}
 	% \caption{Performance plot comparing branches of reduction-based branching strategies.}\label{fig:all_reduction_branch}
 \end{subfigure}
 \caption{Performance plots for reduction-based branching strategies}\label{fig:all_reduction}
@@ -1029,7 +1029,7 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	
 \end{table}
 
 \begin{table}[htb!]	
@@ -1096,7 +1096,7 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	
 \end{table}
 \begin{table}
 	\scriptsize
@@ -1151,7 +1151,7 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	
 \end{table}
 
 \begin{table}
@@ -1186,7 +1186,7 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	
 \end{table}
 
 \FloatBarrier
@@ -1204,7 +1204,7 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	
 \end{table}
 
 \begin{table}
@@ -1271,7 +1271,7 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	
 \end{table}
 
 \begin{table}
@@ -1327,7 +1327,6 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_tablee}
 \end{table}
 
 \begin{table}
@@ -1362,6 +1361,6 @@ A value is highlighted in bold if its the best one within a row.
 			\hline
 		\end{tabular}
 	\end{center}
-	\label{table:another_table}
+	
 \end{table}
 \end{document}
