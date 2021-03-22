@@ -689,21 +689,32 @@ The remaining set of instances is composed of 48 PACE instances, 37 DIMACS insta
 
 \subsection{Decomposition Branching}\label{sec:experiments_decomp}
 
-Figure~\ref{fig:all_decomp} shows performance plots of the running time and
+Figure~\ref{fig:all_decomp} shows performance profiles~\cite{dolan2002benchmarking} of the running time and
 number of branches of
-our decomposition-based branching strategies: For each instance, the best
-algorithm is determined. The upper plot shows for each algorithm $1 - (t_{\text{best}}/
-t_{\text{alg}})$, where $t_{\text{best}}$ is the running time of the fastest algorithm
-for that instance and $t_{\text{alg}}$ is the time of the respective algorithm.
-A value of $0$ means that
-the algorithm was the fastest algorithm on that instance and a value of
-$\numprint{0.5}$ means that the algorithm took twice as long as the fastest
-algorithm. Timeouts are shown as a value $> 1$. For each algorithm, instances
-are then sorted by their value. Note that this means that the points on a
-vertical line do not necessarily correspond to the same instance. Furthermore,
-the plot uses a square root scale for the $y$-axis to better illustrate small values.
-Analogously, the lower plot shows the same metric for the number of
-branches.\todo{use performance profiles?}
+our decomposition-based branching strategies:
+Let $\mathcal{T}$ be the set of all techniques we want to compare, $\mathcal{I}$
+the set of instances, and $t_{T}({I})$ the running time/number of branches of
+technique $T$ on instance $I$. The y-axis shows for each technique $T$ the
+fraction of instances for which $t_T(I) \leq \tau \cdot \min_{T' \in
+  \mathcal{T}}t_{T'}(I)$, where $\tau$ is shown on the x-axis. For $\tau = 1$,
+the y-axis shows the fraction of instances on which a technique performs best.
+Note that these plots compare the performance of a technique relative to the
+best performing technique and does not show a ranking of all techniques.
+Instances that were not finished by a technique within the time limit are marked
+with \ClockLogo{}.
+% For each instance, the best
+% algorithm is determined. The upper plot shows for each algorithm $1 - (t_{\text{best}}/
+% t_{\text{alg}})$, where $t_{\text{best}}$ is the running time of the fastest algorithm
+% for that instance and $t_{\text{alg}}$ is the time of the respective algorithm.
+% A value of $0$ means that
+% the algorithm was the fastest algorithm on that instance and a value of
+% $\numprint{0.5}$ means that the algorithm took twice as long as the fastest
+% algorithm. Timeouts are shown as a value $> 1$. For each algorithm, instances
+% are then sorted by their value. Note that this means that the points on a
+% vertical line do not necessarily correspond to the same instance. Furthermore,
+% the plot uses a square root scale for the $y$-axis to better illustrate small values.
+% Analogously, the lower plot shows the same metric for the number of
+% branches.\todo{use performance profiles?}
 
 The running time plot in Figure~\ref{fig:all_decomp} shows that for most instances, the default strategy of branching on a
 vertex of maximum degree outperforms our decomposition-based approaches.
