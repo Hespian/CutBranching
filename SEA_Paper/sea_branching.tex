@@ -731,12 +731,9 @@ to solve all instances for two algorithms) of $\numprint{2.12}$ to $\numprint{2.
 decomposition-based techniques on sparse networks (see
 Table~\ref{tab:summary_decomp}). In particular, there is one instance (web-stanford) that causes a timeout with the
 default strategy but can be solved in $8$ (articulation points) to $43$ (nested
-dissections) seconds using a decomposition-based approach. When ignoring this instance, the total speedup drops down
-to $\numprint{0.98}$ to $\numprint{1.04}$.\todo{Remove this?} Table~\ref{tab:summary_decomp} shows that overall, our
+dissections) seconds using a decomposition-based approach. Table~\ref{tab:summary_decomp} shows that overall, our
 technique using edge cuts seems to be the most beneficial, achieving an overall
-speedup of $22\%$ over maximum degree and is on par with maximum degree branching
-when only considering instances that were solved by all decomposition-based
-techniques and maximum degree branching.\todo{remove?}
+speedup of $22\%$ over maximum degree.
 Finally, Figure~\ref{fig:all_decomp} shows that most running
 times are only slightly slower than the default strategy with a few instances
 showing a speedup. This is mainly because
