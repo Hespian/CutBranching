@@ -622,14 +622,16 @@ branch that includes $v$. Based on the assumption that no maximum independent
 set includes a vertex $v$, constraints for the remaining vertices can be
 derived. For example, a maximum independent set that does not contain $v$ has to
 include at least two neighbors of $v$. The corresponding constraint is
-$\sum_{u\in N(v)}x_u \geq2$,\todo{Diese Regel verstehe ich nicht} where $x_u$ is a binary variable that indicates
-whether a vertex is included in the current solution. The algorithm creates such
+$\sum_{u\in N(v)}x_u \geq2$, where $x_u$ is a binary variable that indicates
+whether a vertex is included in the current solution. Otherwise we will find a
+solution of the same size in the branch including $v$. The algorithm creates such
 constraints when branching or reducing, and updates them accordingly during the data reductions and branching steps. When a vertex $v$ is eliminated from the graph, $x_v$ gets removed from all constraints. If $v$ is included into the current solution, the corresponding right sides are also decreased by one.
 
 A constraint $\sum_{v\in S\subset V}x_v\geq k$ can be utilized in two
 reductions. Firstly, if $k$ is equal to the number of variables $|S|$, all
-vertices from $S$ have to be included into the current solution\todo{kein check,
-ob es eine Kante innerhalb von $S$ gibt?}. Secondly, if there is a vertex $v$ such that $|S|-|N(v)\cap S| < k$, then $v$ has to be excluded from the current solution. If $k > |S|$, the constraint can not be fulfilled and the current branch is pruned.
+vertices from $S$ have to be included into the current solution. If there are
+edges between vertices from $S$, then no valid solution can include all vertices
+from $S$, so the branch is pruned. Secondly, if there is a vertex $v$ such that $|S|-|N(v)\cap S| < k$, then $v$ has to be excluded from the current solution. If $k > |S|$, the constraint can not be fulfilled and the current branch is pruned.
 
 In our branching strategy we target both reductions. If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$, where $|S| = k + 1$, excluding any vertex of $S$ from the solution or including a vertex of $S$ that has one neighbour in $S$ enables the first reduction. Thus, we consider all vertices in $S$ for branching. Note that including a vertex from $S$ that has more than one neighbour in $S$ makes the constraint unfulfillable and the branch is pruned.
 
