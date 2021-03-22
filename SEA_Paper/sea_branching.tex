@@ -722,16 +722,16 @@ However, for instances that have suitable candidates for decomposition such as
 sparse networks, significant speedups compared to the default strategy can be
 seen. To be more specific, assigning a time of ten hours (our timeout threshold) for unfinished
 instances, we achieve a total speedup (calculated by dividing the running times
-to solve all instances for two algorithms) of $\numprint{1.59}$ to $\numprint{1.90}$ for our
+to solve all instances for two algorithms) of $\numprint{2.12}$ to $\numprint{2.29}$ for our
 decomposition-based techniques on sparse networks (see
 Table~\ref{tab:summary_decomp}). In particular, there is one instance (web-stanford) that causes a timeout with the
-default strategy but can be solved in $48$ (articulation points) to $164$ (nested
+default strategy but can be solved in $8$ (articulation points) to $43$ (nested
 dissections) seconds using a decomposition-based approach. When ignoring this instance, the total speedup drops down
-to $\numprint{0.95}$ to $\numprint{1.01}$. Table~\ref{tab:summary_decomp} shows that overall, our
+to $\numprint{0.98}$ to $\numprint{1.04}$.\todo{Remove this?} Table~\ref{tab:summary_decomp} shows that overall, our
 technique using edge cuts seems to be the most beneficial, achieving an overall
-speedup of $33\%$ over maximum degree and a slight slowdown
+speedup of $22\%$ over maximum degree and is on par with maximum degree branching
 when only considering instances that were solved by all decomposition-based
-techniques and maximum degree branching.
+techniques and maximum degree branching.\todo{remove?}
 Finally, Figure~\ref{fig:all_decomp} shows that most running
 times are only slightly slower than the default strategy with a few instances
 showing a speedup. This is mainly because
