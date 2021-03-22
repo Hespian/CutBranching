@@ -398,7 +398,7 @@ maximum degree. If the degree of all candidate vertices lies below a threshold
 of maximum degree. The rational here is that a vertex of large degree changes
 the structure of the graph more than a vertex of small degree even if that
 vertex is guaranteed to enable the application of a reduction rule. Also, our
-current strategies only enable the application of the targeted reduction rule in
+current strategies (except the packing-based rule in Section~\ref{sec:almost_packing}) only enable the application of the targeted reduction rule in
 the branch that excludes the vertex from the independent set, the
 \emph{excluding branch}. However, in the
 case that includes it into the independent set (\emph{including branch}) all neighbors are removed from
@@ -637,6 +637,9 @@ In our branching strategy we target both reductions. If there is a constraint $\
 
 If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$ and a vertex $v$, such that $k = |S|-|N(v)\cap S|$, excluding any vertex of $S\setminus N(v)$ from the solution or including a vertex of $S\setminus N(v)$ that has at least one neighbour in $S\setminus N(v)$ enables the second reduction. Thus, we consider all vertices in $S\setminus N(v)$ for branching.
 
+Note that, in contrast to our previous reduction-based branching rules, packing
+reductions can also be applied in the including branch in many cases.
+
 Detecting these branching candidates can be done with small constant overhead whilst performing the packing reduction.
 
 
@@ -799,6 +802,10 @@ instances, performance is closer to that of maximum degree with an overall
 speedup of $4\%$. On sparse networks, packing is only faster than maximum degree
 branching on $6$ out of $16$ instances but still achieves an overall speedup of
 $31\%$ due to being considerably faster on some of the longer running instances.
+The performance of out packing-based technique might be explained by it's
+property of enabling a reduction in both the including and the excluding branch,
+while our other reduction-based techniques only enable a reduction in the
+excluding branch.
 Our funnel-based technique is faster than maximum degree branching for all but 4
 of the PACE instances, resulting in a speedup of $14\%$ on these instances but
 only a $1\%$ speedup over all instances due to slightly slower running times on
