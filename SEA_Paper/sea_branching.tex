@@ -727,7 +727,7 @@ However, for instances that have suitable candidates for decomposition such as
 sparse networks, significant speedups compared to the default strategy can be
 seen. To be more specific, assigning a time of ten hours (our timeout threshold) for unfinished
 instances, we achieve a total speedup (calculated by dividing the running times
-to solve all instances for two algorithms) of $\numprint{2.12}$ to $\numprint{2.29}$ for our
+to solve all instances for two algorithms) of $\numprint{2.15}$ to $\numprint{2.29}$ for our
 decomposition-based techniques on sparse networks (see
 Table~\ref{tab:summary_decomp}). In particular, there is one instance (web-stanford) that causes a timeout with the
 default strategy but can be solved in $8$ (articulation points) to $43$ (nested
@@ -802,7 +802,7 @@ while our other reduction-based techniques only enable a reduction in the
 excluding branch.
 Our funnel-based technique is faster than maximum degree branching for all but 4
 of the PACE instances, resulting in a speedup of $14\%$ on these instances but
-only a $1\%$ speedup over all instances due to slightly slower running times on
+only a $2\%$ speedup over all instances due to slightly slower running times on
 the other instance classes. We also show results for a strategy that targets all reduction rules
 described in Section~\ref{sec:reduction_branching} (called \emph{combined}). Even though this approach
 leads to the second lowest number of branches for most instances, the time required to
