@@ -139,8 +139,8 @@ They either (1) aim to decompose the graph into two or more connected components
 Our experimental evaluation on a large set of real-world instances indicates
 that our strategies are able to improve the performance of the state-of-the-art
 branch-and-reduce algorithm by Akiba and Iwata. To be more specific,
-we are able to compute a solution faster than the default branching strategy of selecting a vertex of highest degree on $90\%$ of all instances tested.
-Furthermore, our decomposition-based strategies are able to achieve a speedup of $90\%$ on sparse networks ($33\%$ on all instances).
+we are able to compute a solution faster than the default branching strategy of selecting a vertex of highest degree on $97\%$ of all instances tested.
+Furthermore, our decomposition-based strategies are able to achieve a speedup of $2.29$ on sparse networks ($1.22$ on all instances).
 
 \end{abstract}
 
@@ -187,8 +187,8 @@ For each approach we present several concrete strategies that vary in their comp
 Finally, we evaluate their performance by comparing them to the aforementioned default strategy used in the state-of-the-art solver by Akiba and Iwata~\cite{AkibaIwata}.
 For this purpose we make use of a wide spectrum of instances from different graph classes and applications.
 Our experiments indicate that our strategies are able to find an optimal
-solution faster than the default strategy on $90\%$ of all instances tested.
-In particular, our strategies achieve a speedup of $33\%$ (over the default strategy) over all instances.
+solution faster than the default strategy on $97\%$ of all instances tested.
+In particular, our strategies achieve a speedup of $1.22$ (over the default strategy) over all instances.
 A more detailed explanation of a previous version of this work
 can be found in Schorr's Bachelor's thesis~\cite{schorr2020improved}.
 
@@ -673,7 +673,7 @@ InertialFlowCutter~\cite{gottesburen2019faster}
 with the KaFFPa~\cite{DBLP:conf/wea/SandersS13}
 backend. The KaFFPa partitioner is configured to use the \emph{strong} preset
 with a fixed seed of $42$. For branching we use
-three levels of nested dissections with a minimum balance of at least 40 percent of the vertices in the smaller part of each dissection. Furthermore, we
+three levels of nested dissections with a minimum balance of at least $40\%$ of the vertices in the smaller part of each dissection. Furthermore, we
 only use the nested dissection if separators contain at most
 50 vertices. For the reduction-based
 branching rules, we fall back to the default branching strategy if all
@@ -699,7 +699,7 @@ number of branches of
 our decomposition-based branching strategies:
 Let $\mathcal{T}$ be the set of all techniques we want to compare, $\mathcal{I}$
 the set of instances, and $t_{T}({I})$ the running time/number of branches of
-technique $T$ on instance $I$. The y-axis shows for each technique $T$ the
+technique $T \in mathcal{T}$ on instance $I \in mathcal{I}$. The y-axis shows for each technique $T$ the
 fraction of instances for which $t_T(I) \leq \tau \cdot \min_{T' \in
   \mathcal{T}}t_{T'}(I)$, where $\tau$ is shown on the x-axis. For $\tau = 1$,
 the y-axis shows the fraction of instances on which a technique performs best.
@@ -1037,8 +1037,8 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 \label{app:detailed_results}
 We now present detailed results of our experimental evaluation. Detailed tables
 show running times $t$ (in seconds) and speedups $s$.
-Speedups are computed by dividing the (total) running time of maximum degree branching by the (total) running time of the respective technique.
-We show two types of aggregated speedups: (1) ``all'': all instances (timeouts are assigned a running time of ten hours), and (2) ``solved'': only instances that have been solved by all techniques.
+Speedups are computed by dividing the (total) running time of maximum degree branching by the (total) running time of the respective technique (timeouts are assigned a running time of ten hours).
+We also present the aggregated speedup $s_{\text{total}} computed using the geometric mean of the speedups over all instances.
 A value is highlighted in bold if its the best one within a row.
 
 \begin{table}[htb!]	
