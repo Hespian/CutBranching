@@ -727,7 +727,8 @@ However, for instances that have suitable candidates for decomposition such as
 sparse networks, significant speedups compared to the default strategy can be
 seen. To be more specific, assigning a time of ten hours (our timeout threshold) for unfinished
 instances, we achieve a total speedup (calculated by dividing the running times
-to solve all instances for two algorithms) of $\numprint{2.15}$ to $\numprint{2.29}$ for our
+to solve all instances for two algorithms, excluding instances unsolved by both
+algorithms) of $\numprint{2.15}$ to $\numprint{2.29}$ over maximum degree branching for our
 decomposition-based techniques on sparse networks (see
 Table~\ref{tab:summary_decomp}). In particular, there is one instance (web-stanford) that causes a timeout with the
 default strategy but can be solved in $8$ (articulation points) to $43$ (nested
