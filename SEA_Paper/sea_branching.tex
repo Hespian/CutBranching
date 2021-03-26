@@ -840,6 +840,47 @@ instances and 16 sparse networks.
 \FloatBarrier
 \subsection{Decomposition Branching}\label{sec:experiments_decomp}
 
+%\begin{figure}[t]
+%\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
+%\caption{Performance plot comparing running times of decomposition-based branching strategies.}
+%\label{fig:all_decomp_time}
+%\end{figure}
+
+%\begin{figure}[t]
+%  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
+%  \caption{Performance plot comparing branches of decomposition-based branching strategies.}
+%  \label{fig:all_decomp_branch}
+%\end{figure}
+
+\begin{figure}[t!]
+\begin{subfigure}[]{\textwidth}
+	\centering
+	\input{plots/decomposition_based.tex}
+	% \caption{Performance plot comparing running times of decomposition-based branching strategies.}\label{fig:all_decomp_time}
+\end{subfigure}
+
+%\begin{subfigure}[t!]{\textwidth}
+%	\centering
+%	\input{plots/decomposition_based_branches.tex}
+	% \caption{Performance plot comparing branches of decomposition-based branching strategies.}\label{fig:all_decomp_branch}
+%\end{subfigure}
+\caption{Performance plots for decomposition-based branching strategies}\label{fig:all_decomp}
+\end{figure}
+
+\begin{table}[t!]
+  \caption{Speedup of our decomposition-based techniques over maximum degree branching.}\label{tab:summary_decomp}
+
+  \centering
+  \footnotesize
+  \begin{tabular}{|l|r|r|r|r|}
+    \hline
+    & \multicolumn{1}{c|}{PACE} & \multicolumn{1}{c|}{DIMACS} & \multicolumn{1}{c|}{Sparse net.} & \multicolumn{1}{c|}{All Instances}                                                                                                            \\\hline
+    articulation points         & \numprint{0.99}          & \numprint{0.99}             & \numprint{2.17}             & \numprint{1.20} \\
+    edge cuts                   & \numprint{1.00}  & \numprint{0.99}             & \textbf{\numprint{2.29}}    & \textbf{\numprint{1.22}}  \\
+    nested dissections          & \numprint{1.00}           & \numprint{0.99}          & \numprint{2.15}          & \numprint{1.21} \\
+    \hline
+    \end{tabular}
+\end{table}
 Figure~\ref{fig:all_decomp} shows performance profiles~\cite{dolan2002benchmarking} of the running time and
 number of branches of
 our decomposition-based branching strategies:
@@ -889,50 +930,8 @@ cases and most of the running time
 difference is caused by the overhead from
 searching for branching vertices.% \todo{I would add that this behavior is not 'too' surprising}
 
-%\begin{figure}[t]
-%\includegraphics[width=\textwidth]{plots/all_decomposition_based_time}
-%\caption{Performance plot comparing running times of decomposition-based branching strategies.}
-%\label{fig:all_decomp_time}
-%\end{figure}
-
-%\begin{figure}[t]
-%  \includegraphics[width=\textwidth]{plots/all_decomposition_based_branch}
-%  \caption{Performance plot comparing branches of decomposition-based branching strategies.}
-%  \label{fig:all_decomp_branch}
-%\end{figure}
-
-\begin{figure}[t!]
-\begin{subfigure}[t!]{\textwidth}
-	\centering
-	\input{plots/decomposition_based.tex}
-	% \caption{Performance plot comparing running times of decomposition-based branching strategies.}\label{fig:all_decomp_time}
-\end{subfigure}
-
-%\begin{subfigure}[t!]{\textwidth}
-%	\centering
-%	\input{plots/decomposition_based_branches.tex}
-	% \caption{Performance plot comparing branches of decomposition-based branching strategies.}\label{fig:all_decomp_branch}
-%\end{subfigure}
-\caption{Performance plots for decomposition-based branching strategies}\label{fig:all_decomp}
-\end{figure}
-
-\begin{table}[t!]
-  \caption{Speedup of our decomposition-based techniques over maximum degree branching.}\label{tab:summary_decomp}
-
-  \centering
-  \footnotesize
-  \begin{tabular}{|l|r|r|r|r|}
-    \hline
-    & \multicolumn{1}{c|}{PACE} & \multicolumn{1}{c|}{DIMACS} & \multicolumn{1}{c|}{Sparse net.} & \multicolumn{1}{c|}{All Instances}                                                                                                            \\\hline
-    articulation points         & \numprint{0.99}          & \numprint{0.99}             & \numprint{2.17}             & \numprint{1.20} \\
-    edge cuts                   & \numprint{1.00}  & \numprint{0.99}             & \textbf{\numprint{2.29}}    & \textbf{\numprint{1.22}}  \\
-    nested dissections          & \numprint{1.00}           & \numprint{0.99}          & \numprint{2.15}          & \numprint{1.21} \\
-    \hline
-    \end{tabular}
-\end{table}
 
 
-% \FloatBarrier
 \subsection{Reduction Branching}
 Figure~\ref{fig:all_reduction} shows the performance profiles (see
 Section~\ref{sec:experiments_decomp}) for our reduction-based branching strategies. Here we see that targeting the packing reduction
