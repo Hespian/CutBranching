@@ -139,7 +139,9 @@ They either (1) aim to decompose the graph into two or more connected components
 Our experimental evaluation on a large set of real-world instances indicates
 that our strategies are able to improve the performance of the state-of-the-art
 branch-and-reduce algorithm by Akiba and Iwata. To be more specific,
-our reduction-based packing branching rule is able to outperform the default branching strategy of selecting a vertex of highest degree on $65\%$ of all instances tested.
+our reduction-based packing branching rule is able to outperform the default
+branching strategy of selecting a vertex of highest degree on $65\%$ of all
+instances tested.
 Furthermore, our decomposition-based strategies based on edge cuts is able to achieve a speedup of $2.29$ on sparse networks ($1.22$ on all instances).
 
 \end{abstract}
@@ -687,12 +689,155 @@ Complements of Maximum Clique instances from the second DIMACS Implementation Ch
 the Stanford Network Analysis Project (SNAP)~\cite{snapnets}, the 9th DIMACS
 Implementation Challenge on Shortest Paths~\cite{demetrescu2009shortest} and the
 Network Data Repository~\cite{nr}. Detailed instance information can
-be found in Table~\ref{table:instance} in Appendix~\ref{app:instances}. Directed instances were converted into
+be found in Table~\ref{table:instance}. Directed instances were converted into
 undirected graphs by ignoring the direction of edges and removing duplicates.
 Our original set of instances contained the first 80 PACE instances, 53 DIMACS instances and 34 sparse networks.
 From these instances, we excluded all instances that (1) required no branches, (2) on which all techniques had a running time of less than $0.1$ seconds, and (3) on which no technique was able to find a solution within 10 hours.
-The remaining set of instances is composed of 48 PACE instances, 37 DIMACS instances and 16 sparse networks.
+The remaining set of instances is composed of 48 PACE instances, 37 DIMACS
+instances and 16 sparse networks.
 
+\begin{table}[htb!]	
+	\scriptsize
+	\caption{Number of vertices $|V|$ and edges $|E|$ for each graph.}\label{table:instance}
+	\begin{center}
+      \scalebox{0.8}{
+		\begin{minipage}{0.29\textwidth}
+			\centering
+			\begin{tabular}{|l|r|r|}
+				\hline
+				\multicolumn{3}{|l|}{PACE \cite{dzulfikar_et_al:LIPIcs:2019:11486} instances:}                                                            \\
+				\hline
+				Graph                 & $|V|$              & $|E|$                                               \\
+				\hline
+				05 & \numprint{200} & \numprint{798}\\
+				06 & \numprint{200} & \numprint{733}\\
+				10 & \numprint{199} & \numprint{758}\\
+				16 & \numprint{153} & \numprint{802} \\
+				19 & \numprint{200} & \numprint{862}\\
+				31 & \numprint{200} & \numprint{813}\\
+				33 & \numprint{4410} & \numprint{6885}\\
+				35 & \numprint{200} & \numprint{864}\\
+				36                    & \numprint{26300}   & \numprint{41500}                                    \\
+				37                    & \numprint{198}     & \numprint{808}                                      \\
+				38                    & \numprint{786}     & \numprint{14024}                                    \\
+				39                    & \numprint{6795}    & \numprint{10620}                                    \\
+				40                    & \numprint{210}     & \numprint{625}                                      \\
+				41                    & \numprint{200}     & \numprint{1023}                                     \\
+				42                    & \numprint{200}     & \numprint{952}                                      \\
+				43                    & \numprint{200}     & \numprint{841}                                      \\
+				44                    & \numprint{200}     & \numprint{1147}                                     \\
+				45                    & \numprint{200}     & \numprint{1020}                                     \\
+				46                    & \numprint{200}     & \numprint{812}                                      \\
+				47                    & \numprint{200}     & \numprint{1093}                                     \\
+				48                    & \numprint{200}     & \numprint{1025}                                     \\
+				49                    & \numprint{200}     & \numprint{933}                                      \\
+				50                    & \numprint{200}     & \numprint{1025}                                     \\
+				51                    & \numprint{200}     & \numprint{1098}                                     \\
+				52                    & \numprint{200}     & \numprint{992}                                      \\
+				53                    & \numprint{200}     & \numprint{1026}                                     \\
+				54                    & \numprint{200}     & \numprint{961}                                      \\
+				55                    & \numprint{200}     & \numprint{938}                                      \\
+				56                    & \numprint{200}     & \numprint{1089}                                     \\
+				57                    & \numprint{200}     & \numprint{1160}                                     \\
+				58                    & \numprint{200}     & \numprint{1171}                                     \\
+				59                    & \numprint{200}     & \numprint{961}                                      \\
+				60                    & \numprint{200}     & \numprint{1118}                                     \\
+				61                    & \numprint{200}     & \numprint{931}                                      \\
+				62                    & \numprint{199}     & \numprint{1128}                                     \\
+				63                    & \numprint{200}     & \numprint{1011}                                     \\
+				64                    & \numprint{200}     & \numprint{1042}                                     \\
+				65                    & \numprint{200}     & \numprint{1011}                                     \\
+				66                    & \numprint{200}     & \numprint{866}                                      \\
+				67                    & \numprint{200}     & \numprint{1174}                                     \\
+				68                    & \numprint{200}     & \numprint{961}                                      \\
+				69                    & \numprint{200}     & \numprint{1083}                                     \\
+				70                    & \numprint{200}     & \numprint{860}                                      \\
+				71                    & \numprint{200}     & \numprint{952}                                      \\
+				72                    & \numprint{200}     & \numprint{1167}                                     \\
+				73                    & \numprint{200}     & \numprint{1078}                                     \\
+				74                    & \numprint{200}     & \numprint{805}                                      \\
+				77                    & \numprint{200}   & \numprint{961}                                    \\
+				\hline
+			\end{tabular}
+		\end{minipage}
+		\begin{minipage}{0.7\textwidth}
+			\centering
+			\begin{tabular}{|l|r|r|}
+				\hline
+				\multicolumn{3}{|l|}{DIMACS \cite{johnson1993cliques} instances:}                                                          \\
+				\hline
+				Graph                 & $|V|$              & $|E|$                                               \\
+				\hline
+				C125.9 & \numprint{125} & \numprint{787} \\
+				MANN\_a27 & \numprint{378} & \numprint{702} \\
+				MANN\_a45 & \numprint{1035} & \numprint{1980} \\
+				brock200\_1 & \numprint{200} & \numprint{5066} \\
+				brock200\_2 & \numprint{200} & \numprint{10024} \\
+				brock200\_3 & \numprint{200} & \numprint{7852} \\
+				brock200\_4 & \numprint{200} & \numprint{6811} \\
+				gen200\_p0.9\_44 & \numprint{200} & \numprint{1990} \\
+				gen200\_p0.9\_55 & \numprint{200} & \numprint{1990} \\
+				hamming8-4 & \numprint{256} & \numprint{11776} \\
+				johnson16-2-4 & \numprint{120} & \numprint{1680} \\
+				keller4 & \numprint{171} & \numprint{5100} \\
+				p\_hat1000-1 & \numprint{1000} & \numprint{377247} \\
+				p\_hat1000-2 & \numprint{1000} & \numprint{254701} \\
+				p\_hat1500-1 & \numprint{1500} & \numprint{839327} \\
+				p\_hat300-1 & \numprint{300} & \numprint{33917} \\
+				p\_hat300-2 & \numprint{300} & \numprint{22922} \\
+				p\_hat300-3 & \numprint{300} & \numprint{11460} \\
+				p\_hat500-1 & \numprint{500} & \numprint{93181} \\
+				p\_hat500-2 & \numprint{500} & \numprint{61804} \\
+				p\_hat500-3 & \numprint{500} & \numprint{30950} \\
+				p\_hat700-1 & \numprint{700} & \numprint{183651} \\
+				p\_hat700-2 & \numprint{700} & \numprint{122922} \\
+				san1000 & \numprint{1000} & \numprint{249000} \\
+				san200\_0.7\_1 & \numprint{200} & \numprint{5970} \\
+				san200\_0.7\_2 & \numprint{200} & \numprint{5970} \\
+				san200\_0.9\_1 & \numprint{200} & \numprint{1990} \\
+				san200\_0.9\_2 & \numprint{200} & \numprint{1990} \\
+				san200\_0.9\_3 & \numprint{200} & \numprint{1990} \\
+				san400\_0.5\_1 & \numprint{400} & \numprint{39900} \\
+				san400\_0.7\_1 & \numprint{400} & \numprint{23940} \\
+				san400\_0.7\_2 & \numprint{400} & \numprint{23940} \\
+				san400\_0.7\_3 & \numprint{400} & \numprint{23940} \\
+				sanr200\_0.7 & \numprint{200} & \numprint{6032} \\
+				sanr200\_0.9 & \numprint{200} & \numprint{2037} \\
+				sanr400\_0.5 & \numprint{400} & \numprint{39816} \\
+				sanr400\_0.7 & \numprint{400} & \numprint{23931} \\
+				\hline
+			\end{tabular}
+			\vspace{2em}
+			\newline
+			\begin{tabular}{|l|r|r|c|}
+				\hline			
+				\multicolumn{4}{|l|}{Sparse networks:}                                                           \\
+				\hline
+				Graph                 & $|V|$              & $|E|$               & source                        \\			
+				\hline
+				as-skitter            & \numprint{1696415} & \numprint{11095298} & \cite{snapnets}               \\
+				baidu-relatedpages    & \numprint{415641} & \numprint{2374044} & \cite{nr} \\
+				bay                     & \numprint{321270}  & \numprint{397415}   & \cite{demetrescu2009shortest} \\
+				col                   & \numprint{435666}  & \numprint{521200}   & \cite{demetrescu2009shortest} \\
+				fla                   & \numprint{1070376} & \numprint{1343951}  & \cite{demetrescu2009shortest} \\
+				hudong-internallink   & \numprint{1984484} & \numprint{14428382} & \cite{nr}\\
+				in-2004 			  & \numprint{1382870} & \numprint{13591473} & \cite{nr}\\
+				libimseti             & \numprint{220970}  & \numprint{17233144} & \cite{nr}                     \\
+				musae-twitch\_FR      & \numprint{6549}    & \numprint{112666}   & \cite{snapnets}               \\
+				petster-friendships-dog & \numprint{426820} & \numprint{8543549} & \cite{nr} \\
+				soc-LiveJournal1      & \numprint{4847571} & \numprint{42851237} & \cite{snapnets} \\
+				web-BerkStan          & \numprint{685230}  & \numprint{6649470}  & \cite{snapnets}               \\
+				web-Google            & \numprint{875713}  & \numprint{4322051}  & \cite{snapnets}               \\
+				web-NotreDame         & \numprint{325730}  & \numprint{1090108}  & \cite{snapnets}               \\
+				web-Stanford          & \numprint{281903}  & \numprint{1992636}  & \cite{snapnets}               \\
+				\hline
+			\end{tabular}
+		\end{minipage}
+      }
+	\end{center}
+\end{table}
+
+\FloatBarrier
 \subsection{Decomposition Branching}\label{sec:experiments_decomp}
 
 Figure~\ref{fig:all_decomp} shows performance profiles~\cite{dolan2002benchmarking} of the running time and
@@ -892,149 +1037,6 @@ In turn, this might lead to a branching strategy that consistently outperforms b
 
 \appendix
 
-\section{Detailed Instance Information}
-\label{app:instances}
-\begin{table}[htb!]	
-	\scriptsize
-	\caption{Number of vertices $|V|$ and edges $|E|$ for each graph.}\label{table:instance}
-	\begin{center}
-		\begin{minipage}{0.29\textwidth}
-			\centering
-			\begin{tabular}{|l|r|r|}
-				\hline
-				\multicolumn{3}{|l|}{PACE \cite{dzulfikar_et_al:LIPIcs:2019:11486} instances:}                                                            \\
-				\hline
-				Graph                 & $|V|$              & $|E|$                                               \\
-				\hline
-				05 & \numprint{200} & \numprint{798}\\
-				06 & \numprint{200} & \numprint{733}\\
-				10 & \numprint{199} & \numprint{758}\\
-				16 & \numprint{153} & \numprint{802} \\
-				19 & \numprint{200} & \numprint{862}\\
-				31 & \numprint{200} & \numprint{813}\\
-				33 & \numprint{4410} & \numprint{6885}\\
-				35 & \numprint{200} & \numprint{864}\\
-				36                    & \numprint{26300}   & \numprint{41500}                                    \\
-				37                    & \numprint{198}     & \numprint{808}                                      \\
-				38                    & \numprint{786}     & \numprint{14024}                                    \\
-				39                    & \numprint{6795}    & \numprint{10620}                                    \\
-				40                    & \numprint{210}     & \numprint{625}                                      \\
-				41                    & \numprint{200}     & \numprint{1023}                                     \\
-				42                    & \numprint{200}     & \numprint{952}                                      \\
-				43                    & \numprint{200}     & \numprint{841}                                      \\
-				44                    & \numprint{200}     & \numprint{1147}                                     \\
-				45                    & \numprint{200}     & \numprint{1020}                                     \\
-				46                    & \numprint{200}     & \numprint{812}                                      \\
-				47                    & \numprint{200}     & \numprint{1093}                                     \\
-				48                    & \numprint{200}     & \numprint{1025}                                     \\
-				49                    & \numprint{200}     & \numprint{933}                                      \\
-				50                    & \numprint{200}     & \numprint{1025}                                     \\
-				51                    & \numprint{200}     & \numprint{1098}                                     \\
-				52                    & \numprint{200}     & \numprint{992}                                      \\
-				53                    & \numprint{200}     & \numprint{1026}                                     \\
-				54                    & \numprint{200}     & \numprint{961}                                      \\
-				55                    & \numprint{200}     & \numprint{938}                                      \\
-				56                    & \numprint{200}     & \numprint{1089}                                     \\
-				57                    & \numprint{200}     & \numprint{1160}                                     \\
-				58                    & \numprint{200}     & \numprint{1171}                                     \\
-				59                    & \numprint{200}     & \numprint{961}                                      \\
-				60                    & \numprint{200}     & \numprint{1118}                                     \\
-				61                    & \numprint{200}     & \numprint{931}                                      \\
-				62                    & \numprint{199}     & \numprint{1128}                                     \\
-				63                    & \numprint{200}     & \numprint{1011}                                     \\
-				64                    & \numprint{200}     & \numprint{1042}                                     \\
-				65                    & \numprint{200}     & \numprint{1011}                                     \\
-				66                    & \numprint{200}     & \numprint{866}                                      \\
-				67                    & \numprint{200}     & \numprint{1174}                                     \\
-				68                    & \numprint{200}     & \numprint{961}                                      \\
-				69                    & \numprint{200}     & \numprint{1083}                                     \\
-				70                    & \numprint{200}     & \numprint{860}                                      \\
-				71                    & \numprint{200}     & \numprint{952}                                      \\
-				72                    & \numprint{200}     & \numprint{1167}                                     \\
-				73                    & \numprint{200}     & \numprint{1078}                                     \\
-				74                    & \numprint{200}     & \numprint{805}                                      \\
-				77                    & \numprint{200}   & \numprint{961}                                    \\
-				\hline
-			\end{tabular}
-		\end{minipage}
-		\begin{minipage}{0.7\textwidth}
-			\centering
-			\begin{tabular}{|l|r|r|}
-				\hline
-				\multicolumn{3}{|l|}{DIMACS \cite{johnson1993cliques} instances:}                                                          \\
-				\hline
-				Graph                 & $|V|$              & $|E|$                                               \\
-				\hline
-				C125.9 & \numprint{125} & \numprint{787} \\
-				MANN\_a27 & \numprint{378} & \numprint{702} \\
-				MANN\_a45 & \numprint{1035} & \numprint{1980} \\
-				brock200\_1 & \numprint{200} & \numprint{5066} \\
-				brock200\_2 & \numprint{200} & \numprint{10024} \\
-				brock200\_3 & \numprint{200} & \numprint{7852} \\
-				brock200\_4 & \numprint{200} & \numprint{6811} \\
-				gen200\_p0.9\_44 & \numprint{200} & \numprint{1990} \\
-				gen200\_p0.9\_55 & \numprint{200} & \numprint{1990} \\
-				hamming8-4 & \numprint{256} & \numprint{11776} \\
-				johnson16-2-4 & \numprint{120} & \numprint{1680} \\
-				keller4 & \numprint{171} & \numprint{5100} \\
-				p\_hat1000-1 & \numprint{1000} & \numprint{377247} \\
-				p\_hat1000-2 & \numprint{1000} & \numprint{254701} \\
-				p\_hat1500-1 & \numprint{1500} & \numprint{839327} \\
-				p\_hat300-1 & \numprint{300} & \numprint{33917} \\
-				p\_hat300-2 & \numprint{300} & \numprint{22922} \\
-				p\_hat300-3 & \numprint{300} & \numprint{11460} \\
-				p\_hat500-1 & \numprint{500} & \numprint{93181} \\
-				p\_hat500-2 & \numprint{500} & \numprint{61804} \\
-				p\_hat500-3 & \numprint{500} & \numprint{30950} \\
-				p\_hat700-1 & \numprint{700} & \numprint{183651} \\
-				p\_hat700-2 & \numprint{700} & \numprint{122922} \\
-				san1000 & \numprint{1000} & \numprint{249000} \\
-				san200\_0.7\_1 & \numprint{200} & \numprint{5970} \\
-				san200\_0.7\_2 & \numprint{200} & \numprint{5970} \\
-				san200\_0.9\_1 & \numprint{200} & \numprint{1990} \\
-				san200\_0.9\_2 & \numprint{200} & \numprint{1990} \\
-				san200\_0.9\_3 & \numprint{200} & \numprint{1990} \\
-				san400\_0.5\_1 & \numprint{400} & \numprint{39900} \\
-				san400\_0.7\_1 & \numprint{400} & \numprint{23940} \\
-				san400\_0.7\_2 & \numprint{400} & \numprint{23940} \\
-				san400\_0.7\_3 & \numprint{400} & \numprint{23940} \\
-				sanr200\_0.7 & \numprint{200} & \numprint{6032} \\
-				sanr200\_0.9 & \numprint{200} & \numprint{2037} \\
-				sanr400\_0.5 & \numprint{400} & \numprint{39816} \\
-				sanr400\_0.7 & \numprint{400} & \numprint{23931} \\
-				\hline
-			\end{tabular}
-			\vspace{2em}
-			\newline
-			\begin{tabular}{|l|r|r|c|}
-				\hline			
-				\multicolumn{4}{|l|}{Sparse networks:}                                                           \\
-				\hline
-				Graph                 & $|V|$              & $|E|$               & source                        \\			
-				\hline
-				as-skitter            & \numprint{1696415} & \numprint{11095298} & \cite{snapnets}               \\
-				baidu-relatedpages    & \numprint{415641} & \numprint{2374044} & \cite{nr} \\
-				bay                     & \numprint{321270}  & \numprint{397415}   & \cite{demetrescu2009shortest} \\
-				col                   & \numprint{435666}  & \numprint{521200}   & \cite{demetrescu2009shortest} \\
-				fla                   & \numprint{1070376} & \numprint{1343951}  & \cite{demetrescu2009shortest} \\
-				hudong-internallink   & \numprint{1984484} & \numprint{14428382} & \cite{nr}\\
-				in-2004 			  & \numprint{1382870} & \numprint{13591473} & \cite{nr}\\
-				libimseti             & \numprint{220970}  & \numprint{17233144} & \cite{nr}                     \\
-				musae-twitch\_FR      & \numprint{6549}    & \numprint{112666}   & \cite{snapnets}               \\
-				petster-friendships-dog & \numprint{426820} & \numprint{8543549} & \cite{nr} \\
-				soc-LiveJournal1      & \numprint{4847571} & \numprint{42851237} & \cite{snapnets} \\
-				web-BerkStan          & \numprint{685230}  & \numprint{6649470}  & \cite{snapnets}               \\
-				web-Google            & \numprint{875713}  & \numprint{4322051}  & \cite{snapnets}               \\
-				web-NotreDame         & \numprint{325730}  & \numprint{1090108}  & \cite{snapnets}               \\
-				web-Stanford          & \numprint{281903}  & \numprint{1992636}  & \cite{snapnets}               \\
-				\hline
-			\end{tabular}
-		\end{minipage}
-		
-	\end{center}
-\end{table}
-\FloatBarrier
-% \newpage
 \section{Detailed Experimental Results}
 \label{app:detailed_results}
 We now present detailed results of our experimental evaluation. Detailed tables
