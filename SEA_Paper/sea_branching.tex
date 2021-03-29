@@ -354,13 +354,13 @@ However, selecting the vertices $s$ and $t$ to ensure reasonably balanced cuts c
 Natural choices include random vertices, as well as vertices that are far apart in terms of their shortest path distance.
 However, our preliminary experiments indicate that selecting random vertices of maximum degree
  for $s$ and $t$ seems to produce the best results.
-Finally, to derive a vertex separator from a cut one can compute an MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm~\cite{hopcroft1973n}.
+Finally, to derive a vertex separator from a cut, one can compute an MVC on the bipartite graph induced by the cut set, \eg using the Hopcroft-Karp algorithm~\cite{hopcroft1973n}.
 This separator can then be used to select branching vertices. In particular,
 we continuously branch on vertices from the separator.
 
 Overall, our second strategy works similar to the first one: We maintain a set of possible branching vertices that were selected by computing a minimum $s$-$t$-cut and turning it into a vertex separator.
-Vertices that were removed by data reduction are discarded from this set and once it is empty, a new cut computation is started.
-However, in contrast to the first strategy finding a set of suitable branching vertices is much more likely.
+Vertices that were removed by data reduction are discarded from this set and once it is empty a new cut computation is started.
+However, in contrast to the first strategy, finding a set of suitable branching vertices is much more likely.
 In order to avoid separators that contain too many vertices, and thus would require too many branching steps to disconnect the graph, we only keep those that do not exceed a certain size and balance threshold.
 The specific values for these threshold are presented in Section~\ref{sec:algo_conf}.
 Finally, if no suitable separator is found, we use the default branching strategy.
