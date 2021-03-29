@@ -295,11 +295,7 @@ cover. Additionally, they employ special reduction rules that can be applied
 during branching. Another optimization done by their algorithm is to solve
 connected components separately. We utilize this in
 Section~\ref{sec:decomposition_branching} where we introduce branching rules
-that decompose the graph into connected components. Akiba and Iwata also
-compare three different strategies for
-selecting the branching vertex: Uniform random, minimum degree and maximum
-degree. They conclude that choosing a vertex of maximum degree that also
-minimizes the number of edges among $N(v)$ performs best. We use this algorithm
+that decompose the graph into connected components. We use this algorithm
 as the base implementation to test our new branching strategies.
 
 \section{Decomposition Branching}\label{sec:decomposition_branching}
