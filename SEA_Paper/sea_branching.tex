@@ -383,7 +383,7 @@ We compute such an ordering once, after finishing the initial data reduction pha
 There are two main optimizations that we use when considering the nested dissection ordering.
 First, we limit the number of recursive calls during the nested dissection
 computation, because we noticed that vertices at the end of the ordering seldom lead to a decomposition of the graph. 
-This is due to vertices being removed by data reduction which can lead to separators becoming invalid.
+This is due to the graph structure being changed by data reduction which can lead to separators becoming invalid.
 Furthermore, similar to the edge-cut-based strategy, we limit the size of
 separators considered during branching using a threshold.
 Again, this is done to ensure that we do not require too many branching steps to decompose the graph.
