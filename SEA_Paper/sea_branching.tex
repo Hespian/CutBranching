@@ -182,7 +182,7 @@ strategies for other problems such as finding a maximum $k$-plex~\cite{gao2018ex
 \subsection{Contribution}
 In this paper, we propose and examine several novel strategies for selecting branching vertices.
 These strategies follow two main approaches that are motivated by existing research: (1) Branching on vertices that decompose the graph into several connected components that can be solved independently.
-This has been shown to significantly improve the performance of branch-and-reduce in practice, especially when the size of the largest component is small~\cite{alsahafy2020computing}.
+Solving components individually has been shown to significantly improve the performance of branch-and-reduce in practice, especially when the size of the largest component is small~\cite{alsahafy2020computing}.
 (2) Branching on vertices whose removal leads to reduction rules becoming applicable again.
 In turn, this leads to a smaller reduced graph and thus improved performance.
 For each approach we present several concrete strategies that vary in their complexity.
@@ -327,9 +327,9 @@ articulation point.
 \begin{figure}[t]
   \centering
   \includegraphics[scale=1]{figures/articulation_points}
-  \caption{Branching on an articulation point (circled vertex) the
-    graph decomposes into two connected components (gray boxes) that can be
-    solved independently. The graphic shows the branch on which the vertex is
+  \caption{Branching on an articulation point (circled vertex)
+    decomposes the graph into two connected components (gray boxes) that can be
+    solved independently. The graphic shows the branch in which the vertex is
     excluded from the independent set.}\label{fig:articulation_points}
 \end{figure}
 
@@ -338,7 +338,7 @@ This results in the default branching strategy being selected rather
 frequently.
 Furthermore, our preliminary experiments indicate that articulation points are rarely found at higher depth.
 However, due to their low overhead, we can justify searching for them whenever
-our set of branching vertices becomes empty.
+$A$ becomes empty.
 
 \subsection{Edge Cuts}
 To alleviate the restrictive nature of finding articulation points, we now propose a more flexible branching strategy based on \emph{(minimal) edge cuts}.
