@@ -618,10 +618,9 @@ adding them to the actual candidate list if $v$ is not removed.
 \subsection{Almost Packing}\label{sec:almost_packing}
 
 The core idea behind the packing rule by Akiba and Iwata \cite{AkibaIwata} is
-that when branching in the case of excluding a vertex $v$ from the solution, one
+that when the exluding branch of a vertex $v$ is selected, one
 can assume that no maximum independent set contains $v$. Otherwise, if there is
-a maximum independent set that contains $v$, the algorithm finds it in the
-branch that includes $v$. Based on the assumption that no maximum independent
+a maximum independent set that contains $v$, the algorithm finds it in the including branch of $v$. Based on the assumption that no maximum independent
 set includes a vertex $v$, constraints for the remaining vertices can be
 derived. For example, a maximum independent set that does not contain $v$ has to
 include at least two neighbors of $v$. The corresponding constraint is
