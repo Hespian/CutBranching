@@ -639,7 +639,7 @@ In our branching strategy we target both reductions. If there is a constraint $\
 
 If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$ and a vertex $v$, such that $k = |S|-|N(v)\cap S|$, excluding any vertex of $S\setminus N(v)$ from the solution or including a vertex of $S\setminus N(v)$ that has at least one neighbour in $S\setminus N(v)$ enables the second reduction. Thus, we consider all vertices in $S\setminus N(v)$ for branching.
 
-Note that, in contrast to our previous reduction-based branching rules, packing
+Note that in contrast to our previous reduction-based branching rules, packing
 reductions can also be applied in the including branch in many cases.
 
 Detecting these branching candidates can be done with small constant overhead whilst performing the packing reduction.
