@@ -916,7 +916,7 @@ with \ClockLogo{}.
 
 The running time plot in Figure~\ref{fig:all_decomp} shows that for most instances, the default strategy of branching on a
 vertex of maximum degree outperforms our decomposition-based approaches.
-However, for instances that have suitable candidates for decomposition such as
+However, for instances that have suitable candidates for decomposition, such as
 sparse networks, significant speedups compared to the default strategy can be
 seen. To be more specific, assigning a time of ten hours (our timeout threshold) for unfinished
 instances, we achieve a total speedup (calculated by dividing the running times
@@ -1016,13 +1016,13 @@ In this work we presented several novel branching strategies for the maximum ind
 Our strategies either follow a decomposition-based or reduction-rule-based approach.
 The decomposition-based strategies make use of increasingly sophisticated methods of finding vertices that are likely to decompose the graph into two or more connected components.
 Even though these strategies often come with a non negligible overhead, they work well for graphs that have a suitable structure, such as social networks.
-For instances that still favor the default branching strategy of branching on the vertex of highest degree, our reduction-rule-based strategies provide a small but consistent speedup.
+For instances that still favor the default branching strategy of branching on the vertex of highest degree, our reduction-rule-based strategies provide a smaller but more consistent speedup.
 These rules aim to facilitate the application of reduction rules which leads to smaller graphs that can be solved more quickly.
 
 Overall, using one of our proposed strategies allows us to find the optimal solution the fastest for most instances tested.
 However, deciding which particular strategy to use for a given instance still remains an open problem.
 Finding suitable graph characteristics to do so provides an interesting opportunity for future work.
-Furthermore, our experimental evaluation on a combined approach that tries to use all reduction-rule-based strategies at the same time achieves the least number of branches for a large set of instances.
+Furthermore, our experimental evaluation on a combined approach that tries to use all reduction-rule-based strategies at the same time achieves a smaller number of branches than the default strategy for a large set of instances.
 However, the running time of this approach still suffers from frequent checks if a particular vertex is a potential branching vertex.
 A more sophisticated and incremental way of tracking when a vertex becomes a branching vertex might provide significant performance benefits.
 In turn, this might lead to a branching strategy that consistently outperforms branching on the vertex of highest degree independent of the instance type.
