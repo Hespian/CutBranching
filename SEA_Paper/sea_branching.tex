@@ -217,7 +217,7 @@ A \emph{path} $P=(v_1, \ldots, v_k)$ of length $k$ is a sequence of $k$ distinct
 A subgraph of $G$ induced by a maximal subset of vertices that are connected by a path is called a \emph{connected component}.
 Furthermore, a graph that only contains one connected component is called \emph{connected}.
 Likewise, a graph with more than one connected component is called \emph{disconnected}.
-A subset $S \subset V$ of a connected graph $G$ is called a \emph{vertex separator}, if the removal of $S$ from $G$ makes the graph disconnected.
+A subset $S \subset V$ of a connected graph $G$ is called a \emph{vertex separator} if the removal of $S$ from $G$ makes the graph disconnected.
 
 An \emph{independent set} of a graph is a subset of vertices $I \subseteq V$ such that no two vertices of $I$ are adjacent. 
 A \emph{maximum independent set} (MIS) is an independent set of maximum cardinality.
@@ -304,7 +304,7 @@ as the base implementation to test our new branching strategies.
 
 \section{Decomposition Branching}\label{sec:decomposition_branching}
 Our first approach to improve the default branching strategy found in many state-of-the-art algorithms (including that of Akiba and Iwata~\cite{AkibaIwata}) is to decompose the graph into several connected components.
-Subsequently processing these components individually has been shown to improve the performance of branch-and-reduce in practice~\cite{alsahafy2020computing}.
+Subsequently, processing these components individually has been shown to improve the performance of branch-and-reduce in practice~\cite{alsahafy2020computing}.
 To this end, we now present three concrete strategies with varying computational
 complexity: articulation points, edge cuts and nested dissections.
 
@@ -399,7 +399,7 @@ computational overhead in practice. To be self contained we will also repeat the
 rules used here but omit any proofs that can be found in the original
 publications. Out of the candidates found we then select a vertex of
 maximum degree. If the degree of all candidate vertices lies below a threshold
-(defined in Section~\ref{sec:algo_conf}) or no candidate vertices were found we fall back to branching on a vertex
+(defined in Section~\ref{sec:algo_conf}) or no candidate vertices were found, we fall back to branching on a vertex
 of maximum degree. The rational here is that a vertex of large degree changes
 the structure of the graph more than a vertex of small degree even if that
 vertex is guaranteed to enable the application of a reduction rule. Also, our
@@ -420,7 +420,7 @@ the high amount of priority queue operations.
 The first reduction we target is the \emph{twin} reduction by Xiao and Nagamochi~\cite{XiaoUnconfined}:
 
 \begin{definition}(Twins~\cite{XiaoUnconfined})
-  In a graph $G=(V,E)$ two vertices $u$ and $v$ are called twins, if $N(u) = N(v)$ and $d(u) = d(v) = 3$.
+  In a graph $G=(V,E)$ two vertices $u$ and $v$ are called twins if $N(u) = N(v)$ and $d(u) = d(v) = 3$.
 \end{definition}
 
 \begin{theorem} (Twin Reduction~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ let
@@ -445,7 +445,7 @@ We now define \emph{almost twins} as follows:
 
 Clearly, after removing $w$, $u$ and $v$ are twins so we can apply the twin
 reduction. Finding almost twins can be done while searching for twins: The
-original algorithm checks for each vertex $v$ of degree $3$ whether there is a
+original algorithm checks for each vertex $v$ of degree-$3$ whether there is a
 vertex $u \in N^2(v)$ with $d(u) = 3$ and $N(u) = N(v)$. We augment this
 algorithm by simultaneously also searching for $u \in N^2(v)$ with $d(u) = 4$
 and $N(v) \subset N(u)$. This induces about the same computational cost for
@@ -463,12 +463,12 @@ be small. Figure~\ref{fig:twin} illustrates branching for almost twins.
 
 \subsection{Almost Funnels}\label{sec:almost_funnels}
 
-Next we consider the \emph{funnel} reduction which is a special case of the
+Next, we consider the \emph{funnel} reduction which is a special case of the
 \emph{alternative} reduction by Xiao and Nagamochi~\cite{XiaoUnconfined}:
 
 \begin{definition} (Alternative Sets~\cite{XiaoUnconfined})
 	In a graph $G=(V,E)$ two non empty, disjoint subsets $A,B\subseteq V$ are
-    called alternatives, if $|A| = |B|$ and there is an MIS $I$ in $G$ such that $I\cap(A\cup B)$ is either $A$ or $B$.
+    called alternatives if $|A| = |B|$ and there is an MIS $I$ in $G$ such that $I\cap(A\cup B)$ is either $A$ or $B$.
 \end{definition}
 
 \begin{theorem} (Alternative Reduction~\cite{XiaoUnconfined})
@@ -492,7 +492,7 @@ by Akiba and Iwata~\cite{AkibaIwata} only uses special cases, one of which is
 the funnel reduction:
 
 \begin{definition} (Funnel~\cite{XiaoUnconfined})
-	In a graph $G=(V,E)$ two adjacent vertices $u$ and $v$ are called funnels, if $G_{N(v)\setminus\{u\}}$ is a complete graph, i.e, if $N(v)\setminus\{u\}$ is a clique.
+	In a graph $G=(V,E)$ two adjacent vertices $u$ and $v$ are called funnels if $G_{N(v)\setminus\{u\}}$ is a complete graph, i.e, if $N(v)\setminus\{u\}$ is a clique.
 \end{definition}
 \begin{theorem} (Funnel Reduction~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ let $u$ and $v$ be funnels. Then, $\{u\}$ and $\{v\}$ are alternative sets.	
 \end{theorem}
@@ -561,7 +561,7 @@ Nagamochi~\cite{XiaoUnconfined} is to detect vertices not required for an MIS
 that can therefore be removed from the graph by algorithmically
 contradicting the assumption that every MIS contains the vertex.
 
-\begin{definition} (Child, Parent~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ with an \textit{independent set} $I$, a vertex $v$ is called a child of $I$, if $|N(v)\cap I| = 1$ and the unique neighbor of $v$ in $I$ is called the parent of $v$.
+\begin{definition} (Child, Parent~\cite{XiaoUnconfined}) In a graph $G=(V,E)$ with an \textit{independent set} $I$, a vertex $v$ is called a child of $I$ if $|N(v)\cap I| = 1$ and the unique neighbor of $v$ in $I$ is called the parent of $v$.
 \end{definition}
 
 Algorithm~\ref{alg:unconf} shows the algorithm used by Akiba and
@@ -627,7 +627,7 @@ set includes a vertex $v$, constraints for the remaining vertices can be
 derived. For example, a maximum independent set that does not contain $v$ has to
 include at least two neighbors of $v$. The corresponding constraint is
 $\sum_{u\in N(v)}x_u \geq2$, where $x_u$ is a binary variable that indicates
-whether a vertex is included in the current solution. Otherwise we will find a
+whether a vertex is included in the current solution. Otherwise, we will find a
 solution of the same size in the branch including $v$. The algorithm creates such
 constraints when branching or reducing, and updates them accordingly during the data reductions and branching steps. When a vertex $v$ is eliminated from the graph, $x_v$ gets removed from all constraints. If $v$ is included into the current solution, the corresponding right sides are also decreased by one.
 
@@ -637,9 +637,9 @@ vertices from $S$ have to be included into the current solution. If there are
 edges between vertices from $S$, then no valid solution can include all vertices
 from $S$, so the branch is pruned. Secondly, if there is a vertex $v$ such that $|S|-|N(v)\cap S| < k$, then $v$ has to be excluded from the current solution. If $k > |S|$, the constraint can not be fulfilled and the current branch is pruned.
 
-In our branching strategy we target both reductions. If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$, where $|S| = k + 1$, excluding any vertex of $S$ from the solution or including a vertex of $S$ that has one neighbour in $S$ enables the first reduction. Thus, we consider all vertices in $S$ for branching. Note that including a vertex from $S$ that has more than one neighbour in $S$ makes the constraint unfulfillable and the branch is pruned.
+In our branching strategy we target both reductions. If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$, where $|S| = k + 1$, excluding any vertex of $S$ from the solution or including a vertex of $S$ that has one neighbor in $S$ enables the first reduction. Thus, we consider all vertices in $S$ for branching. Note that including a vertex from $S$ that has more than one neighbor in $S$ makes the constraint unfulfillable and the branch is pruned.
 
-If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$ and a vertex $v$, such that $k = |S|-|N(v)\cap S|$, excluding any vertex of $S\setminus N(v)$ from the solution or including a vertex of $S\setminus N(v)$ that has at least one neighbour in $S\setminus N(v)$ enables the second reduction. Thus, we consider all vertices in $S\setminus N(v)$ for branching.
+If there is a constraint $\sum_{v\in S\subset V}x_v\geq k$ and a vertex $v$, such that $k = |S|-|N(v)\cap S|$, excluding any vertex of $S\setminus N(v)$ from the solution or including a vertex of $S\setminus N(v)$ that has at least one neighbor in $S\setminus N(v)$ enables the second reduction. Thus, we consider all vertices in $S\setminus N(v)$ for branching.
 
 Note that in contrast to our previous reduction-based branching rules, packing
 reductions can also be applied in the including branch in many cases.
@@ -659,7 +659,7 @@ Iwata~\cite{AkibaIwata} with our branching strategies and compile it
 with g++ 9.3.0 using full optimizations (\texttt{-O3}). Our
 code is publicly available on GitHub\footnote{\url{https://github.com/Hespian/CutBranching}}. We execute all our experiments on a machine with 4 8-core Intel Xeon E5-4640 CPUs
 (2.4~GHz) and 512 GiB DDR3-PC1600 RAM running Ubuntu 20.04.1 with Linux Kernel 5.4.0-64. To speed up our experiments we use two
-identical machines and run at most 16 instances at once on the
+identical machines and run at most 8 instances at once on the
 same machine (using the same machine for all algorithms on a specific instance).
 All numbers reported are arithmetic means of three runs with a timeout of ten
 hours.
@@ -676,12 +676,12 @@ the cut contains at least ten percent of the remaining vertices. If no suitable 
 InertialFlowCutter~\cite{gottesburen2019faster}
 with the KaFFPa~\cite{DBLP:conf/wea/SandersS13}
 backend. The KaFFPa partitioner is configured to use the \emph{strong} preset
-with a fixed seed of $42$. For branching we use
+with a fixed seed of $42$. For branching, we use
 three levels of nested dissections with a minimum balance of at least $40\%$ of the vertices in the smaller part of each dissection. Furthermore, we
 only use the nested dissection if separators contain at most
 50 vertices. For the reduction-based
 branching rules, we fall back to the default branching strategy if all
-candidates have a degree of less than $\Delta - k$. In the case of twin-, funnel- and unconfined-reduction-based branching strategies we choose $k$ as $2$. For the packing-reduction-based branching rule $k$ is set to $5$ and for the combined branching rule $k$ is set to $4$.
+candidates have a degree of less than $\Delta - k$. In the case of twin-, funnel- and unconfined-reduction-based branching strategies we choose $k$ as $2$. For the packing-reduction-based branching rule, $k$ is set to $5$ and for the combined branching rule, $k$ is set to $4$.
 
 \subsection{Instances}
 We use instances from several sources: The ``easy'' instances used for the
@@ -1025,7 +1025,7 @@ Overall, using one of our proposed strategies allows us to find the optimal solu
 However, deciding which particular strategy to use for a given instance still remains an open problem.
 Finding suitable graph characteristics to do so provides an interesting opportunity for future work.
 Furthermore, our experimental evaluation on a combined approach that tries to use all reduction-rule-based strategies at the same time achieves a smaller number of branches than the default strategy for a large set of instances.
-However, the running time of this approach still suffers from frequent checks if a particular vertex is a potential branching vertex.
+However, the running time of this approach still suffers from frequent checks whether a particular vertex is a potential branching vertex.
 A more sophisticated and incremental way of tracking when a vertex becomes a branching vertex might provide significant performance benefits.
 In turn, this might lead to a branching strategy that consistently outperforms branching on the vertex of highest degree independent of the instance type.
 
