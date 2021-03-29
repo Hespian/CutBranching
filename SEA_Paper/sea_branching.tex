@@ -284,9 +284,9 @@ from the graph, more reduction rules might be applicable afterwards. The
 set of reductions used in their algorithm is relatively large and not covered
 completely here. However, some reduction rules are explained in
 Section~\ref{sec:reduction_branching} where we show how to target particular reduction
-rules when branching. Akiba and Iwata apply the reduction rules by, for each
-rule in a predefined order, iterating over all
-vertices in the graph and checking whether the rule
+rules when branching. Akiba and Iwata apply the reduction rules in a predefined
+order. For each rule, their algorithm iterates over all
+vertices in the graph and checks whether the rule
 can be applied. If a rule is applied successfully, this process is
 restarted from the first reduction rule. In order to prune the search space, bounds on the largest
 possible independent set of a branch are computed. They implement three different
