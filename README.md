@@ -36,12 +36,22 @@ to compute a MIS for all graphs in `graph_dir_path`. The result is written to th
 If you use this code in your publication, please cite our paper:
 
 ```
-@misc{hespe2021targeted,
-      title={Targeted Branching for the Maximum Independent Set Problem}, 
-      author={Demian Hespe and Sebastian Lamm and Christian Schorr},
-      year={2021},
-      eprint={2102.01540},
-      archivePrefix={arXiv},
-      primaryClass={cs.DS}
+@InProceedings{hespe_et_al:LIPIcs.SEA.2021.17,
+  author =	{Hespe, Demian and Lamm, Sebastian and Schorr, Christian},
+  title =	{{Targeted Branching for the Maximum Independent Set Problem}},
+  booktitle =	{19th International Symposium on Experimental Algorithms (SEA 2021)},
+  pages =	{17:1--17:21},
+  series =	{Leibniz International Proceedings in Informatics (LIPIcs)},
+  ISBN =	{978-3-95977-185-6},
+  ISSN =	{1868-8969},
+  year =	{2021},
+  volume =	{190},
+  editor =	{Coudert, David and Natale, Emanuele},
+  publisher =	{Schloss Dagstuhl -- Leibniz-Zentrum f{\"u}r Informatik},
+  address =	{Dagstuhl, Germany},
+  URL =		{https://drops.dagstuhl.de/opus/volltexte/2021/13789},
+  URN =		{urn:nbn:de:0030-drops-137893},
+  doi =		{10.4230/LIPIcs.SEA.2021.17},
+  annote =	{Keywords: Graphs, Combinatorial Optimization, Independent Set, Vertex Cover, Clique, Branch-and-Reduce, Branch-and-Bound, Data Reduction}
 }
 ```
