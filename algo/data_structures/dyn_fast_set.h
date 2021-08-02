@@ -17,18 +17,18 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************************/
 
-#ifndef FAST_SET_H
-#define FAST_SET_H
+#ifndef DYN_FAST_SET_H
+#define DYN_FAST_SET_H
 
 #include <vector>
 
-class fast_set {
+class dyn_fast_set {
 	
 	std::vector<int> used;
 	int uid;
 
 public:
-	fast_set(int const n) : used(n, 0), uid(1)
+	dyn_fast_set(int const n) : used(n, 0), uid(1)
     { }
 	
 	void clear() {
@@ -41,6 +41,9 @@ public:
 	}
 	
 	bool add(int i) {
+        if (i >= used.size())
+            used.resize(used.size() * 2, 0);
+
 		bool const res(used[i] != uid);
 		used[i] = uid;
 		return res;
@@ -64,4 +67,4 @@ public:
 	}
 };
 
-#endif // FAST_SET_H
+#endif // DYN_FAST_SET_H

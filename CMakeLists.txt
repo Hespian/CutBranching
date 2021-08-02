@@ -28,7 +28,8 @@ if (USE_IFC)
     add_subdirectory(extern/InertialFlowCutter)
 endif()
 
-add_executable(MIS main.cpp algo/branch_and_reduce_algorithm.cpp algo/modified.cpp)
+add_executable(MIS main.cpp algo/branch_and_reduce_algorithm.cpp algo/modified.cpp algo/separator_refinement/fm_ns_local_search.cpp)
+target_link_libraries(MIS ${CMAKE_SOURCE_DIR}/Metis/build/Linux-x86_64/libmetis/libmetis.a)
 
 if (USE_IFC)
     target_compile_definitions(MIS PUBLIC USE_IFC)

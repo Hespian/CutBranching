@@ -216,7 +216,8 @@ public:
                                     bool compute_source_set,
                                     std::vector<NodeID> &source_set,
                                     bool compute_cut,
-                                    std::vector<std::pair<int, int>> &cut)
+                                    std::vector<std::pair<int, int>> &cut,
+                                    std::vector<NodeID> &partition_index)
     {
         m_work = 0;
         m_num_relabels = 0;
@@ -252,14 +253,11 @@ public:
         }
 
         std::vector<bool> n_r(n, false);
-        std::vector<bool> n_r_2(n, false);
-        std::vector<NodeID> source_set_2;
-        std::vector<bool> m_bfstouched_2(n, false);
 
         if (compute_source_set)
         {
             {
-                // perform bfs starting from source set
+                // perform bfs starting from source
                 source_set.clear();
 
                 for (NodeID node = 0; node < n; node++)
@@ -268,6 +266,7 @@ public:
                 std::queue<NodeID> Q;
                 Q.push(source);
                 m_bfstouched[source] = true;
+                partition_index[source] = 1;
 
                 while (!Q.empty())
                 {
@@ -286,6 +285,8 @@ public:
                                 Q.push(target);
                                 m_bfstouched[target] = true;
                                 n_r[target] = false;
+
+                                partition_index[target] = 1;
                             }
                             else if (resCap == 0 && !m_bfstouched[target])
                             {
@@ -294,54 +295,6 @@ public:
                         }
                     }
                 }
-            }
-
-            std::vector<bool> m_bfstouched_2(n, false);
-            std::vector<bool> n_r_2(n, false);
-
-            {
-                source_set_2.clear();
-                for (NodeID node = 0; node < n; node++)
-                    m_bfstouched_2[node] = false;
-
-                std::queue<NodeID> Q;
-                Q.push(sink);
-                m_bfstouched_2[sink] = true;
-
-                while (!Q.empty())
-                {
-                    NodeID node = Q.front();
-                    Q.pop();
-                    source_set_2.push_back(node);
-
-                    for (int i = 0; i < adj[node].size(); i++)
-                    {
-                        NodeID target = adj[node][i];
-                        if (isActive(target))
-                        {
-                            FlowType resCap = getEdgeCapacity(target, node) - getEdgeFlow(target, getReverseIndex(target, node));
-                            if (resCap > 0 && !m_bfstouched_2[target])
-                            {
-                                Q.push(target);
-                                m_bfstouched_2[target] = true;
-                                n_r_2[target] = false;
-                            }
-                            else if (resCap == 0 && !m_bfstouched_2[target])
-                            {
-                                n_r_2[target] = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            double b1 = std::abs(0.5 - ((double)source_set.size() / (double)rn));
-            double b2 = std::abs(0.5 - ((double)source_set_2.size() / (double)rn));
-            if (b2 <= b1)
-            {
-                source_set.swap(source_set_2);
-                m_bfstouched.swap(m_bfstouched_2);
-                n_r.swap(n_r_2);
             }
         }
         if (compute_cut)

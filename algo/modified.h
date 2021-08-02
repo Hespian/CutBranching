@@ -34,6 +34,8 @@ public:
     std::vector<std::vector<int>> oldAdj;
     branch_and_reduce_algorithm *pAlg;
 
+    int foldingMapAdd = -1;
+
 public:
     modified(int const add, std::vector<int> &removed, std::vector<int> &vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg);
 
@@ -41,7 +43,7 @@ public:
 
     virtual ~modified() {};
 
-    void restore();
+    virtual void restore();
 
     virtual void reverse(std::vector<int> &x) = 0;
 };
@@ -50,15 +52,15 @@ class fold : public modified
 {
 
 public:
-    fold(int const add, std::vector<int> &removed, std::vector<int> &vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg)
-    : modified(add, removed, vs, newAdj, _pAlg)
-    { }
+    fold(int const add, std::vector<int> &removed, std::vector<int> &vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg);
 
     fold(std::vector<int> &removed, std::vector<int> &vs, branch_and_reduce_algorithm *_pAlg)
     : modified(removed, vs, _pAlg)
     { }
 
     virtual ~fold() {}
+
+    void restore() override;
 
     virtual void reverse(std::vector<int> &x) {
         int k = removed.size() / 2;
@@ -77,11 +79,7 @@ class alternative : public modified {
 public:
     int k;
 
-    alternative(int const add, std::vector<int> &removed, std::vector<int> &vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg, int k)
-    : modified(add, removed, vs, newAdj, _pAlg)
-    {
-        this->k = k;
-    }
+    alternative(int const add, std::vector<int> &removed, std::vector<int> &vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg, int k);
 
     alternative(std::vector<int> &removed, std::vector<int> &vs, branch_and_reduce_algorithm *_pAlg, int k)
     : modified(removed, vs, _pAlg)
@@ -90,6 +88,8 @@ public:
     }
 
     virtual ~alternative() {}
+
+    void restore() override;
 
     void reverse(std::vector<int> &x) {
         bool A0 = false, A1 = true;

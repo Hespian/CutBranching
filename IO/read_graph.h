@@ -23,11 +23,11 @@ std::vector<std::vector<int>> readGraph(std::istream &infile)
 
         if (firstSymbol == 'p')
         {
-            iss >> numVertices >> numEdges;
+            std::string td;
+            iss >> td >> numVertices >> numEdges;
             break;
         }
     }
-
     std::vector<std::vector<int>> graph(numVertices);
 
     while (getline(infile, line))

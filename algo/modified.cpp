@@ -38,7 +38,7 @@ modified::modified(int const _add, std::vector<int> &_removed, std::vector<int> 
     for (int i = 0; i < static_cast<int>(vs.size()); i++) {
         oldAdj[i].swap(pAlg->adj[vs[i]]);
         pAlg->adj[vs[i]].swap(newAdj[i]);
-    }
+    }    
 }
 
 modified::modified(std::vector<int> &_removed, std::vector<int> &_vs, branch_and_reduce_algorithm *_pAlg)
@@ -68,5 +68,61 @@ void modified::restore() {
             pAlg->in[pAlg->out[vs[i]]] = -1;
             pAlg->out[vs[i]] = -1;
         }
+    }
+}
+
+fold::fold(int const add, std::vector<int> &_removed, std::vector<int> &_vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg)
+    : modified(add, _removed, _vs, newAdj, _pAlg)
+    { 
+        if (pAlg->USE_DEPENDENCY_CHECKING) {
+            foldingMapAdd = 0;
+
+            for (int v : removed) {
+                if (pAlg->packingMap[v].size() != 0) {
+                    pAlg->foldingMap[vs[0]].push_back(v);
+                    foldingMapAdd += 1;
+                }
+            }        
+        }
+    }
+
+void fold::restore() {
+    modified::restore();
+
+    if (pAlg->USE_DEPENDENCY_CHECKING) {
+        for (int i = 0; i < foldingMapAdd; i++){
+            pAlg->foldingMap[vs[0]].pop_back();
+        }        
+    }
+}
+
+alternative::alternative(int const add, std::vector<int> &_removed, std::vector<int> &_vs, std::vector<std::vector<int>> &newAdj, branch_and_reduce_algorithm *_pAlg, int k)
+    : modified(add, _removed, _vs, newAdj, _pAlg)
+    {
+        this->k = k;
+
+        if (pAlg->USE_DEPENDENCY_CHECKING) {
+            foldingMapAdd = 0;
+
+            for (int v : removed) {
+                if (pAlg->packingMap[v].size() != 0) {
+                    foldingMapAdd += 1;
+                    for (int vv : vs) {
+                        pAlg->foldingMap[vv].emplace_back(v);
+                    }
+                }
+            }        
+        }
+    }
+
+void alternative::restore() {
+    modified::restore();
+
+    if (pAlg->USE_DEPENDENCY_CHECKING) {
+        for (int i = 0; i < foldingMapAdd; i++) {
+            for (int vv : vs) {
+                pAlg->foldingMap[vv].pop_back();
+            }
+        }  
     }
 }

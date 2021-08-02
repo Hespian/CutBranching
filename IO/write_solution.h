@@ -30,6 +30,9 @@ void writeResult(Result& sol, std::ostream &f) {
       << " branches: " << sol.nBranchings 
       << " time: " << sol.time 
       << " MIS size: " << sol.misSize
+      << " nDefPicks: " << sol.nDefaultPicks
+      << " nStratPicks: " << sol.nStratPicks
+      << " nDefBranchings: " << sol.nDefaultBranchings
       << std::endl;
 }
 

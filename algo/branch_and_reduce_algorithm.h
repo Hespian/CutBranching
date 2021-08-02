@@ -30,10 +30,14 @@
 #ifdef USE_IFC
 #include "../extern/InertialFlowCutter/include/inertial_flow_cutter.h"
 #endif
+#include "../Metis/include/metis.h"
+
+#include "tools/debug_info_logger.h"
 
 // system includes
 #include <vector>
 #include <stack> 
+#include <set>
 #include <string>
 #include <memory>
 #include <cstring>
@@ -44,7 +48,9 @@
 #include <memory>
 
 //void get_nd_separators_cutter(std::vector<std::vector<int>> &adj, double balance, std::vector<std::pair<int, std::vector<int>>> &separators);
-
+#include "separator_refinement/fm_ns_local_search.h"
+#include "data_structures/dyn_fast_set.h"
+#include "data_structures/ArraySet.h"
 
 class branch_and_reduce_algorithm
 {
@@ -71,6 +77,8 @@ public:
 	static long defaultPicks;
 	static long stratPicks;
 	static long nDecomps;
+
+	debug_info_logger* logger;
 
 	static long prunes;
 	static long ro;
@@ -258,33 +266,72 @@ public:
 	int branch_t = 0;
 	std::vector<int> cut;
 	void get_stcut_vertices();
+	void get_stcut_vertices_n();
 
 	// utility
 	inline int get_max_deg_vtx();
 
-	// Nested Dissection
+	// Nested Dissection - Inertial Flow Cutter
 	bool nd_computed = false;
 	std::vector<int> nd_order;
 	void compute_nd_order_cutter();
 
-	// almost dominated
 	std::vector<int> domin_vtcs;
 	bool almost_dominated();
 
-	// almost unconfined
 	std::vector<int> unconf_vtcs;
-
-	// almost twins 
 	std::vector<int> twin_vtcs;
-	int _uid;
-	// almost funnel
-
 	std::vector<int> funnel_vtcs;
-	bool is_almost_funnel(int v);
+	std::vector<int> packing_vtcs;
+
+	int packing_thresh = 5;
+	int funnel_thresh = 2;
+	int twin_thresh = 2;
+	int unconf_thresh = 2;
+
 
 	std::vector<int> b_vtcs;
 
 	int max_nh_vtx();
+
+	// Nested Dissection - Metis
+	void compute_nd_order();
+	std::vector<std::pair<std::vector<int>, int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
+
+
+	// refinement
+	std::vector<int> partition_index;
+	fm_ns_local_search ls_refinement;
+	bool perform_refinement = false;
+
+	void compute_metis_sep();
+	std::vector<int> separator;
+	//PartialBoundary separator;
+
+
+
+	// dependency checking
+	static bool USE_DEPENDENCY_CHECKING;
+
+	ArraySet dc_candidates;	
+
+
+	bool deg1Reduction_dc();
+	bool reduce_dc();
+	bool fold2Reduction_dc();
+	bool twinReduction_dc();
+	bool funnelReduction_dc();
+	bool funnelReduction_a_dc();
+	int packingReduction_dc();
+
+	void getPackingCandidates(int v);
+	fast_set candidatesChecked;
+
+	std::vector<std::vector<int>> packingMap;
+	std::vector<std::vector<int>> foldingMap;
+	std::set<int> packingCandidates;
+	void inline pushPacking(std::vector<int> &packing); 
+	void inline popPacking(); 
 
 
 #if 0
