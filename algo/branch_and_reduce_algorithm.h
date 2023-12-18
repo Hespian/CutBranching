@@ -30,7 +30,7 @@
 #ifdef USE_IFC
 #include "../extern/InertialFlowCutter/include/inertial_flow_cutter.h"
 #endif
-#include "../Metis/include/metis.h"
+//#include "../Metis/include/metis.h"
 
 #include "tools/debug_info_logger.h"
 
@@ -295,16 +295,16 @@ public:
 	int max_nh_vtx();
 
 	// Nested Dissection - Metis
-	void compute_nd_order();
-	std::vector<std::pair<std::vector<int>, int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
-
+	// void compute_nd_order();
+	// std::vector<std::pair<std::vector<int>, int>> get_nd_separators(int32_t* perm, int32_t* part_sizes, int32_t* sep_sizes, int n, int p, int32_t* weights);
+	// void compute_metis_sep();
 
 	// refinement
 	std::vector<int> partition_index;
 	fm_ns_local_search ls_refinement;
 	bool perform_refinement = false;
 
-	void compute_metis_sep();
+	
 	std::vector<int> separator;
 	//PartialBoundary separator;
 

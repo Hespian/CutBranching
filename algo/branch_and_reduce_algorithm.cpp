@@ -2797,7 +2797,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         b_vtcs.clear();
         dv = deg(v);
     }
-    else if (BRANCHING == 12) // Nested Dissection - METIS
+    /*else if (BRANCHING == 12) // Nested Dissection - METIS
     {
         if (nd_computed == false)
         {
@@ -2868,7 +2868,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         }
 
         dv = deg(v);
-    }
+    }*/
     else if (BRANCHING == 20) // st - cut refinement
     {
         int cut_size = 0;
@@ -2937,7 +2937,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         
         dv = deg(v);
     }
-    else if (BRANCHING == 21) 
+    /*else if (BRANCHING == 21) // nested disection - metis - refinement
     {
         int separator_size = 0;
         for (int v : separator)
@@ -2995,7 +2995,7 @@ void branch_and_reduce_algorithm::branching(timer &t, double time_limit)
         deb_info.add_stats.emplace_back("separator size: ", separator.size());
         
         dv = deg(v);
-    } 
+    } */
     else if (BRANCHING == 31) // new combined
     {
         int pv = -1;
@@ -5030,7 +5030,7 @@ int branch_and_reduce_algorithm::max_nh_vtx()
 
     return v;
 }
-
+/*
 void branch_and_reduce_algorithm::compute_nd_order()
 {
     double balance = TUNING_PARAM2;
@@ -5281,3 +5281,4 @@ void branch_and_reduce_algorithm::compute_metis_sep()
     free(adjncy);
     free(part);
 }
+*/
